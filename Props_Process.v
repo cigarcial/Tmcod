@@ -123,7 +123,7 @@ Qed.
 
 (*
 *)
-Lemma All_Process_Body :
+Lemma All_Lc_Body :
 forall (P : Process),
 lc P -> Body P.
 Proof.
@@ -148,7 +148,7 @@ Qed.
 
 (*
 *)
-Lemma Close_Is_Body :
+Lemma Lc_Close_Body :
 forall ( P : Process )(x : nat),
 lc P -> Body (Close_Rec 0 x P).
 Proof.
@@ -157,6 +157,18 @@ Proof.
   apply (Close_Lca _ x _)  in H.
   apply Lca_One_Body in H.
   auto.
+Qed.
+
+(*
+*)
+Lemma Lc_Close_Is_Body :
+forall ( P : Process )(x : nat),
+lc P -> ( forall (y : nat), lc ( (Close_Rec 0 x P) ^ y)).
+Proof.
+  intros.
+  apply (Lc_Close_Body P x) in H.
+  inversions H.
+  apply H0.
 Qed.
 
 
@@ -176,7 +188,7 @@ Qed.
 
 (*
 *)
-Lemma Subst_Process_Process :
+Lemma Subst_Lc_Lc :
 forall (P : Process)(x y : nat),
 lc P -> lc ({y \ x} P).
 Proof.
@@ -241,26 +253,36 @@ Proof.
     - auto.
 Qed.
 
-
-(*
-*)
-
 (*
 Primer teorema fuerte, la representación local libre de nombres preserva sentido bajo congruencias.
 *)
 Theorem Congruence_WD :
-forall P Q : Prepro, 
-(P === Q) -> Process(P)  -> Process(Q).
+forall P Q : Process, 
+(P === Q) -> lc(P)  -> lc(Q).
 Proof.
   intros.
-  inversions H; inversions H0; auto.
-  constructor.
-  intros.
-  simpl.
-  constructor.
-  + apply (Open_Process_Process); auto.
-  + inversion H6.
-    apply (H8 L); auto.
+  induction H; inversions H0; auto.
+  + apply ProcessAt_Process.
+    do 2 constructor.
+    apply Process_ProcessAt in H0.
+    inversions H0.
+    inversions H3.
+    apply Lca_Bex; auto.
+  + inversions H2; auto.
+  + constructor. simpl.
+    constructor.
+    apply Open_Lc_Lc; auto.
+    inversions H4.
+    apply H2; auto.
+  + apply IHCongruence in H.
+    constructor.
+    apply (Lc_Close_Is_Body Q); auto.
+  + constructor; auto.
+    intros.
+    apply (Lc_Close_Is_Body Q); auto.
+  + constructor; auto.
+    intros.
+    apply (Lc_Close_Is_Body Q); auto.
 Qed.
 
 
@@ -268,19 +290,24 @@ Qed.
 Resultado fundamental para la representación LNR, al hacer una redución de un proceso se obtiene un proceso.
 *)
 Theorem ProcessReduction_WD : 
-forall P Q : Prepro, 
-(P --> Q) -> Process(P)  -> Process(Q).
+forall P Q : Process, 
+(P --> Q) -> lc(P)  -> lc(Q).
 Proof.
   intros.
-  induction H.
+  induction H; try inversions H0; try constructor; auto.
+  + inversions H6.
+    specialize (H8 y); auto.
   + constructor; auto.
-    inversions H1.
-    inversions H2.
-    specialize (FVars_Finite Q) as HF.
-    apply (H3 (FVars Q)); auto.
-  + inversions H0.
-    inversions H5.
     inversions H6.
+    specialize (H8 y); auto.
+  + apply Subst_Lc_Lc; auto.
+  + apply IHReduction in H.
+    apply Lc_Close_Is_Body; auto.
+  + admit.
+  + 
+    intros.
+    apply (Close_Is_Body Q x) in H.
+    admit.
     inversions H2.
     specialize (FVars_Finite Q) as HF.
     constructor; auto.

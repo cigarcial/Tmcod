@@ -376,6 +376,20 @@ Qed.
 
 
 
+Lemma Lca_Bex :
+forall (P : Process)(i j k : nat),
+i < j -> j < k -> 
+lca k (P) -> lca k ({i <~> j} P).
+Proof.
+  intro.
+  induction P; 
+    try intros;
+    try simpl; 
+    try inversions H1; 
+    try constructor; 
+    try apply Lca_Name_Bex; 
+    try apply IHP; try lia; auto.
+Qed.
 
 
 

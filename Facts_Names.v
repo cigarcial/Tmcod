@@ -384,6 +384,26 @@ Qed.
 
 
 
-
+Lemma Lca_Name_Bex : 
+forall (N : Name)( i j k : nat),
+i < j -> j < k -> lca_name k N ->
+lca_name k (Bex_Name i j N).
+Proof.
+  intros.
+  destruct N.
+  + constructor.
+  + inversions H1.
+    destruct (bool_dec (i0 =? i) true).
+    - simpl. rewrite e.
+      constructor. auto.
+    - apply not_true_iff_false in n.
+      simpl. rewrite n.
+      destruct (bool_dec (i0 =? j) true).
+      * simpl. rewrite e.
+        constructor. lia.
+      * apply not_true_iff_false in n0.
+        simpl. rewrite n0.
+        constructor. auto.
+Qed.
 
 

@@ -333,11 +333,11 @@ forall (P : Process)(k : nat)(L : list nat),
 lca k P -> lc (MOpen_Rec k L P).
 Proof.
   induction P; intros; inversions H0.
-  + rewrite MOpen_Pzero; auto.
+  + rewrite MOpen_Pzero; constructor.
   + rewrite MOpen_Fuse; auto.
     constructor; 
     apply MOpen_Name_Rec_lc; auto.
-  + rewrite MOpen_Parallel; auto.
+  + rewrite MOpen_Parallel; constructor; auto.
   + rewrite MOpen_Chan_output; auto.
     constructor; 
     try apply MOpen_Name_Rec_lc; auto.

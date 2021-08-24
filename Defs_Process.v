@@ -202,7 +202,8 @@ Hint Constructors lc : core.
 *)
 Inductive Body : Process -> Prop := 
   | is_body : forall (P : Process), 
-    ( forall (x : nat), lc ({ 0 ~> x }P) ) -> Body(P).
+    ( forall (x : nat), lc ({ 0 ~> x
+     }P) ) -> Body(P).
 
 
 (*
@@ -362,12 +363,33 @@ Inductive Congruence : Process -> Process -> Prop :=
     | Con_asoc_parallel : forall (P Q R : Process),
         ((P↓Q)↓R) === (P↓(Q↓R))
       
-    | Con_conmt_fuses : forall (x y : Name),
-        [x ←→ y] === ([y ←→ x])
+    | Con_conmt_fuses : forall (n m : Name),
+        [n ←→ m] === ([m ←→ n])
       
     | Con_abs_restriction : forall (P Q : Process),
         lc P -> (P↓(ν Q)) === ν (P↓Q)
 
+    | Con_con_res : forall (P Q : Process)(x : nat), 
+      lc P -> P === Q -> (ν Close x P) === (ν Close x Q)
+      
+    | Con_con_output : forall (P Q : Process)(n m : Name), 
+      P === Q -> ( n « m »· P) === ( n « m »· Q)
+      
+    | Con_con_repli : forall (P Q : Process)(n : Name)(x : nat), 
+      lc P -> P === Q -> ( n !· Close x P) === (n !· Close x Q)
+      
+    | Con_con_parallel : forall (P Q R : Process), 
+      P === Q -> (R↓P) === (R↓Q)
+      
+    | Con_con_input : forall (P Q : Process)(n : Name)(x : nat), 
+      lc P -> P === Q -> ( n · Close x P) === ( n · Close x Q)  
+      
+    | Con_con_chan_close : forall (P Q : Process)(n : Name), 
+      P === Q -> ( n ()· P) === ( n ()· Q)  
+    
+    | Con_sym : forall (P Q : Process),
+      lc P -> P === Q -> Q === P
+    
 where "R '===' S" := (Congruence R S).
 Hint Constructors Congruence : core.
 
@@ -382,30 +404,29 @@ Inductive Reduction : Process -> Process -> Prop :=
     lc P -> Body Q -> Well_Open Q y ->
     ( ( ( (FName x) « (FName y) »· P)  ↓ ( (FName x) · Q) ) --> (P ↓ ( {0 ~> y} Q )) )
 
-(*  | Red_parallel_replicate : forall (x y : nat) (P Q : Prepro),
-    Process P -> Body Q -> Well_Open Q y ->
+  | Red_parallel_replicate : forall (x y : nat) (P Q : Process),
+    lc P -> Body Q -> Well_Open Q y ->
       (( ( (FName x) « (FName y) »· P) ↓ ( (FName x) !· Q )  ) --> ( P ↓ ({0 ~> y} Q) ↓ ( (FName x) !· Q) ))
 
-  | Red_chzero_chclose : forall ( Q : Prepro) (x : Name),
-     Process ( x «»·° ) -> Process ( x ()· Q  ) -> 
-     ( ( ( x «»·° ) ↓ ( x ()· Q ) ) -->  Q )
+  | Red_chzero_chclose : forall ( Q : Process) (x : nat),
+     lc Q -> 
+     ( ( ( (FName x) ·θ ) ↓ ( (FName x) ()· Q ) ) -->  Q )
 
-  | Red_parallel_fuse : forall ( x y : nat) ( P : Prepro),
-    Process P -> Well_Subst P x y ->
-    ( (P ↓ [(FName x)←→(FName y)]) --> (Subst x y P) )
+  | Red_parallel_fuse : forall ( x y : nat) ( P : Process),
+    lc P -> Well_Subst P x y ->
+    ( P ↓ ([(FName x) ←→ (FName y)]) --> (Subst x y P) )
 
-  | Red_reduction_parallel : forall ( P Q R : Prepro), 
-    Process R -> Process Q -> Process R ->
+  | Red_reduction_parallel : forall ( P Q R : Process), 
+    lc P -> lc R ->
     ((Q --> R) -> ((P ↓ Q ) --> (P ↓ R)))
 
-  | Red_reduction_chanres : forall (P Q : Prepro)( x : nat),
-    Process P -> Process Q ->
+  | Red_reduction_chanres : forall (P Q : Process)( x : nat),
+    lc P -> 
     ( P --> Q ) -> ( ν (Close x P) --> ν (Close x Q) )
 
-   | Red_reduction_congruence : forall ( P Q P' Q' : Prepro ),
-    Process P' -> Congruence P' P -> Congruence Q' Q ->
-    (P' --> Q') -> (P --> Q) *)
-
+   | Red_reduction_struct : forall ( P Q P' Q' : Process ),
+    lc P' -> ( P' === P ) -> ( Q' === Q ) ->
+    (P' --> Q') -> (P --> Q) 
 where "R '-->' S" := (Reduction R S).
 
 
