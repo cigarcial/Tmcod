@@ -385,9 +385,10 @@ Inductive Congruence : Process -> Process -> Prop :=
       lc P -> P === Q -> ( n · Close x P) === ( n · Close x Q)  
       
     | Con_con_chan_close : forall (P Q : Process)(n : Name), 
-      P === Q -> ( n ()· P) === ( n ()· Q)  
+      P === Q -> ( n ()· P) === ( n ()· Q) 
 
     
+     P === Q -> Q===P 
 where "R '===' S" := (Congruence R S).
 Hint Constructors Congruence : core.
 

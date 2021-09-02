@@ -285,7 +285,6 @@ Proof.
     apply (Lc_Close_Is_Body Q); auto.
 Qed.
 
-
 (*
 Resultado fundamental para la representación LNR, al hacer una redución de un proceso se obtiene un proceso.
 *)
@@ -303,30 +302,4 @@ Proof.
   + apply Subst_Lc_Lc; auto.
   + apply IHReduction in H.
     apply Lc_Close_Is_Body; auto.
-  + admit.
-  + 
-    intros.
-    apply (Close_Is_Body Q x) in H.
-    admit.
-    inversions H2.
-    specialize (FVars_Finite Q) as HF.
-    constructor; auto.
-    constructor; auto.
-    apply (H11 (FVars Q)); auto.
-  + inversions H1; auto.
-  + apply Subst_Process_Process; auto.
-  + inversions H0.
-    constructor; auto.
-  + unfold Close in *.
-    apply (Close_Is_Body _ x) in H1.
-    inversions H1.
-    constructor; auto.
-(*   + apply IHReduction in H.
-    specialize (Congruence_WD Q' Q) as HQ.
-    specialize (HQ H2 H).
-    auto. *)
-Qed.
-
-
-
-
+Admitted.
