@@ -3,9 +3,29 @@
   Ciro Iván García López 
   Proyecto 1. Session Type Systems Verification
 *)
-From PROYI Require Import Defs_Process.
-From PROYI Require Import Facts_Process.
 From Coq Require Import Bool.Bool.
+From Coq Require Import Lists.List.
+Import ListNotations.
+
+
+From old Require Import Defs_Process.
+From old Require Import Defs_Tactics.
+From old Require Import Facts_MOpen.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -16,96 +36,180 @@ From Coq Require Import Bool.Bool.
 
 (*
 *)
-Lemma Open_Process_Process :
-forall ( P : Prepro ), Process P -> 
-forall ( k x : nat ), Process ( {k ~> x}P ).
+Theorem Process_ProcessAt :
+forall ( P : Process ), 
+lc P -> lca 0 P.
+Proof.
+  intros.
+  induction H;
+   constructor;
+    try apply Lc_Lca_Zero_Name;
+    try apply (Process_Lca_Open_S _  _ ); auto.
+Qed.
+
+
+(*
+*)
+Theorem ProcessAt_Process :
+forall ( P : Process ),
+lca 0 P -> lc P.
+Proof.
+  intros.
+  induction P; try inversions H;
+    try constructor;
+    try apply Lca_Zero_Lc_Name;
+    try apply IHP1 || apply IHP2;
+    try intros;
+    try specialize (Lca_Lc_Process_MOpen P 1 [x]) as HB;
+    try specialize (Lca_Lc_Process_MOpen P 1 [x0]) as HB;
+    try simpl in HB;
+    try apply HB; auto.
+Qed.
+
+
+(*
+*)
+Lemma Body_Lc_One :
+forall ( P : Process ),
+Body P -> lca 1 P.
+Proof.
+  intros.
+  apply Body_Process_Equivalence_Res in H.
+  apply Process_ProcessAt in H.
+  inversions H.
+  auto.
+Qed.
+
+
+(*
+*)
+Lemma Lca_One_Body :
+forall ( P : Process ),
+lca 1 P -> Body P.
+Proof.
+  intros.
+  apply Body_Process_Equivalence_Res.
+  apply ProcessAt_Process.
+  constructor.
+  auto.
+Qed.
+
+
+(*
+*)
+Lemma Lc_Open_Close_Subst :
+forall ( P : Process )( x y k : nat ), 
+lc P -> { 0 ~> y } Close_Rec 0 x P = { y \ x } P.
+Proof.
+  intros.
+  apply Lca_Open_Close_Subst.
+  apply Process_ProcessAt; auto.
+Qed.
+
+
+
+(*
+*)
+Lemma Open_Lc_Lc :
+forall ( P : Process ), lc P -> 
+forall ( k x : nat ), lc ( {k ~> x}P ).
 Proof.
   intros P H.
   induction H; intros; simpl.
   + auto.
-  + rewrite Output_PName_Output; auto.
-    rewrite Output_PName_Output; auto.
+  + rewrite Output_LCName_Output; auto.
+    rewrite Output_LCName_Output; auto.
   + constructor.
-    apply IHProcess1.
-    apply IHProcess2.
-  + rewrite Output_PName_Output; auto.
-    rewrite Output_PName_Output; auto.
-  + rewrite Output_PName_Output; auto.
-  + rewrite Output_PName_Output; auto.
-  + simpl.
-    isBody.
-    specialize (H0 L H1 x0 H2 (S k) x).
-    rewrite Exchange_Open_Sk_i; auto.
-  + simpl.
-    isBody.
-    - rewrite Output_PName_Output; auto.
-    - specialize (H1 L H2 x1 H3 (S k) x0).
-      rewrite Exchange_Open_Sk_i; auto.
-  + simpl.
-    isBody.
-    - rewrite Output_PName_Output; auto.
-    - specialize (H1 L H2 x1 H3 (S k) x0).
-      rewrite Exchange_Open_Sk_i; auto.
+    apply IHlc1.
+    apply IHlc2.
+  + rewrite Output_LCName_Output; auto.
+    rewrite Output_LCName_Output; auto.
+  + rewrite Output_LCName_Output; auto.
+  + rewrite Output_LCName_Output; auto.
+  + constructor.
+    intros.
+    rewrite Exchange_Open; auto.
+  + constructor.
+    rewrite Output_LCName_Output; auto.
+    intros.
+    rewrite Exchange_Open; auto.
+  + constructor.
+    rewrite Output_LCName_Output; auto.
+    intros.
+    rewrite Exchange_Open; auto.
 Qed.
 
 
 (*
 *)
-Lemma All_Process_Body :
-forall (P : Prepro),
-Process P -> Body P.
+Lemma All_Lc_Body :
+forall (P : Process),
+lc P -> Body P.
 Proof.
   intros.
   constructor.
   intros.
-  apply Open_Process_Process; auto.
+  apply Open_Lc_Lc; auto.
 Qed.
 
 
 (*
 *)
-Lemma Close_Process_At :
-forall ( P : Prepro )(x k: nat),
-Process_At k P -> Process_At (S k) (Close_Rec k x P).
+Lemma Close_Lca :
+forall ( P : Process )(x k: nat),
+lca k P -> lca (S k) (Close_Rec k x P).
 Proof.
   intro.
-  induction P; intros; simpl; try inversions H; constructor; try apply Process_NameAt_Close_Name; auto.
+  induction P; intros; simpl; try inversions H; constructor; 
+  try apply Lca_Name_Close; auto.
 Qed.
 
 
 (*
 *)
-Lemma Close_Is_Body :
-forall ( P : Prepro )(x : nat),
-Process P -> Body (Close_Rec 0 x P).
+Lemma Lc_Close_Body :
+forall ( P : Process )(x : nat),
+lc P -> Body (Close_Rec 0 x P).
 Proof.
   intros.
   apply Process_ProcessAt in H.
-  apply (Close_Process_At _ x _)  in H.
-  apply ProcessAt_One_Body in H.
+  apply (Close_Lca _ x _)  in H.
+  apply Lca_One_Body in H.
   auto.
+Qed.
+
+(*
+*)
+Lemma Lc_Close_Is_Body :
+forall ( P : Process )(x : nat),
+lc P -> ( forall (y : nat), lc ( (Close_Rec 0 x P) ^ y)).
+Proof.
+  intros.
+  apply (Lc_Close_Body P x) in H.
+  inversions H.
+  apply H0.
 Qed.
 
 
 (*
 *)
 Lemma Subst_Body_Body :
-forall (P : Prepro),
+forall (P : Process),
 Body P -> forall (x y : nat), Body ({y \ x} P).
 Proof.
   intros.
-  apply Body_ProcessAt_One in H.
-  apply ProcessAt_One_Body.
-  apply Subst_Process_At.
+  apply Body_Lc_One in H.
+  apply Lca_One_Body.
+  apply Subst_Lca_Process.
   auto.
 Qed.
 
 
 (*
 *)
-Lemma Subst_Process_Process :
-forall (P : Prepro)(x y : nat),
-Process P -> Process ({y \ x} P).
+Lemma Subst_Lc_Lc :
+forall (P : Process)(x y : nat),
+lc P -> lc ({y \ x} P).
 Proof.
   intros.
   induction H.
@@ -168,65 +272,53 @@ Proof.
     - auto.
 Qed.
 
-
-(*
-*)
-
 (*
 Primer teorema fuerte, la representación local libre de nombres preserva sentido bajo congruencias.
 *)
 Theorem Congruence_WD :
-forall P Q : Prepro, 
-(P === Q) -> Process(P)  -> Process(Q).
+forall P Q : Process, 
+(P === Q) -> lc(P)  -> lc(Q).
 Proof.
   intros.
-  inversions H; inversions H0; auto.
-  constructor.
-  intros.
-  simpl.
-  constructor.
-  + apply (Open_Process_Process); auto.
-  + inversion H6.
-    apply (H8 L); auto.
+  induction H; inversions H0; auto.
+  + apply ProcessAt_Process.
+    do 2 constructor.
+    apply Process_ProcessAt in H0.
+    inversions H0.
+    inversions H3.
+    apply Lca_Bex; auto.
+  + inversions H2; auto.
+  + constructor. simpl.
+    constructor.
+    apply Open_Lc_Lc; auto.
+    inversions H4.
+    apply H2; auto.
+  (*+ apply IHCongruence in H.
+    constructor.
+    apply (Lc_Close_Is_Body Q); auto.
+  + constructor; auto.
+    intros.
+    apply (Lc_Close_Is_Body Q); auto.
+  + constructor; auto.
+    intros.
+    apply (Lc_Close_Is_Body Q); auto.*)
 Qed.
-
 
 (*
 Resultado fundamental para la representación LNR, al hacer una redución de un proceso se obtiene un proceso.
 *)
 Theorem ProcessReduction_WD : 
-forall P Q : Prepro, 
-(P --> Q) -> Process(P)  -> Process(Q).
+forall P Q : Process, 
+(P --> Q) -> lc(P)  -> lc(Q).
 Proof.
   intros.
-  induction H.
+  induction H; try inversions H0; try constructor; auto.
+  + inversions H6.
+    specialize (H8 y); auto.
   + constructor; auto.
-    inversions H1.
-    inversions H2.
-    specialize (FVars_Finite Q) as HF.
-    apply (H3 (FVars Q)); auto.
-  + inversions H0.
-    inversions H5.
     inversions H6.
-    inversions H2.
-    specialize (FVars_Finite Q) as HF.
-    constructor; auto.
-    constructor; auto.
-    apply (H11 (FVars Q)); auto.
-  + inversions H1; auto.
-  + apply Subst_Process_Process; auto.
-  + inversions H0.
-    constructor; auto.
-  + unfold Close in *.
-    apply (Close_Is_Body _ x) in H1.
-    inversions H1.
-    constructor; auto.
-(*   + apply IHReduction in H.
-    specialize (Congruence_WD Q' Q) as HQ.
-    specialize (HQ H2 H).
-    auto. *)
-Qed.
-
-
-
-
+    specialize (H8 y); auto.
+  + apply Subst_Lc_Lc; auto.
+  + apply IHReduction in H.
+    apply Lc_Close_Is_Body; auto.
+Admitted.

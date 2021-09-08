@@ -1,0 +1,8 @@
+(*
+  Verificación Formal - Unam 2020-2
+  Ciro Iván García López
+  Proyecto 1. Session Type Systems Verification
+*)
+From Tmcod Require Import  Defs_Proposition.
+
+

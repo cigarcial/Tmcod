@@ -15,14 +15,18 @@ From Tmcod Require Import Facts_Process.
 From Tmcod Require Import Defs_Tactics.
 
 
-Lemma Zr_No_Type :
-forall (D F G : list Assignment),
-~( D ;;; F !- θ ::: G ).
+Theorem One : 
+forall (P : Process)(D F G : list Assignment),
+  ( D ;;; F !- P ::: G ) -> forall (Q : Process), (P === Q) -> ( D ;;; F !- Q ::: G ).
 Proof.
-  unfold not.
   intros.
-  inversions H.
+  inversions H0.
+  + admit.
+  + admit.
   + 
+
+
+Admitted.
 
 
 
@@ -30,14 +34,7 @@ Lemma Fuse_No_Reduces :
 forall (x y : Name)(Q : Process), 
 ~([x ←→  y] --> Q ).
 Proof.
-  unfold not.
-  intros.
-  
-  inversions H.
-  inversions H2.
-  - 
-  
-  
+
 Admitted.
     
 
@@ -53,7 +50,6 @@ Proof.
   induction H.
   + intros.
     induction H2.
-    - 
 
 
 

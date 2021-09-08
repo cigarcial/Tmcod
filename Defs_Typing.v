@@ -45,7 +45,7 @@ Inductive Inference : Process -> list Assignment -> list Assignment -> list Assi
 
   | idl : forall (D : list Assignment)(x y : Name)(A : Proposition),
     Collect D -> lc_name x -> lc_name y -> 
-    ( D ;;; ( (cons (x:A) nil) ++ (cons (x:(A^⊥)) nil) )  !-  ([x←→y]) ::: []  )
+    ( D ;;; ( (cons (x:A) nil) ++ (cons (y:(A^⊥)) nil) )  !-  ([x←→y]) ::: []  )
 
 
   | repr : forall ( D : list Assignment ) ( x : Name)( y : nat )( A : Proposition )( P : Process ), 
