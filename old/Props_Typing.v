@@ -643,6 +643,46 @@ Admitted.
 
 
 
+
+
+
+
+
+
+
+Lemma Aux1 :
+forall ( P Q : Process)(x u : nat),
+(( {x \ u} P  ) --> Q ) ->  ( P --> ({u \ x} Q)).
+Proof.
+  intros.
+  assert (HA := H).
+  induction H.
+  + admit.
+  + admit.
+  + assert (HB : {x \ u} P = (FName x0 ·θ) ↓ (FName x0 ()·Q)). admit.
+Admitted.
+
+Lemma Equality_Subst_Equality :
+forall (P Q : Process)(x u : nat),
+P = Q -> {x \ u} P = {x \ u} Q.
+Proof.
+  intros.
+  rewrite H.
+  auto.
+Qed.
+
+
+
+Lemma Inv_Subst_Reac1 :
+forall (P Q S T: Process)(x u : nat),
+{x \ u} P = S ↓ T -> P = ({u \ x} S)↓ ({u \ x}T).
+Proof.
+  intros.
+  apply (Equality_Subst_Equality _ _ u x) in H.
+  simpl in H.
+Admitted.
+
+
 (*
 Teorema 2.1 del artículo.
 *)

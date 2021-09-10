@@ -13,7 +13,7 @@ From Tmcod Require Import Defs_Proposition.
 From Tmcod Require Import Props_Process.
 From Tmcod Require Import Facts_Process.
 From Tmcod Require Import Defs_Tactics.
-
+Require Import Coq.Program.Equality.
 
 Theorem One : 
 forall (P : Process)(D F G : list Assignment),
@@ -34,9 +34,7 @@ Lemma Fuse_No_Reduces :
 forall (x y : Name)(Q : Process), 
 ~([x ←→  y] --> Q ).
 Proof.
-
 Admitted.
-    
 
 
 (*
@@ -47,7 +45,7 @@ forall (P : Process)(D F G : list Assignment),
   ( D ;;; F !- P ::: G ) -> forall (Q : Process), (P --> Q) -> ( D ;;; F !- Q ::: G ).
 Proof.
   intros P D F G H.
-  induction H.
+  dependent induction H.
   + intros.
     induction H2.
 
