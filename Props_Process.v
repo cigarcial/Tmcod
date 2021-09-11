@@ -277,12 +277,12 @@ Proof.
   + apply IHCongruence in H.
     constructor.
     apply (Lc_Close_Is_Body Q); auto.
-  + constructor; auto.
+(*  + constructor; auto.
     intros.
     apply (Lc_Close_Is_Body Q); auto.
   + constructor; auto.
     intros.
-    apply (Lc_Close_Is_Body Q); auto.
+    apply (Lc_Close_Is_Body Q); auto.*)
 Qed.
 
 (*
@@ -293,7 +293,18 @@ forall P Q : Process,
 (P --> Q) -> lc(P)  -> lc(Q).
 Proof.
   intros.
-  induction H; try inversions H0; try constructor; auto.
+  induction H.
+  
+  
+  
+  
+  
+Admitted.
+
+
+(*
+
+   ; try inversions H0; try constructor; auto.
   + inversions H6.
     specialize (H8 y); auto.
   + constructor; auto.
@@ -302,4 +313,5 @@ Proof.
   + apply Subst_Lc_Lc; auto.
   + apply IHReduction in H.
     apply Lc_Close_Is_Body; auto.
-Admitted.
+  + 
+*)

@@ -348,12 +348,11 @@ Definición 2.4, equivalencias entre términos, observe que usando NLR no es nec
 *)
 Reserved Notation "R '===' S" (at level 60).
 Inductive Congruence : Process -> Process -> Prop :=
-(*    | Con_parallel_zero : forall (P : Process),
+    | Con_parallel_zero : forall (P : Process),
         (P↓θ) === P
     
     | Con_res_zero : 
-        ( ν θ)  === (θ) *)
-      
+        ( ν θ)  === (θ) 
       
     | Con_conmt_parallel : forall (P Q : Process),
         (P↓Q) === (Q↓P)
@@ -372,25 +371,8 @@ Inductive Congruence : Process -> Process -> Prop :=
 
     | Con_con_res : forall (P Q : Process)(x : nat), 
       lc P -> P === Q -> (ν Close x P) === (ν Close x Q)
-      
-    | Con_con_output : forall (P Q : Process)(n m : Name), 
-      P === Q -> ( n « m »· P) === ( n « m »· Q)
-      
-    | Con_con_repli : forall (P Q : Process)(n : Name)(x : nat), 
-      lc P -> P === Q -> ( n !· Close x P) === (n !· Close x Q)
-      
-    | Con_con_parallel : forall (P Q R : Process), 
-      P === Q -> (R↓P) === (R↓Q)
-      
-    | Con_con_input : forall (P Q : Process)(n : Name)(x : nat), 
-      lc P -> P === Q -> ( n · Close x P) === ( n · Close x Q)  
-      
-    | Con_con_chan_close : forall (P Q : Process)(n : Name), 
-      P === Q -> ( n ()· P) === ( n ()· Q)  
 
-    
 where "R '===' S" := (Congruence R S).
-Hint Constructors Congruence : core.
 
 
 (*
