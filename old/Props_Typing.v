@@ -111,51 +111,6 @@ Proof.
 Qed.
 
 
-
-Lemma Fuse_No_Reduces :
-forall (x y : Name)(Q : Process), 
-~([x ←→  y] --> Q ).
-Proof.
-  unfold not.
-  intros.
-  inversions H.
-  inversions H1.
-Qed.
-
-
-Lemma Rep_Input_No_Reduces :
-forall (x: Name)(y : nat)(P Q : Process),
-~((x !· Close y P) --> Q).
-Proof.
-  unfold not.
-  intros.
-  inversions H.
-  inversions H1.
-Qed.
-
-
-Lemma Chan_Close_No_Reduces :
-forall (x : Name)(P Q : Process),
-~((x ()·P) --> Q).
-Proof.
-  unfold not.
-  intros.
-  inversions H.
-  inversions H1.
-Qed.
-
-
-Lemma Zero_No_Reduces :
-forall (x : Name)(Q : Process), 
-~((x ·θ) --> Q).
-Proof.
-  unfold not.
-  intros.
-  inversions H.
-  inversions H1.
-Qed.
-
-
 Lemma No_FVars_Parallel :
 forall (P Q : Process)( u : nat),
 ( ~(u ∈ FVars (P ↓ Q))) -> (~ u ∈ FVars P) /\ (~ u ∈ FVars Q).
@@ -194,7 +149,6 @@ Proof.
     apply beq_nat_false in n.
     contradiction.
 Qed.
-
 
 
 (*
@@ -725,6 +679,78 @@ Admitted.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Lemma Fuse_No_Reduces :
+forall (x y : Name)(Q : Process), 
+~([x ←→  y] --> Q ).
+Proof.
+  unfold not.
+  intros.
+  inversions H.
+  inversions H1.
+Qed.
+
+
+Lemma Rep_Input_No_Reduces :
+forall (x: Name)(y : nat)(P Q : Process),
+~((x !· Close y P) --> Q).
+Proof.
+  unfold not.
+  intros.
+  inversions H.
+  inversions H1.
+Qed.
+
+
+Lemma Chan_Close_No_Reduces :
+forall (x : Name)(P Q : Process),
+~((x ()·P) --> Q).
+Proof.
+  unfold not.
+  intros.
+  inversions H.
+  inversions H1.
+Qed.
+
+
+Lemma Zero_No_Reduces :
+forall (x : Name)(Q : Process), 
+~((x ·θ) --> Q).
+Proof.
+  unfold not.
+  intros.
+  inversions H.
+  inversions H1.
+Qed.
+
+
+
 (*
 Teorema 2.1 del artículo.
 *)
@@ -745,9 +771,10 @@ Proof.
   + apply Rep_Input_No_Reduces in H3.
     contradiction.
   + apply Chan_Close_No_Reduces in H5. contradiction.
-  + admit.
-  + admit.
-  + admit.
+  + apply Zero_No_Reduces in H1. contradiction.
+  + apply Chan_Close_No_Reduces in H5. contradiction.
+  + apply Zero_No_Reduces in H1. contradiction.
+  + 
 Admitted.
 
 
