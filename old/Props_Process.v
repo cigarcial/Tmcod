@@ -304,6 +304,9 @@ Proof.
     apply (Lc_Close_Is_Body Q); auto.*)
 Qed.
 
+
+Require Import Coq.Program.Equality.
+
 (*
 Resultado fundamental para la representación LNR, al hacer una redución de un proceso se obtiene un proceso.
 *)
@@ -312,13 +315,10 @@ forall P Q : Process,
 (P --> Q) -> lc(P)  -> lc(Q).
 Proof.
   intros.
-  induction H; try inversions H0; try constructor; auto.
-  + inversions H6.
-    specialize (H8 y); auto.
-  + constructor; auto.
-    inversions H6.
-    specialize (H8 y); auto.
+  dependent induction H;
+    try inversions H0;
+    try constructor; auto.
+  + inversions H2. auto.
   + apply Subst_Lc_Lc; auto.
-  + apply IHReduction in H.
-    apply Lc_Close_Is_Body; auto.
+  + admit.
 Admitted.

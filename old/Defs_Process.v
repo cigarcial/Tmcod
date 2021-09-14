@@ -270,8 +270,13 @@ Notation " { y \ x } P " := (Subst x y P) (at level 60).
 
 Inductive Well_Subst : Process -> nat -> nat -> Prop := 
   | Is_Well_Subst : forall ( P : Process)(x y : nat),
-    ~( y ∈ (FVars P) ) -> (Well_Subst P x y).
+    ~( y ∈ (FVars P) ) -> x <> y -> (Well_Subst P x y).
 
+
+Inductive Well_Subst_Close : Process -> nat -> nat -> nat -> Prop :=
+ | Is_Well_Subst_Close : forall ( P : Process)(x y z: nat),
+    ~( y ∈ (FVars P) ) -> x <> y -> y <> z-> 
+    (Well_Subst_Close P x y z).
 
 (*
 
@@ -299,11 +304,6 @@ match T with
   | Chan_replicate x P => Chan_replicate (Bex_Name i j x) (Bex_Rec (S i) (S j) P)
 end.
 Notation "{ i <~> j } P " := (Bex_Rec i j P)(at level 60).
-
-
-
-
-
 
 
 
@@ -422,8 +422,8 @@ Inductive Reduction : Process -> Process -> Prop :=
     (Q --> R) -> ((P ↓ Q ) --> (P ↓ R))
 
   | Red_reduction_chanres : forall (P Q : Process)( x : nat),
-    lc P -> 
-    ( P --> Q ) -> ( ν (Close x P) --> ν (Close x Q) )
+    Body P -> Body Q -> Well_Open P x -> Well_Open Q x -> 
+    ( ({0 ~> x} P) -->  ({0 ~> x} Q) ) -> ( ν P --> ν Q )
 
    | Red_reduction_struct : forall ( P Q P' Q' : Process ),
     lc P' -> ( P' === P ) -> ( Q' === Q ) ->
