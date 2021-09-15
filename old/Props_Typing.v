@@ -493,7 +493,7 @@ Qed.
 
 (*
 *)
-Lemma Well_Subst_Open_Exchange :
+Lemma Subst_Open_NEq_Exchange :
 forall (Q : Process)(x y u : nat),
 x <> y -> 
 ({u \ x} Q) ^ y = {u \ x} (Q ^ y).
@@ -511,7 +511,7 @@ Qed.
 
 (*
 *)
-Lemma Subst_Open_Name_Eq :
+Lemma Subst_Open_Eq_Exchange_Name :
 forall (N : Name)(x u i : nat),
 Subst_Name x u (Open_Name i x N) = Open_Name i u (Subst_Name x u N).
 Proof.
@@ -537,7 +537,7 @@ Qed.
 
 (*
 *)
-Lemma Subst_Open_Eq :
+Lemma Subst_Open_Eq_Exchange :
 forall ( Q : Process)(u x i: nat),
 ({u \ x} ({i ~> x} Q )) = {i ~> u}({u \ x} Q).
 Proof.
@@ -545,32 +545,32 @@ Proof.
   induction Q; intros.
   + auto.
   + simpl.
-    do 2 rewrite Subst_Open_Name_Eq.
+    do 2 rewrite Subst_Open_Eq_Exchange_Name.
     auto.
   + simpl.
     rewrite IHQ1.
     rewrite IHQ2.
     auto.
   + simpl.
-    do 2 rewrite Subst_Open_Name_Eq.
+    do 2 rewrite Subst_Open_Eq_Exchange_Name.
     rewrite IHQ.
     auto.
   + simpl.
-    rewrite Subst_Open_Name_Eq.
+    rewrite Subst_Open_Eq_Exchange_Name.
     auto.
   + simpl.
-    rewrite Subst_Open_Name_Eq.
+    rewrite Subst_Open_Eq_Exchange_Name.
     rewrite IHQ.
     auto.
   + simpl.
     rewrite IHQ.
     auto.
   + simpl.
-    rewrite Subst_Open_Name_Eq.
+    rewrite Subst_Open_Eq_Exchange_Name.
     rewrite IHQ.
     auto.
   + simpl.
-    rewrite Subst_Open_Name_Eq.
+    rewrite Subst_Open_Eq_Exchange_Name.
     rewrite IHQ.
     auto.
 Qed.
@@ -590,108 +590,136 @@ Qed.
 
 
 
-Lemma Double_WSubst_Equality :
-forall (P : Process)( x u : nat),
-Well_Subst P u x -> ({u \ x} ({x \ u} P)) = P.
-Proof.
-  intros.
-  dependent induction P.
-  + simpl. auto.
-Admitted.
-
-Lemma Well_Subst_Red_Well_Subst :
-forall (P Q : Process)(u x : nat),
-Well_Subst P u x -> ({x \ u} P) --> Q -> 
-Well_Subst Q x u.
-Proof.
-Admitted.
-
-
-Lemma Lc_Subst_WSubst_WSubst :
-forall (P : Process)( u x : nat),
-lc ({x \ u} P) -> Well_Subst ({x \ u} P) x u -> Well_Subst P u x.
-Proof.
-Admitted.
 
 
 Lemma Aux1 :
 forall ( P Q : Process)(x u : nat),
-Well_Subst P u x -> lc P ->
-(( {x \ u} P  ) --> Q ) ->  ( P --> ({u \ x} Q)).
+Well_Subst P x u -> lc P ->
+( P --> Q ) ->  ( ({u \ x}P) --> ({u \ x} Q)).
 Proof.
   intros.
   assert (HA := H1).
   dependent induction H1.
-  + admit.
-  + admit.
-  + apply (Equality_Subst_Equality _ _ u x1) in x.
-    rewrite Double_WSubst_Equality in x; auto.
-    rewrite <- x.
-    destruct (bool_dec (x0 =? x1) true).
-    * simpl.
-      rewrite e.
+  + simpl.
+    destruct (bool_dec (x0 =? x) true).
+    - destruct (bool_dec (y =? x) true).
+      * rewrite e. rewrite e0.
+        apply beq_nat_true in e.
+        apply beq_nat_true in e0.
+        rewrite e0.
+        rewrite Subst_Open_Eq_Exchange.
+        constructor.
+        apply Subst_Lc_Lc; auto.
+        apply Subst_Body_Body; auto.
+        admit.
+      * rewrite e. 
+        apply not_true_iff_false in n. rewrite n.
+        rewrite <- Subst_Open_NEq_Exchange.
+        constructor.
+        apply Subst_Lc_Lc; auto.
+        apply Subst_Body_Body; auto.
+        admit.
+        apply beq_nat_false in n.
+        auto.
+    - destruct (bool_dec (y =? x) true).
+      * rewrite e.
+        apply not_true_iff_false in n. rewrite n.
+        apply beq_nat_true in e.
+        rewrite e.
+        rewrite Subst_Open_Eq_Exchange.
+        constructor.
+        apply Subst_Lc_Lc; auto.
+        apply Subst_Body_Body; auto.
+        admit.
+      * apply not_true_iff_false in n. rewrite n.
+        apply not_true_iff_false in n0. rewrite n0.
+        rewrite <- Subst_Open_NEq_Exchange.
+        constructor.
+        apply Subst_Lc_Lc; auto.
+        apply Subst_Body_Body; auto.
+        admit.
+        apply beq_nat_false in n0.
+        auto.
+  + simpl.
+    destruct (bool_dec (x0 =? x) true).
+    - destruct (bool_dec (y =? x) true).
+      * rewrite e. rewrite e0.
+        apply beq_nat_true in e.
+        apply beq_nat_true in e0.
+        rewrite e0.
+        rewrite Subst_Open_Eq_Exchange.
+        constructor.
+        apply Subst_Lc_Lc; auto.
+        apply Subst_Body_Body; auto.
+        admit.
+      * rewrite e. 
+        apply not_true_iff_false in n. rewrite n.
+        rewrite <- Subst_Open_NEq_Exchange.
+        constructor.
+        apply Subst_Lc_Lc; auto.
+        apply Subst_Body_Body; auto.
+        admit.
+        apply beq_nat_false in n.
+        auto.
+    - destruct (bool_dec (y =? x) true).
+      * rewrite e.
+        apply not_true_iff_false in n. rewrite n.
+        apply beq_nat_true in e.
+        rewrite e.
+        rewrite Subst_Open_Eq_Exchange.
+        constructor.
+        apply Subst_Lc_Lc; auto.
+        apply Subst_Body_Body; auto.
+        admit.
+      * apply not_true_iff_false in n. rewrite n.
+        apply not_true_iff_false in n0. rewrite n0.
+        rewrite <- Subst_Open_NEq_Exchange.
+        constructor.
+        apply Subst_Lc_Lc; auto.
+        apply Subst_Body_Body; auto.
+        admit.
+        apply beq_nat_false in n0.
+        auto.
+  + simpl.
+    destruct (bool_dec (x0 =? x) true).
+    - rewrite e.
       constructor.
-      apply (Subst_Lc_Lc _ u x1) in H0.
-      apply ProcessReduction_WD in HA; auto.
-      apply (Subst_Lc_Lc _ x1 u) in HA.
-      auto.
-    * apply not_true_iff_false in n.
-      simpl.
-      rewrite n.
+      apply Subst_Lc_Lc; auto.
+    - apply not_true_iff_false in n; rewrite n.
       constructor.
-      apply (Subst_Lc_Lc _ u x1) in H0.
-      apply ProcessReduction_WD in HA; auto.
-      apply (Subst_Lc_Lc _ x1 u) in HA.
-      auto.
-  + admit.
-  + apply (Equality_Subst_Equality _ _ u x0) in x.
-    rewrite Double_WSubst_Equality in x; auto.
-    rewrite <- x.
-    simpl.
+      apply Subst_Lc_Lc; auto.
+  + simpl.
+    destruct (bool_dec (x0 =? x) true).
+    - destruct (bool_dec (y =? x) true).
+      * rewrite e. rewrite e0.
+        apply beq_nat_true in e.
+        apply beq_nat_true in e0.
+        rewrite e. rewrite e0.
+        admit.
+      * rewrite e. 
+        apply not_true_iff_false in n; rewrite n.
+        apply beq_nat_true in e.
+        rewrite e.
+        admit.
+    - destruct (bool_dec (y =? x) true).
+      * rewrite e.
+        apply not_true_iff_false in n; rewrite n.
+        apply beq_nat_true in e.
+        rewrite e.
+        admit.
+      * apply not_true_iff_false in n. rewrite n.
+        apply not_true_iff_false in n0. rewrite n0.
+        admit.
+  + simpl.
     constructor.
-    apply (Subst_Lc_Lc _ x0 u) in H2; auto.
-    apply (Subst_Lc_Lc _ x0 u) in H3; auto.
-    simpl in x.
-    rewrite <- x in H0.
-    rewrite <- x in H.
-    inversions H.
-    apply No_FVars_Parallel in H4.
-    destruct H4 as [HB HC].
-    apply IHReduction.
-    constructor; auto.
+    apply Subst_Lc_Lc; auto.
+    apply Subst_Lc_Lc; auto.
+    apply IHReduction; auto.
+    admit. (* facil *)
     inversions H0; auto.
-    rewrite Double_WSubst_Equality; auto.
-    apply Lc_Subst_WSubst_WSubst.
-    inversions H0; auto.
-    constructor; auto.
-    rewrite Double_WSubst_Equality; auto.
-    apply Lc_Subst_WSubst_WSubst.
-    inversions H0; auto.
-    constructor; auto.
-  + apply (Equality_Subst_Equality _ _ u x1) in x.
-    rewrite Double_WSubst_Equality in x; auto.
-    rewrite <- x.
-    simpl.
-    apply (Red_reduction_chanres _ _ x0).
-    apply Subst_Body_Body; auto.
-    apply Subst_Body_Body; auto.
-Admitted.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  + simpl.
+    
+  + admit.
 
 
 
@@ -787,6 +815,28 @@ Admitted.
     
     
     
+Lemma Double_WSubst_Equality :
+forall (P : Process)( x u : nat),
+Well_Subst P u x -> ({u \ x} ({x \ u} P)) = P.
+Proof.
+  intros.
+  dependent induction P.
+  + simpl. auto.
+Admitted.
+
+Lemma Well_Subst_Red_Well_Subst :
+forall (P Q : Process)(u x : nat),
+Well_Subst P u x -> ({x \ u} P) --> Q -> 
+Well_Subst Q x u.
+Proof.
+Admitted.
+
+
+Lemma Lc_Subst_WSubst_WSubst :
+forall (P : Process)( u x : nat),
+lc ({x \ u} P) -> Well_Subst ({x \ u} P) x u -> Well_Subst P u x.
+Proof.
+Admitted.
     
     
     
