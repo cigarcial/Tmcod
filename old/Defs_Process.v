@@ -402,11 +402,11 @@ Reserved Notation "R '-->' S" (at level 60).
 Inductive Reduction : Process -> Process -> Prop :=
 
   | Red_output_input : forall ( x y : nat ) ( P Q : Process ),
-    lc P -> Body Q -> Well_Open Q y ->
+    lc P -> Body Q -> 
     ( ( ( (FName x) « (FName y) »· P)  ↓ ( (FName x) · Q) ) --> (P ↓ ( {0 ~> y} Q )) )
 
   | Red_parallel_replicate : forall (x y : nat) (P Q : Process),
-    lc P -> Body Q -> Well_Open Q y ->
+    lc P -> Body Q -> 
       (( ( (FName x) « (FName y) »· P) ↓ ( (FName x) !· Q )  ) --> ( P ↓ ({0 ~> y} Q) ↓ ( (FName x) !· Q) ))
 
   | Red_chzero_chclose : forall ( Q : Process) (x : nat),
@@ -414,7 +414,7 @@ Inductive Reduction : Process -> Process -> Prop :=
      ( ( ( (FName x) ·θ ) ↓ ( (FName x) ()· Q ) ) -->  Q )
 
   | Red_parallel_fuse : forall ( x y : nat) ( P : Process),
-    lc P -> Well_Subst P x y ->
+    lc P -> 
     ( P ↓ ([(FName x) ←→ (FName y)]) --> (Subst x y P) )
 
   | Red_reduction_parallel : forall ( P Q R : Process), 
@@ -422,8 +422,8 @@ Inductive Reduction : Process -> Process -> Prop :=
     (Q --> R) -> ((P ↓ Q ) --> (P ↓ R))
 
   | Red_reduction_chanres : forall (P Q : Process)( x : nat),
-    Body P -> Body Q -> Well_Open P x -> Well_Open Q x -> 
-    ( ({0 ~> x} P) -->  ({0 ~> x} Q) ) -> ( ν P --> ν Q )
+    lc P -> lc Q ->
+    ( P --> Q ) -> ( ν Close x P --> ν Close x Q )
 
    | Red_reduction_struct : forall ( P Q P' Q' : Process ),
     lc P' -> ( P' === P ) -> ( Q' === Q ) ->
@@ -958,36 +958,6 @@ Proof.
     rewrite FVars_Name_No_Close; auto.
     rewrite IHP; auto.
 Qed.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

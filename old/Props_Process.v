@@ -318,7 +318,5 @@ Proof.
   dependent induction H;
     try inversions H0;
     try constructor; auto.
-  + inversions H2. auto.
-  + apply Subst_Lc_Lc; auto.
   + admit.
 Admitted.
