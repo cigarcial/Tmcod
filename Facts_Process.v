@@ -10,8 +10,8 @@ From Coq Require Import Arith.PeanoNat.
 From Coq Require Import Arith.EqNat.
 From Coq Require Import Lia.
 
-From Tmcod Require Import Defs_Process.
 From Tmcod Require Import Defs_Tactics.
+From Tmcod Require Import Defs_Process.
 From Tmcod Require Import Facts_Names.
 
 

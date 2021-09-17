@@ -21,8 +21,8 @@ From Coq Require Import Arith.EqNat.
 From Coq Require Import Bool.Bool.
 From Coq Require Import Lia.
 
-From Tmcod Require Import Defs_Process.
 From Tmcod Require Import Defs_Tactics.
+From Tmcod Require Import Defs_Process.
 
 (*
 *)

@@ -8,11 +8,11 @@ From Coq Require Import Lists.List.
 Import ListNotations.
 
 
-From Tmcod Require Import Defs_Process.
 From Tmcod Require Import Defs_Tactics.
+From Tmcod Require Import Defs_Process.
+From Tmcod Require Import Facts_Names.
 From Tmcod Require Import Facts_Process.
 From Tmcod Require Import Facts_MOpen.
-From Tmcod Require Import Facts_Names.
 
 
 (*

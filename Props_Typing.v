@@ -7,12 +7,14 @@ From Coq Require Import Bool.Bool.
 From Coq Require Import Arith.PeanoNat.
 From Coq Require Import Arith.EqNat.
 
-From Tmcod Require Import Defs_Typing.
-From Tmcod Require Import Defs_Process.
-From Tmcod Require Import Defs_Proposition.
-From Tmcod Require Import Props_Process.
-From Tmcod Require Import Facts_Process.
 From Tmcod Require Import Defs_Tactics.
+From Tmcod Require Import Defs_Proposition.
+From Tmcod Require Import Defs_Process.
+From Tmcod Require Import Defs_Typing.
+From Tmcod Require Import Facts_Process.
+From Tmcod Require Import Props_Process.
+
+
 Require Import Coq.Program.Equality.
 
 Lemma Inv_Subst_Zero :
@@ -31,7 +33,7 @@ Proof.
   unfold not.
   intros.
   dependent induction H.
-  + apply Inv_Subst_Zero in x; auto.
+  + apply Inv_Subst_Zero in x. auto.
   + apply Inv_Subst_Zero in x; auto.
 Qed.
 
@@ -103,13 +105,30 @@ Proof.
 Qed.
 
 
+Lemma ABC :
+forall ( D : list Assignment)( x y : Name )( A : Proposition),
+Collect D -> lc_name x -> lc_name y -> 
+D;;; (x : A) :: nil !- θ ::: ((y : A) :: nil).
+Proof.
+  intros.
+  assert (HA : D ;;; ( cons (x:A) nil ) !- ([x←→y]) ::: ( cons (y:A) nil ) ).
+  constructor; auto.
+  apply (Soundness ([x ←→ y]) ); auto.
+  apply Red_1; auto.
+Qed.
 
 
-
-
-
-
-
+Lemma False_True :
+forall (x y : Name)( A : Proposition), 
+lc_name x -> lc_name y -> False.
+Proof.
+  intros.
+  apply (No_Typing_Zero nil ( cons (x:A) nil ) ( cons (y:A) nil ) ) .
+  apply ABC; auto.
+  
+  constructor; intros.
+  inversions H2.
+Qed.
 
 
 
