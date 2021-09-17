@@ -1,6 +1,0 @@
-coqc Defs_Tactics.v -Q . old
-coqc Defs_Proposition.v -Q . old
-coqc Defs_Process.v -Q . old
-coqc Defs_Typing.v -Q . old
-coqc Facts_MOpen.v -Q . old
-coqc Props_Process.v -Q . old
