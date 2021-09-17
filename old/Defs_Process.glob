@@ -1,0 +1,2164 @@
+DIGEST b8a70df100aa1c59f739263777efc6b8
+Fold.Defs_Process
+R145:147 Coq.Init.Nat <> <> lib
+R174:188 Coq.Arith.Peano_dec <> <> lib
+R215:223 Coq.Sets.Ensembles <> <> lib
+R250:260 Coq.Sets.Finite_sets <> <> lib
+R287:303 Coq.Sets.Finite_sets_facts <> <> lib
+R333:344 old.Defs_Tactics <> <> lib
+def 365:370 <> FVarsE
+R375:382 Coq.Sets.Ensembles <> Ensemble def
+R384:386 Coq.Init.Datatypes <> nat ind
+syndef 399:400 <> ø
+R406:414 Coq.Sets.Ensembles <> Empty_set ind
+R446:447 Coq.Sets.Ensembles <> In def
+not 429:429 <> :::x_'∈'_x
+R515:522 Coq.Sets.Ensembles <> Included def
+not 498:498 <> :::x_'⊆'_x
+R592:596 Coq.Sets.Ensembles <> Union ind
+not 575:575 <> :::x_'∪'_x
+R665:676 Coq.Sets.Ensembles <> Intersection ind
+not 648:648 <> :::x_'∩'_x
+ind 736:739 <> Name
+constr 756:760 <> FName
+constr 784:788 <> BName
+R768:770 Coq.Init.Datatypes <> nat ind
+binder 764:764 <> x:3
+R775:778 old.Defs_Process <> Name:1 ind
+R796:798 Coq.Init.Datatypes <> nat ind
+binder 792:792 <> i:4
+R803:806 old.Defs_Process <> Name:1 ind
+ind 820:826 <> Process
+constr 853:857 <> Pzero
+constr 874:877 <> Fuse
+constr 906:913 <> Parallel
+constr 946:956 <> Chan_output
+constr 1001:1009 <> Chan_zero
+constr 1037:1046 <> Chan_close
+constr 1130:1137 <> Chan_res
+constr 1168:1177 <> Chan_input
+constr 1220:1233 <> Chan_replicate
+R861:867 old.Defs_Process <> Process:5 ind
+R886:889 old.Defs_Process <> Name ind
+binder 880:880 <> x:7
+binder 882:882 <> y:8
+R894:900 old.Defs_Process <> Process:5 ind
+R922:928 old.Defs_Process <> Process:5 ind
+binder 916:916 <> P:9
+binder 918:918 <> Q:10
+R934:940 old.Defs_Process <> Process:5 ind
+R966:969 old.Defs_Process <> Name ind
+binder 960:960 <> x:11
+binder 962:962 <> y:12
+R978:984 old.Defs_Process <> Process:5 ind
+binder 974:974 <> P:13
+R989:995 old.Defs_Process <> Process:5 ind
+R1016:1019 old.Defs_Process <> Name ind
+binder 1012:1012 <> x:14
+R1025:1031 old.Defs_Process <> Process:5 ind
+R1054:1057 old.Defs_Process <> Name ind
+binder 1050:1050 <> x:15
+R1067:1073 old.Defs_Process <> Process:5 ind
+binder 1063:1063 <> P:16
+R1079:1085 old.Defs_Process <> Process:5 ind
+R1144:1150 old.Defs_Process <> Process:5 ind
+binder 1140:1140 <> P:17
+R1156:1162 old.Defs_Process <> Process:5 ind
+R1185:1188 old.Defs_Process <> Name ind
+binder 1181:1181 <> x:18
+R1197:1203 old.Defs_Process <> Process:5 ind
+binder 1193:1193 <> P:19
+R1208:1214 old.Defs_Process <> Process:5 ind
+R1241:1244 old.Defs_Process <> Name ind
+binder 1237:1237 <> x:20
+R1251:1257 old.Defs_Process <> Process:5 ind
+binder 1247:1247 <> P:21
+R1263:1269 old.Defs_Process <> Process:5 ind
+R1300:1304 old.Defs_Process <> Pzero constr
+not 1290:1290 <> :::'θ'
+R1351:1354 old.Defs_Process <> Fuse constr
+not 1330:1330 <> :::'['_x_'←→'_x_']'
+R1517:1524 old.Defs_Process <> Parallel constr
+not 1502:1502 <> :::x_'↓'_x
+R1578:1588 old.Defs_Process <> Chan_output constr
+not 1557:1557 <> :::x_'«'_x_'»·'_x
+R1637:1645 old.Defs_Process <> Chan_zero constr
+not 1622:1622 <> :::x_'·θ'
+R1690:1699 old.Defs_Process <> Chan_close constr
+not 1675:1675 <> :::x_'()·'_x
+R1781:1788 old.Defs_Process <> Chan_res constr
+not 1766:1766 <> :::'ν'_x
+R1833:1842 old.Defs_Process <> Chan_input constr
+not 1819:1819 <> :::x_'·'_x
+R1889:1902 old.Defs_Process <> Chan_replicate constr
+not 1872:1872 <> :::x_'!·'_x
+def 1991:2000 <> FVars_Name
+R2008:2011 old.Defs_Process <> Name ind
+binder 2004:2004 <> N:22
+R2017:2022 old.Defs_Process <> FVarsE def
+R2033:2033 old.Defs_Process <> N:22 var
+R2044:2048 old.Defs_Process <> FName constr
+R2055:2063 Coq.Sets.Ensembles <> Singleton ind
+R2065:2067 Coq.Init.Datatypes <> nat ind
+R2075:2079 old.Defs_Process <> BName constr
+R2086:2094 Coq.Sets.Ensembles <> Empty_set ind
+R2096:2098 Coq.Init.Datatypes <> nat ind
+def 2115:2119 <> FVars
+R2127:2133 old.Defs_Process <> Process ind
+binder 2123:2123 <> T:24
+R2150:2155 old.Defs_Process <> FVarsE def
+R2167:2167 old.Defs_Process <> T:24 var
+R2178:2182 old.Defs_Process <> Pzero constr
+R2187:2195 Coq.Sets.Ensembles <> Empty_set ind
+R2197:2199 Coq.Init.Datatypes <> nat ind
+R2205:2208 old.Defs_Process <> Fuse constr
+R2217:2217 old.Defs_Process <> :::x_'∪'_x not
+R2230:2236 old.Defs_Process <> :::x_'∪'_x not
+R2249:2249 old.Defs_Process <> :::x_'∪'_x not
+R2218:2227 old.Defs_Process <> FVars_Name def
+R2237:2246 old.Defs_Process <> FVars_Name def
+R2255:2262 old.Defs_Process <> Parallel constr
+R2271:2271 old.Defs_Process <> :::x_'∪'_x not
+R2279:2285 old.Defs_Process <> :::x_'∪'_x not
+R2293:2293 old.Defs_Process <> :::x_'∪'_x not
+R2272:2276 old.Defs_Process <> FVars:25 def
+R2286:2290 old.Defs_Process <> FVars:25 def
+R2299:2309 old.Defs_Process <> Chan_output constr
+R2353:2358 old.Defs_Process <> :::x_'∪'_x not
+R2366:2366 old.Defs_Process <> :::x_'∪'_x not
+R2320:2320 old.Defs_Process <> :::x_'∪'_x not
+R2333:2339 old.Defs_Process <> :::x_'∪'_x not
+R2352:2352 old.Defs_Process <> :::x_'∪'_x not
+R2321:2330 old.Defs_Process <> FVars_Name def
+R2340:2349 old.Defs_Process <> FVars_Name def
+R2359:2363 old.Defs_Process <> FVars:25 def
+R2372:2380 old.Defs_Process <> Chan_zero constr
+R2387:2396 old.Defs_Process <> FVars_Name def
+R2404:2413 old.Defs_Process <> Chan_close constr
+R2422:2422 old.Defs_Process <> :::x_'∪'_x not
+R2435:2441 old.Defs_Process <> :::x_'∪'_x not
+R2449:2449 old.Defs_Process <> :::x_'∪'_x not
+R2423:2432 old.Defs_Process <> FVars_Name def
+R2442:2446 old.Defs_Process <> FVars:25 def
+R2455:2462 old.Defs_Process <> Chan_res constr
+R2469:2473 old.Defs_Process <> FVars:25 def
+R2481:2490 old.Defs_Process <> Chan_input constr
+R2499:2499 old.Defs_Process <> :::x_'∪'_x not
+R2512:2518 old.Defs_Process <> :::x_'∪'_x not
+R2526:2526 old.Defs_Process <> :::x_'∪'_x not
+R2500:2509 old.Defs_Process <> FVars_Name def
+R2519:2523 old.Defs_Process <> FVars:25 def
+R2532:2545 old.Defs_Process <> Chan_replicate constr
+R2554:2554 old.Defs_Process <> :::x_'∪'_x not
+R2567:2573 old.Defs_Process <> :::x_'∪'_x not
+R2581:2581 old.Defs_Process <> :::x_'∪'_x not
+R2555:2564 old.Defs_Process <> FVars_Name def
+R2574:2578 old.Defs_Process <> FVars:25 def
+def 2871:2879 <> Open_Name
+R2889:2891 Coq.Init.Datatypes <> nat ind
+binder 2883:2883 <> k:27
+binder 2885:2885 <> z:28
+R2900:2903 old.Defs_Process <> Name ind
+binder 2896:2896 <> N:29
+R2909:2912 old.Defs_Process <> Name ind
+R2924:2924 old.Defs_Process <> N:29 var
+R2936:2940 old.Defs_Process <> FName constr
+R2947:2951 old.Defs_Process <> FName constr
+R2959:2963 old.Defs_Process <> BName constr
+R2976:2979 Coq.Init.Nat <> ::nat_scope:x_'=?'_x not
+R2975:2975 old.Defs_Process <> k:27 var
+R3005:3009 old.Defs_Process <> BName constr
+R2990:2994 old.Defs_Process <> FName constr
+R2996:2996 old.Defs_Process <> z:28 var
+def 3066:3073 <> Open_Rec
+R3082:3084 Coq.Init.Datatypes <> nat ind
+binder 3076:3076 <> k:31
+binder 3078:3078 <> z:32
+R3092:3098 old.Defs_Process <> Process ind
+binder 3088:3088 <> T:33
+R3115:3121 old.Defs_Process <> Process ind
+R3133:3133 old.Defs_Process <> T:33 var
+R3144:3148 old.Defs_Process <> Pzero constr
+R3153:3157 old.Defs_Process <> Pzero constr
+R3163:3166 old.Defs_Process <> Fuse constr
+R3175:3178 old.Defs_Process <> Fuse constr
+R3181:3189 old.Defs_Process <> Open_Name def
+R3191:3191 old.Defs_Process <> k:31 var
+R3193:3193 old.Defs_Process <> z:32 var
+R3200:3208 old.Defs_Process <> Open_Name def
+R3210:3210 old.Defs_Process <> k:31 var
+R3212:3212 old.Defs_Process <> z:32 var
+R3222:3229 old.Defs_Process <> Parallel constr
+R3238:3245 old.Defs_Process <> Parallel constr
+R3248:3255 old.Defs_Process <> Open_Rec:34 def
+R3259:3259 old.Defs_Process <> z:32 var
+R3257:3257 old.Defs_Process <> k:31 var
+R3265:3272 old.Defs_Process <> Open_Rec:34 def
+R3276:3276 old.Defs_Process <> z:32 var
+R3274:3274 old.Defs_Process <> k:31 var
+R3285:3295 old.Defs_Process <> Chan_output constr
+R3306:3316 old.Defs_Process <> Chan_output constr
+R3319:3327 old.Defs_Process <> Open_Name def
+R3329:3329 old.Defs_Process <> k:31 var
+R3331:3331 old.Defs_Process <> z:32 var
+R3337:3345 old.Defs_Process <> Open_Name def
+R3347:3347 old.Defs_Process <> k:31 var
+R3349:3349 old.Defs_Process <> z:32 var
+R3355:3362 old.Defs_Process <> Open_Rec:34 def
+R3366:3366 old.Defs_Process <> z:32 var
+R3364:3364 old.Defs_Process <> k:31 var
+R3375:3383 old.Defs_Process <> Chan_zero constr
+R3390:3398 old.Defs_Process <> Chan_zero constr
+R3401:3409 old.Defs_Process <> Open_Name def
+R3411:3411 old.Defs_Process <> k:31 var
+R3413:3413 old.Defs_Process <> z:32 var
+R3422:3431 old.Defs_Process <> Chan_close constr
+R3440:3449 old.Defs_Process <> Chan_close constr
+R3452:3460 old.Defs_Process <> Open_Name def
+R3462:3462 old.Defs_Process <> k:31 var
+R3464:3464 old.Defs_Process <> z:32 var
+R3470:3477 old.Defs_Process <> Open_Rec:34 def
+R3481:3481 old.Defs_Process <> z:32 var
+R3479:3479 old.Defs_Process <> k:31 var
+R3490:3497 old.Defs_Process <> Chan_res constr
+R3504:3511 old.Defs_Process <> Chan_res constr
+R3514:3521 old.Defs_Process <> Open_Rec:34 def
+R3529:3529 old.Defs_Process <> z:32 var
+R3524:3524 Coq.Init.Datatypes <> S constr
+R3526:3526 old.Defs_Process <> k:31 var
+R3538:3547 old.Defs_Process <> Chan_input constr
+R3556:3565 old.Defs_Process <> Chan_input constr
+R3568:3576 old.Defs_Process <> Open_Name def
+R3578:3578 old.Defs_Process <> k:31 var
+R3580:3580 old.Defs_Process <> z:32 var
+R3586:3593 old.Defs_Process <> Open_Rec:34 def
+R3601:3601 old.Defs_Process <> z:32 var
+R3596:3596 Coq.Init.Datatypes <> S constr
+R3598:3598 old.Defs_Process <> k:31 var
+R3610:3623 old.Defs_Process <> Chan_replicate constr
+R3632:3645 old.Defs_Process <> Chan_replicate constr
+R3648:3656 old.Defs_Process <> Open_Name def
+R3658:3658 old.Defs_Process <> k:31 var
+R3660:3660 old.Defs_Process <> z:32 var
+R3666:3673 old.Defs_Process <> Open_Rec:34 def
+R3681:3681 old.Defs_Process <> z:32 var
+R3676:3676 Coq.Init.Datatypes <> S constr
+R3678:3678 old.Defs_Process <> k:31 var
+R3720:3727 old.Defs_Process <> Open_Rec def
+not 3700:3700 <> :::'{'_x_'~>'_x_'}'_x
+def 3761:3764 <> Open
+R3772:3774 Coq.Init.Datatypes <> nat ind
+binder 3768:3768 <> z:36
+R3783:3789 old.Defs_Process <> Process ind
+binder 3779:3779 <> T:37
+R3794:3800 old.Defs_Process <> Process ind
+R3805:3812 old.Defs_Process <> Open_Rec def
+R3816:3816 old.Defs_Process <> z:36 var
+R3818:3818 old.Defs_Process <> T:37 var
+R3842:3849 old.Defs_Process <> Open_Rec def
+not 3830:3830 <> :::x_'^'_x
+ind 3998:4006 <> Well_Open
+constr 4041:4052 <> Is_Well_Open
+R4017:4020 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4010:4016 old.Defs_Process <> Process ind
+R4024:4027 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4021:4023 Coq.Init.Datatypes <> nat ind
+R4069:4075 old.Defs_Process <> Process ind
+binder 4065:4065 <> P:40
+R4082:4084 Coq.Init.Datatypes <> nat ind
+binder 4078:4078 <> z:41
+R4112:4116 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4130:4130 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R4092:4094 Coq.Init.Logic <> ::type_scope:'~'_x not
+R4110:4111 Coq.Init.Logic <> ::type_scope:'~'_x not
+R4096:4101 old.Defs_Process <> :::x_'∈'_x not
+R4109:4109 old.Defs_Process <> :::x_'∈'_x not
+R4102:4106 old.Defs_Process <> FVars def
+R4108:4108 old.Defs_Process <> P:40 var
+R4095:4095 old.Defs_Process <> z:41 var
+R4117:4125 old.Defs_Process <> Well_Open:38 ind
+R4129:4129 old.Defs_Process <> z:41 var
+R4127:4127 old.Defs_Process <> P:40 var
+def 4242:4251 <> Close_Name
+R4260:4262 Coq.Init.Datatypes <> nat ind
+binder 4255:4255 <> k:42
+binder 4257:4257 <> z:43
+R4271:4274 old.Defs_Process <> Name ind
+binder 4267:4267 <> N:44
+R4280:4283 old.Defs_Process <> Name ind
+R4295:4295 old.Defs_Process <> N:44 var
+R4306:4310 old.Defs_Process <> FName constr
+R4325:4328 Coq.Init.Nat <> ::nat_scope:x_'=?'_x not
+R4329:4329 old.Defs_Process <> z:43 var
+R4353:4353 old.Defs_Process <> N:44 var
+R4339:4343 old.Defs_Process <> BName constr
+R4345:4345 old.Defs_Process <> k:42 var
+R4359:4363 old.Defs_Process <> BName constr
+R4370:4370 old.Defs_Process <> N:44 var
+def 4444:4452 <> Close_Rec
+R4461:4463 Coq.Init.Datatypes <> nat ind
+binder 4455:4455 <> k:46
+binder 4457:4457 <> z:47
+R4471:4477 old.Defs_Process <> Process ind
+binder 4467:4467 <> T:48
+R4494:4500 old.Defs_Process <> Process ind
+R4512:4512 old.Defs_Process <> T:48 var
+R4523:4527 old.Defs_Process <> Pzero constr
+R4532:4536 old.Defs_Process <> Pzero constr
+R4542:4545 old.Defs_Process <> Fuse constr
+R4554:4557 old.Defs_Process <> Fuse constr
+R4560:4569 old.Defs_Process <> Close_Name def
+R4571:4571 old.Defs_Process <> k:46 var
+R4573:4573 old.Defs_Process <> z:47 var
+R4580:4589 old.Defs_Process <> Close_Name def
+R4591:4591 old.Defs_Process <> k:46 var
+R4593:4593 old.Defs_Process <> z:47 var
+R4603:4610 old.Defs_Process <> Parallel constr
+R4619:4626 old.Defs_Process <> Parallel constr
+R4629:4637 old.Defs_Process <> Close_Rec:49 def
+R4641:4641 old.Defs_Process <> z:47 var
+R4639:4639 old.Defs_Process <> k:46 var
+R4647:4655 old.Defs_Process <> Close_Rec:49 def
+R4659:4659 old.Defs_Process <> z:47 var
+R4657:4657 old.Defs_Process <> k:46 var
+R4668:4678 old.Defs_Process <> Chan_output constr
+R4689:4699 old.Defs_Process <> Chan_output constr
+R4702:4711 old.Defs_Process <> Close_Name def
+R4713:4713 old.Defs_Process <> k:46 var
+R4715:4715 old.Defs_Process <> z:47 var
+R4721:4730 old.Defs_Process <> Close_Name def
+R4732:4732 old.Defs_Process <> k:46 var
+R4734:4734 old.Defs_Process <> z:47 var
+R4740:4748 old.Defs_Process <> Close_Rec:49 def
+R4752:4752 old.Defs_Process <> z:47 var
+R4750:4750 old.Defs_Process <> k:46 var
+R4762:4770 old.Defs_Process <> Chan_zero constr
+R4777:4785 old.Defs_Process <> Chan_zero constr
+R4788:4797 old.Defs_Process <> Close_Name def
+R4799:4799 old.Defs_Process <> k:46 var
+R4801:4801 old.Defs_Process <> z:47 var
+R4810:4819 old.Defs_Process <> Chan_close constr
+R4828:4837 old.Defs_Process <> Chan_close constr
+R4840:4849 old.Defs_Process <> Close_Name def
+R4851:4851 old.Defs_Process <> k:46 var
+R4853:4853 old.Defs_Process <> z:47 var
+R4859:4867 old.Defs_Process <> Close_Rec:49 def
+R4871:4871 old.Defs_Process <> z:47 var
+R4869:4869 old.Defs_Process <> k:46 var
+R4880:4887 old.Defs_Process <> Chan_res constr
+R4894:4901 old.Defs_Process <> Chan_res constr
+R4904:4912 old.Defs_Process <> Close_Rec:49 def
+R4920:4920 old.Defs_Process <> z:47 var
+R4915:4915 Coq.Init.Datatypes <> S constr
+R4917:4917 old.Defs_Process <> k:46 var
+R4929:4938 old.Defs_Process <> Chan_input constr
+R4947:4956 old.Defs_Process <> Chan_input constr
+R4959:4968 old.Defs_Process <> Close_Name def
+R4970:4970 old.Defs_Process <> k:46 var
+R4972:4972 old.Defs_Process <> z:47 var
+R4978:4986 old.Defs_Process <> Close_Rec:49 def
+R4994:4994 old.Defs_Process <> z:47 var
+R4989:4989 Coq.Init.Datatypes <> S constr
+R4991:4991 old.Defs_Process <> k:46 var
+R5003:5016 old.Defs_Process <> Chan_replicate constr
+R5025:5038 old.Defs_Process <> Chan_replicate constr
+R5041:5050 old.Defs_Process <> Close_Name def
+R5052:5052 old.Defs_Process <> k:46 var
+R5054:5054 old.Defs_Process <> z:47 var
+R5060:5068 old.Defs_Process <> Close_Rec:49 def
+R5076:5076 old.Defs_Process <> z:47 var
+R5071:5071 Coq.Init.Datatypes <> S constr
+R5073:5073 old.Defs_Process <> k:46 var
+def 5105:5109 <> Close
+R5117:5119 Coq.Init.Datatypes <> nat ind
+binder 5113:5113 <> z:51
+R5128:5134 old.Defs_Process <> Process ind
+binder 5124:5124 <> T:52
+R5139:5145 old.Defs_Process <> Process ind
+R5150:5158 old.Defs_Process <> Close_Rec def
+R5162:5162 old.Defs_Process <> z:51 var
+R5164:5164 old.Defs_Process <> T:52 var
+ind 5186:5192 <> lc_name
+constr 5217:5224 <> lc_fname
+R5200:5203 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5196:5199 old.Defs_Process <> Name ind
+R5240:5242 Coq.Init.Datatypes <> nat ind
+binder 5236:5236 <> x:55
+R5246:5252 old.Defs_Process <> lc_name:53 ind
+R5255:5259 old.Defs_Process <> FName constr
+R5261:5261 old.Defs_Process <> x:55 var
+ind 5276:5277 <> lc
+constr 5304:5311 <> lc_pzero
+constr 5329:5335 <> lc_fuse
+constr 5419:5429 <> lc_parallel
+constr 5498:5511 <> lc_chan_output
+constr 5614:5625 <> lc_chan_zero
+constr 5687:5699 <> lc_chan_close
+constr 5784:5794 <> lc_chan_res
+constr 5884:5896 <> lc_chan_input
+constr 6018:6034 <> lc_chan_replicate
+R5288:5291 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5281:5287 old.Defs_Process <> Process ind
+R5315:5316 old.Defs_Process <> lc:56 ind
+R5318:5319 old.Defs_Process <> :::'θ' not
+R5352:5355 old.Defs_Process <> Name ind
+binder 5346:5346 <> x:58
+binder 5348:5348 <> y:59
+R5372:5375 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5363:5369 old.Defs_Process <> lc_name ind
+R5371:5371 old.Defs_Process <> x:58 var
+R5385:5388 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5376:5382 old.Defs_Process <> lc_name ind
+R5384:5384 old.Defs_Process <> y:59 var
+R5389:5390 old.Defs_Process <> lc:56 ind
+R5394:5395 old.Defs_Process <> :::'['_x_'←→'_x_']' not
+R5397:5404 old.Defs_Process <> :::'['_x_'←→'_x_']' not
+R5406:5406 old.Defs_Process <> :::'['_x_'←→'_x_']' not
+R5396:5396 old.Defs_Process <> x:58 var
+R5405:5405 old.Defs_Process <> y:59 var
+R5446:5452 old.Defs_Process <> Process ind
+binder 5440:5440 <> P:60
+binder 5442:5442 <> Q:61
+R5464:5467 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5460:5461 old.Defs_Process <> lc:56 ind
+R5463:5463 old.Defs_Process <> P:60 var
+R5472:5475 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5468:5469 old.Defs_Process <> lc:56 ind
+R5471:5471 old.Defs_Process <> Q:61 var
+R5476:5477 old.Defs_Process <> lc:56 ind
+R5481:5485 old.Defs_Process <> :::x_'↓'_x not
+R5480:5480 old.Defs_Process <> P:60 var
+R5486:5486 old.Defs_Process <> Q:61 var
+R5529:5532 old.Defs_Process <> Name ind
+binder 5523:5523 <> x:62
+binder 5525:5525 <> y:63
+R5541:5547 old.Defs_Process <> Process ind
+binder 5537:5537 <> P:64
+R5564:5567 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5555:5561 old.Defs_Process <> lc_name ind
+R5563:5563 old.Defs_Process <> x:62 var
+R5577:5580 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5568:5574 old.Defs_Process <> lc_name ind
+R5576:5576 old.Defs_Process <> y:63 var
+R5585:5588 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5581:5582 old.Defs_Process <> lc:56 ind
+R5584:5584 old.Defs_Process <> P:64 var
+R5589:5590 old.Defs_Process <> lc:56 ind
+R5595:5597 old.Defs_Process <> :::x_'«'_x_'»·'_x not
+R5599:5603 old.Defs_Process <> :::x_'«'_x_'»·'_x not
+R5594:5594 old.Defs_Process <> x:62 var
+R5598:5598 old.Defs_Process <> y:63 var
+R5604:5604 old.Defs_Process <> P:64 var
+R5640:5643 old.Defs_Process <> Name ind
+binder 5636:5636 <> x:65
+R5660:5663 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5651:5657 old.Defs_Process <> lc_name ind
+R5659:5659 old.Defs_Process <> x:65 var
+R5664:5665 old.Defs_Process <> lc:56 ind
+R5670:5674 old.Defs_Process <> :::x_'·θ' not
+R5669:5669 old.Defs_Process <> x:65 var
+R5715:5718 old.Defs_Process <> Name ind
+binder 5711:5711 <> x:66
+R5725:5731 old.Defs_Process <> Process ind
+binder 5721:5721 <> P:67
+R5748:5751 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5739:5745 old.Defs_Process <> lc_name ind
+R5747:5747 old.Defs_Process <> x:66 var
+R5756:5759 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5752:5753 old.Defs_Process <> lc:56 ind
+R5755:5755 old.Defs_Process <> P:67 var
+R5760:5761 old.Defs_Process <> lc:56 ind
+R5766:5771 old.Defs_Process <> :::x_'()·'_x not
+R5765:5765 old.Defs_Process <> x:66 var
+R5772:5772 old.Defs_Process <> P:67 var
+R5810:5816 old.Defs_Process <> Process ind
+binder 5806:5806 <> P:68
+R5825:5826 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5861:5866 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5839:5841 Coq.Init.Datatypes <> nat ind
+binder 5835:5835 <> x:69
+R5845:5846 old.Defs_Process <> lc:56 ind
+R5849:5850 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R5852:5855 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R5857:5858 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R5856:5856 old.Defs_Process <> x:69 var
+R5859:5859 old.Defs_Process <> P:68 var
+R5867:5868 old.Defs_Process <> lc:56 ind
+R5871:5873 old.Defs_Process <> :::'ν'_x not
+R5874:5874 old.Defs_Process <> P:68 var
+R5912:5915 old.Defs_Process <> Name ind
+binder 5908:5908 <> x:70
+R5923:5929 old.Defs_Process <> Process ind
+binder 5920:5920 <> P:71
+R5946:5954 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5937:5943 old.Defs_Process <> lc_name ind
+R5945:5945 old.Defs_Process <> x:70 var
+R5955:5956 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5991:5996 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5969:5971 Coq.Init.Datatypes <> nat ind
+binder 5965:5965 <> x:72
+R5975:5976 old.Defs_Process <> lc:56 ind
+R5979:5980 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R5982:5985 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R5987:5988 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R5986:5986 old.Defs_Process <> x:72 var
+R5989:5989 old.Defs_Process <> P:71 var
+R5997:5998 old.Defs_Process <> lc:56 ind
+R6003:6006 old.Defs_Process <> :::x_'·'_x not
+R6002:6002 old.Defs_Process <> x:70 var
+R6007:6007 old.Defs_Process <> P:71 var
+R6050:6053 old.Defs_Process <> Name ind
+binder 6046:6046 <> x:73
+R6061:6067 old.Defs_Process <> Process ind
+binder 6057:6057 <> P:74
+R6084:6092 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R6075:6081 old.Defs_Process <> lc_name ind
+R6083:6083 old.Defs_Process <> x:73 var
+R6093:6094 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R6129:6134 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R6107:6109 Coq.Init.Datatypes <> nat ind
+binder 6103:6103 <> x:75
+R6113:6114 old.Defs_Process <> lc:56 ind
+R6117:6118 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R6120:6123 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R6125:6126 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R6124:6124 old.Defs_Process <> x:75 var
+R6127:6127 old.Defs_Process <> P:74 var
+R6135:6136 old.Defs_Process <> lc:56 ind
+R6141:6145 old.Defs_Process <> :::x_'!·'_x not
+R6140:6140 old.Defs_Process <> x:73 var
+R6146:6146 old.Defs_Process <> P:74 var
+R6169:6170 old.Defs_Process <> lc ind
+ind 6199:6202 <> Body
+constr 6230:6236 <> is_body
+R6213:6216 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R6206:6212 old.Defs_Process <> Process ind
+R6252:6258 old.Defs_Process <> Process ind
+binder 6248:6248 <> P:78
+R6267:6268 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R6308:6313 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R6281:6283 Coq.Init.Datatypes <> nat ind
+binder 6277:6277 <> x:79
+R6287:6288 old.Defs_Process <> lc ind
+R6291:6292 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R6294:6297 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R6299:6305 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R6298:6298 old.Defs_Process <> x:79 var
+R6306:6306 old.Defs_Process <> P:78 var
+R6314:6317 old.Defs_Process <> Body:76 ind
+R6319:6319 old.Defs_Process <> P:78 var
+ind 6342:6349 <> lca_name
+constr 6381:6389 <> lca_Fname
+constr 6439:6447 <> lca_Bname
+R6356:6359 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R6353:6355 Coq.Init.Datatypes <> nat ind
+R6364:6367 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R6360:6363 old.Defs_Process <> Name ind
+R6408:6410 Coq.Init.Datatypes <> nat ind
+binder 6402:6402 <> k:82
+binder 6404:6404 <> x:83
+R6414:6421 old.Defs_Process <> lca_name:80 ind
+R6426:6430 old.Defs_Process <> FName constr
+R6432:6432 old.Defs_Process <> x:83 var
+R6423:6423 old.Defs_Process <> k:82 var
+R6466:6468 Coq.Init.Datatypes <> nat ind
+binder 6460:6460 <> k:84
+binder 6462:6462 <> i:85
+R6472:6473 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R6479:6484 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R6475:6477 Coq.Init.Peano <> ::nat_scope:x_'<'_x not
+R6474:6474 old.Defs_Process <> i:85 var
+R6478:6478 old.Defs_Process <> k:84 var
+R6485:6492 old.Defs_Process <> lca_name:80 ind
+R6497:6501 old.Defs_Process <> BName constr
+R6503:6503 old.Defs_Process <> i:85 var
+R6494:6494 old.Defs_Process <> k:84 var
+ind 6518:6520 <> lca
+constr 6554:6562 <> lca_pzero
+constr 6600:6607 <> lca_fuse
+constr 6714:6725 <> lca_parallel
+constr 6817:6831 <> lca_chan_output
+constr 6959:6971 <> lca_chan_zero
+constr 7053:7066 <> lca_chan_close
+constr 7174:7185 <> lca_chan_res
+constr 7264:7277 <> lca_chan_input
+constr 7386:7403 <> lca_chan_replicate
+R6527:6530 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R6524:6526 Coq.Init.Datatypes <> nat ind
+R6538:6541 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R6531:6537 old.Defs_Process <> Process ind
+R6577:6579 Coq.Init.Datatypes <> nat ind
+binder 6573:6573 <> k:88
+R6582:6584 old.Defs_Process <> lca:86 ind
+R6589:6590 old.Defs_Process <> :::'θ' not
+R6586:6586 old.Defs_Process <> k:88 var
+R6624:6626 Coq.Init.Datatypes <> nat ind
+binder 6620:6620 <> k:89
+R6637:6640 old.Defs_Process <> Name ind
+binder 6631:6631 <> x:90
+binder 6633:6633 <> y:91
+R6661:6664 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R6649:6656 old.Defs_Process <> lca_name ind
+R6658:6658 old.Defs_Process <> k:89 var
+R6660:6660 old.Defs_Process <> x:90 var
+R6677:6680 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R6665:6672 old.Defs_Process <> lca_name ind
+R6674:6674 old.Defs_Process <> k:89 var
+R6676:6676 old.Defs_Process <> y:91 var
+R6681:6683 old.Defs_Process <> lca:86 ind
+R6689:6690 old.Defs_Process <> :::'['_x_'←→'_x_']' not
+R6692:6699 old.Defs_Process <> :::'['_x_'←→'_x_']' not
+R6701:6701 old.Defs_Process <> :::'['_x_'←→'_x_']' not
+R6691:6691 old.Defs_Process <> x:90 var
+R6700:6700 old.Defs_Process <> y:91 var
+R6685:6685 old.Defs_Process <> k:89 var
+R6742:6744 Coq.Init.Datatypes <> nat ind
+binder 6738:6738 <> k:92
+R6755:6761 old.Defs_Process <> Process ind
+binder 6749:6749 <> P:93
+binder 6751:6751 <> Q:94
+R6777:6780 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R6770:6772 old.Defs_Process <> lca:86 ind
+R6776:6776 old.Defs_Process <> P:93 var
+R6774:6774 old.Defs_Process <> k:92 var
+R6788:6791 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R6781:6783 old.Defs_Process <> lca:86 ind
+R6787:6787 old.Defs_Process <> Q:94 var
+R6785:6785 old.Defs_Process <> k:92 var
+R6792:6794 old.Defs_Process <> lca:86 ind
+R6800:6804 old.Defs_Process <> :::x_'↓'_x not
+R6799:6799 old.Defs_Process <> P:93 var
+R6805:6805 old.Defs_Process <> Q:94 var
+R6796:6796 old.Defs_Process <> k:92 var
+R6848:6850 Coq.Init.Datatypes <> nat ind
+binder 6844:6844 <> k:95
+R6861:6864 old.Defs_Process <> Name ind
+binder 6855:6855 <> x:96
+binder 6857:6857 <> y:97
+R6873:6879 old.Defs_Process <> Process ind
+binder 6869:6869 <> P:98
+R6900:6903 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R6888:6895 old.Defs_Process <> lca_name ind
+R6897:6897 old.Defs_Process <> k:95 var
+R6899:6899 old.Defs_Process <> x:96 var
+R6916:6919 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R6904:6911 old.Defs_Process <> lca_name ind
+R6913:6913 old.Defs_Process <> k:95 var
+R6915:6915 old.Defs_Process <> y:97 var
+R6927:6930 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R6920:6922 old.Defs_Process <> lca:86 ind
+R6926:6926 old.Defs_Process <> P:98 var
+R6924:6924 old.Defs_Process <> k:95 var
+R6931:6933 old.Defs_Process <> lca:86 ind
+R6940:6942 old.Defs_Process <> :::x_'«'_x_'»·'_x not
+R6944:6948 old.Defs_Process <> :::x_'«'_x_'»·'_x not
+R6939:6939 old.Defs_Process <> x:96 var
+R6943:6943 old.Defs_Process <> y:97 var
+R6949:6949 old.Defs_Process <> P:98 var
+R6935:6935 old.Defs_Process <> k:95 var
+R6988:6990 Coq.Init.Datatypes <> nat ind
+binder 6984:6984 <> k:99
+R6999:7002 old.Defs_Process <> Name ind
+binder 6995:6995 <> x:100
+R7023:7026 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R7011:7018 old.Defs_Process <> lca_name ind
+R7020:7020 old.Defs_Process <> k:99 var
+R7022:7022 old.Defs_Process <> x:100 var
+R7027:7029 old.Defs_Process <> lca:86 ind
+R7036:7040 old.Defs_Process <> :::x_'·θ' not
+R7035:7035 old.Defs_Process <> x:100 var
+R7031:7031 old.Defs_Process <> k:99 var
+R7083:7085 Coq.Init.Datatypes <> nat ind
+binder 7079:7079 <> k:101
+R7094:7097 old.Defs_Process <> Name ind
+binder 7090:7090 <> x:102
+R7106:7112 old.Defs_Process <> Process ind
+binder 7102:7102 <> P:103
+R7133:7136 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R7121:7128 old.Defs_Process <> lca_name ind
+R7130:7130 old.Defs_Process <> k:101 var
+R7132:7132 old.Defs_Process <> x:102 var
+R7144:7147 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R7137:7139 old.Defs_Process <> lca:86 ind
+R7143:7143 old.Defs_Process <> P:103 var
+R7141:7141 old.Defs_Process <> k:101 var
+R7148:7150 old.Defs_Process <> lca:86 ind
+R7157:7162 old.Defs_Process <> :::x_'()·'_x not
+R7156:7156 old.Defs_Process <> x:102 var
+R7163:7163 old.Defs_Process <> P:103 var
+R7152:7152 old.Defs_Process <> k:101 var
+R7202:7204 Coq.Init.Datatypes <> nat ind
+binder 7198:7198 <> k:104
+R7213:7219 old.Defs_Process <> Process ind
+binder 7209:7209 <> P:105
+R7240:7243 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R7229:7231 old.Defs_Process <> lca:86 ind
+R7239:7239 old.Defs_Process <> P:105 var
+R7234:7234 Coq.Init.Datatypes <> S constr
+R7236:7236 old.Defs_Process <> k:104 var
+R7244:7246 old.Defs_Process <> lca:86 ind
+R7251:7253 old.Defs_Process <> :::'ν'_x not
+R7254:7254 old.Defs_Process <> P:105 var
+R7248:7248 old.Defs_Process <> k:104 var
+R7294:7296 Coq.Init.Datatypes <> nat ind
+binder 7290:7290 <> k:106
+R7305:7308 old.Defs_Process <> Name ind
+binder 7301:7301 <> x:107
+R7316:7322 old.Defs_Process <> Process ind
+binder 7313:7313 <> P:108
+R7343:7346 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R7331:7338 old.Defs_Process <> lca_name ind
+R7340:7340 old.Defs_Process <> k:106 var
+R7342:7342 old.Defs_Process <> x:107 var
+R7358:7361 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R7347:7349 old.Defs_Process <> lca:86 ind
+R7357:7357 old.Defs_Process <> P:108 var
+R7352:7352 Coq.Init.Datatypes <> S constr
+R7354:7354 old.Defs_Process <> k:106 var
+R7362:7364 old.Defs_Process <> lca:86 ind
+R7371:7374 old.Defs_Process <> :::x_'·'_x not
+R7370:7370 old.Defs_Process <> x:107 var
+R7375:7375 old.Defs_Process <> P:108 var
+R7366:7366 old.Defs_Process <> k:106 var
+R7420:7422 Coq.Init.Datatypes <> nat ind
+binder 7416:7416 <> k:109
+R7431:7434 old.Defs_Process <> Name ind
+binder 7427:7427 <> x:110
+R7443:7449 old.Defs_Process <> Process ind
+binder 7439:7439 <> P:111
+R7470:7473 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R7458:7465 old.Defs_Process <> lca_name ind
+R7467:7467 old.Defs_Process <> k:109 var
+R7469:7469 old.Defs_Process <> x:110 var
+R7485:7488 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R7474:7476 old.Defs_Process <> lca:86 ind
+R7484:7484 old.Defs_Process <> P:111 var
+R7479:7479 Coq.Init.Datatypes <> S constr
+R7481:7481 old.Defs_Process <> k:109 var
+R7489:7491 old.Defs_Process <> lca:86 ind
+R7498:7502 old.Defs_Process <> :::x_'!·'_x not
+R7497:7497 old.Defs_Process <> x:110 var
+R7503:7503 old.Defs_Process <> P:111 var
+R7493:7493 old.Defs_Process <> k:109 var
+R7526:7532 old.Defs_Process <> Process ind
+def 7562:7571 <> Subst_Name
+R7581:7583 Coq.Init.Datatypes <> nat ind
+binder 7575:7575 <> x:112
+binder 7577:7577 <> y:113
+R7592:7595 old.Defs_Process <> Name ind
+binder 7588:7588 <> N:114
+R7601:7604 old.Defs_Process <> Name ind
+R7615:7615 old.Defs_Process <> N:114 var
+R7627:7631 old.Defs_Process <> FName constr
+R7646:7649 Coq.Init.Nat <> ::nat_scope:x_'=?'_x not
+R7650:7650 old.Defs_Process <> x:112 var
+R7674:7674 old.Defs_Process <> N:114 var
+R7660:7664 old.Defs_Process <> FName constr
+R7666:7666 old.Defs_Process <> y:113 var
+R7680:7684 old.Defs_Process <> BName constr
+R7691:7691 old.Defs_Process <> N:114 var
+def 7709:7713 <> Subst
+R7723:7725 Coq.Init.Datatypes <> nat ind
+binder 7717:7717 <> x:116
+binder 7719:7719 <> y:117
+R7734:7740 old.Defs_Process <> Process ind
+binder 7730:7730 <> T:118
+R7757:7763 old.Defs_Process <> Process ind
+R7775:7775 old.Defs_Process <> T:118 var
+R7786:7790 old.Defs_Process <> Pzero constr
+R7795:7799 old.Defs_Process <> Pzero constr
+R7805:7808 old.Defs_Process <> Fuse constr
+R7817:7820 old.Defs_Process <> Fuse constr
+R7823:7832 old.Defs_Process <> Subst_Name def
+R7834:7834 old.Defs_Process <> x:116 var
+R7836:7836 old.Defs_Process <> y:117 var
+R7843:7852 old.Defs_Process <> Subst_Name def
+R7854:7854 old.Defs_Process <> x:116 var
+R7856:7856 old.Defs_Process <> y:117 var
+R7865:7872 old.Defs_Process <> Parallel constr
+R7881:7888 old.Defs_Process <> Parallel constr
+R7891:7895 old.Defs_Process <> Subst:119 def
+R7899:7899 old.Defs_Process <> y:117 var
+R7897:7897 old.Defs_Process <> x:116 var
+R7905:7909 old.Defs_Process <> Subst:119 def
+R7913:7913 old.Defs_Process <> y:117 var
+R7911:7911 old.Defs_Process <> x:116 var
+R7922:7932 old.Defs_Process <> Chan_output constr
+R7943:7953 old.Defs_Process <> Chan_output constr
+R7956:7965 old.Defs_Process <> Subst_Name def
+R7967:7967 old.Defs_Process <> x:116 var
+R7969:7969 old.Defs_Process <> y:117 var
+R7975:7984 old.Defs_Process <> Subst_Name def
+R7986:7986 old.Defs_Process <> x:116 var
+R7988:7988 old.Defs_Process <> y:117 var
+R7994:7998 old.Defs_Process <> Subst:119 def
+R8002:8002 old.Defs_Process <> y:117 var
+R8000:8000 old.Defs_Process <> x:116 var
+R8011:8019 old.Defs_Process <> Chan_zero constr
+R8026:8034 old.Defs_Process <> Chan_zero constr
+R8037:8046 old.Defs_Process <> Subst_Name def
+R8048:8048 old.Defs_Process <> x:116 var
+R8050:8050 old.Defs_Process <> y:117 var
+R8060:8069 old.Defs_Process <> Chan_close constr
+R8078:8087 old.Defs_Process <> Chan_close constr
+R8090:8099 old.Defs_Process <> Subst_Name def
+R8101:8101 old.Defs_Process <> x:116 var
+R8103:8103 old.Defs_Process <> y:117 var
+R8109:8113 old.Defs_Process <> Subst:119 def
+R8117:8117 old.Defs_Process <> y:117 var
+R8115:8115 old.Defs_Process <> x:116 var
+R8168:8175 old.Defs_Process <> Chan_res constr
+R8182:8189 old.Defs_Process <> Chan_res constr
+R8192:8196 old.Defs_Process <> Subst:119 def
+R8200:8200 old.Defs_Process <> y:117 var
+R8198:8198 old.Defs_Process <> x:116 var
+R8209:8218 old.Defs_Process <> Chan_input constr
+R8228:8237 old.Defs_Process <> Chan_input constr
+R8240:8249 old.Defs_Process <> Subst_Name def
+R8251:8251 old.Defs_Process <> x:116 var
+R8253:8253 old.Defs_Process <> y:117 var
+R8259:8263 old.Defs_Process <> Subst:119 def
+R8267:8267 old.Defs_Process <> y:117 var
+R8265:8265 old.Defs_Process <> x:116 var
+R8276:8289 old.Defs_Process <> Chan_replicate constr
+R8298:8311 old.Defs_Process <> Chan_replicate constr
+R8314:8323 old.Defs_Process <> Subst_Name def
+R8325:8325 old.Defs_Process <> x:116 var
+R8327:8327 old.Defs_Process <> y:117 var
+R8333:8337 old.Defs_Process <> Subst:119 def
+R8341:8341 old.Defs_Process <> y:117 var
+R8339:8339 old.Defs_Process <> x:116 var
+R8380:8384 old.Defs_Process <> Subst def
+not 8360:8360 <> :::'{'_x_'\'_x_'}'_x
+ind 8421:8430 <> Well_Subst
+constr 8472:8484 <> Is_Well_Subst
+R8441:8444 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R8434:8440 old.Defs_Process <> Process ind
+R8448:8451 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R8445:8447 Coq.Init.Datatypes <> nat ind
+R8455:8458 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R8452:8454 Coq.Init.Datatypes <> nat ind
+R8501:8507 old.Defs_Process <> Process ind
+binder 8497:8497 <> P:123
+R8516:8518 Coq.Init.Datatypes <> nat ind
+binder 8510:8510 <> x:124
+binder 8512:8512 <> y:125
+R8546:8549 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R8526:8528 Coq.Init.Logic <> ::type_scope:'~'_x not
+R8544:8545 Coq.Init.Logic <> ::type_scope:'~'_x not
+R8530:8535 old.Defs_Process <> :::x_'∈'_x not
+R8543:8543 old.Defs_Process <> :::x_'∈'_x not
+R8536:8540 old.Defs_Process <> FVars def
+R8542:8542 old.Defs_Process <> P:123 var
+R8529:8529 old.Defs_Process <> y:125 var
+R8556:8560 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R8577:8577 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R8551:8554 Coq.Init.Logic <> ::type_scope:x_'<>'_x not
+R8550:8550 old.Defs_Process <> x:124 var
+R8555:8555 old.Defs_Process <> y:125 var
+R8561:8570 old.Defs_Process <> Well_Subst:121 ind
+R8576:8576 old.Defs_Process <> y:125 var
+R8574:8574 old.Defs_Process <> x:124 var
+R8572:8572 old.Defs_Process <> P:123 var
+ind 8592:8607 <> Well_Subst_Close
+constr 8654:8672 <> Is_Well_Subst_Close
+R8618:8621 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R8611:8617 old.Defs_Process <> Process ind
+R8625:8628 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R8622:8624 Coq.Init.Datatypes <> nat ind
+R8632:8635 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R8629:8631 Coq.Init.Datatypes <> nat ind
+R8639:8642 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R8636:8638 Coq.Init.Datatypes <> nat ind
+R8689:8695 old.Defs_Process <> Process ind
+binder 8685:8685 <> P:128
+R8705:8707 Coq.Init.Datatypes <> nat ind
+binder 8698:8698 <> x:129
+binder 8700:8700 <> y:130
+binder 8702:8702 <> z:131
+R8735:8738 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R8715:8717 Coq.Init.Logic <> ::type_scope:'~'_x not
+R8733:8734 Coq.Init.Logic <> ::type_scope:'~'_x not
+R8719:8724 old.Defs_Process <> :::x_'∈'_x not
+R8732:8732 old.Defs_Process <> :::x_'∈'_x not
+R8725:8729 old.Defs_Process <> FVars def
+R8731:8731 old.Defs_Process <> P:128 var
+R8718:8718 old.Defs_Process <> y:130 var
+R8745:8748 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R8740:8743 Coq.Init.Logic <> ::type_scope:x_'<>'_x not
+R8739:8739 old.Defs_Process <> x:129 var
+R8744:8744 old.Defs_Process <> y:130 var
+R8755:8763 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R8788:8788 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R8750:8753 Coq.Init.Logic <> ::type_scope:x_'<>'_x not
+R8749:8749 old.Defs_Process <> y:130 var
+R8754:8754 old.Defs_Process <> z:131 var
+R8764:8779 old.Defs_Process <> Well_Subst_Close:126 ind
+R8787:8787 old.Defs_Process <> z:131 var
+R8785:8785 old.Defs_Process <> y:130 var
+R8783:8783 old.Defs_Process <> x:129 var
+R8781:8781 old.Defs_Process <> P:128 var
+def 8811:8818 <> Bex_Name
+R8828:8830 Coq.Init.Datatypes <> nat ind
+binder 8822:8822 <> i:132
+binder 8824:8824 <> j:133
+R8839:8842 old.Defs_Process <> Name ind
+binder 8835:8835 <> N:134
+R8848:8851 old.Defs_Process <> Name ind
+R8863:8863 old.Defs_Process <> N:134 var
+R8875:8879 old.Defs_Process <> FName constr
+R8886:8890 old.Defs_Process <> FName constr
+R8898:8902 old.Defs_Process <> BName constr
+R8915:8918 Coq.Init.Nat <> ::nat_scope:x_'=?'_x not
+R8919:8919 old.Defs_Process <> i:132 var
+R8950:8953 Coq.Init.Nat <> ::nat_scope:x_'=?'_x not
+R8954:8954 old.Defs_Process <> j:133 var
+R8979:8983 old.Defs_Process <> BName constr
+R8964:8968 old.Defs_Process <> BName constr
+R8970:8970 old.Defs_Process <> i:132 var
+R8929:8933 old.Defs_Process <> BName constr
+R8935:8935 old.Defs_Process <> j:133 var
+def 9043:9049 <> Bex_Rec
+R9058:9060 Coq.Init.Datatypes <> nat ind
+binder 9052:9052 <> i:136
+binder 9054:9054 <> j:137
+R9068:9074 old.Defs_Process <> Process ind
+binder 9064:9064 <> T:138
+R9091:9097 old.Defs_Process <> Process ind
+R9109:9109 old.Defs_Process <> T:138 var
+R9120:9124 old.Defs_Process <> Pzero constr
+R9129:9133 old.Defs_Process <> Pzero constr
+R9139:9142 old.Defs_Process <> Fuse constr
+R9151:9154 old.Defs_Process <> Fuse constr
+R9157:9164 old.Defs_Process <> Bex_Name def
+R9166:9166 old.Defs_Process <> i:136 var
+R9168:9168 old.Defs_Process <> j:137 var
+R9175:9182 old.Defs_Process <> Bex_Name def
+R9184:9184 old.Defs_Process <> i:136 var
+R9186:9186 old.Defs_Process <> j:137 var
+R9196:9203 old.Defs_Process <> Parallel constr
+R9212:9219 old.Defs_Process <> Parallel constr
+R9222:9228 old.Defs_Process <> Bex_Rec:139 def
+R9232:9232 old.Defs_Process <> j:137 var
+R9230:9230 old.Defs_Process <> i:136 var
+R9238:9244 old.Defs_Process <> Bex_Rec:139 def
+R9248:9248 old.Defs_Process <> j:137 var
+R9246:9246 old.Defs_Process <> i:136 var
+R9257:9267 old.Defs_Process <> Chan_output constr
+R9278:9288 old.Defs_Process <> Chan_output constr
+R9291:9298 old.Defs_Process <> Bex_Name def
+R9300:9300 old.Defs_Process <> i:136 var
+R9302:9302 old.Defs_Process <> j:137 var
+R9308:9315 old.Defs_Process <> Bex_Name def
+R9317:9317 old.Defs_Process <> i:136 var
+R9319:9319 old.Defs_Process <> j:137 var
+R9325:9331 old.Defs_Process <> Bex_Rec:139 def
+R9335:9335 old.Defs_Process <> j:137 var
+R9333:9333 old.Defs_Process <> i:136 var
+R9344:9352 old.Defs_Process <> Chan_zero constr
+R9359:9367 old.Defs_Process <> Chan_zero constr
+R9370:9377 old.Defs_Process <> Bex_Name def
+R9379:9379 old.Defs_Process <> i:136 var
+R9381:9381 old.Defs_Process <> j:137 var
+R9390:9399 old.Defs_Process <> Chan_close constr
+R9408:9417 old.Defs_Process <> Chan_close constr
+R9420:9427 old.Defs_Process <> Bex_Name def
+R9429:9429 old.Defs_Process <> i:136 var
+R9431:9431 old.Defs_Process <> j:137 var
+R9437:9443 old.Defs_Process <> Bex_Rec:139 def
+R9447:9447 old.Defs_Process <> j:137 var
+R9445:9445 old.Defs_Process <> i:136 var
+R9456:9463 old.Defs_Process <> Chan_res constr
+R9470:9477 old.Defs_Process <> Chan_res constr
+R9480:9486 old.Defs_Process <> Bex_Rec:139 def
+R9495:9495 Coq.Init.Datatypes <> S constr
+R9497:9497 old.Defs_Process <> j:137 var
+R9489:9489 Coq.Init.Datatypes <> S constr
+R9491:9491 old.Defs_Process <> i:136 var
+R9507:9516 old.Defs_Process <> Chan_input constr
+R9525:9534 old.Defs_Process <> Chan_input constr
+R9537:9544 old.Defs_Process <> Bex_Name def
+R9546:9546 old.Defs_Process <> i:136 var
+R9548:9548 old.Defs_Process <> j:137 var
+R9554:9560 old.Defs_Process <> Bex_Rec:139 def
+R9569:9569 Coq.Init.Datatypes <> S constr
+R9571:9571 old.Defs_Process <> j:137 var
+R9563:9563 Coq.Init.Datatypes <> S constr
+R9565:9565 old.Defs_Process <> i:136 var
+R9581:9594 old.Defs_Process <> Chan_replicate constr
+R9603:9616 old.Defs_Process <> Chan_replicate constr
+R9619:9626 old.Defs_Process <> Bex_Name def
+R9628:9628 old.Defs_Process <> i:136 var
+R9630:9630 old.Defs_Process <> j:137 var
+R9636:9642 old.Defs_Process <> Bex_Rec:139 def
+R9651:9651 Coq.Init.Datatypes <> S constr
+R9653:9653 old.Defs_Process <> j:137 var
+R9645:9645 Coq.Init.Datatypes <> S constr
+R9647:9647 old.Defs_Process <> i:136 var
+R9694:9700 old.Defs_Process <> Bex_Rec def
+not 9673:9673 <> :::'{'_x_'<~>'_x_'}'_x
+R9751:9760 Coq.Lists.List <> <> lib
+def 9802:9815 <> MOpen_Name_Rec
+R9822:9824 Coq.Init.Datatypes <> nat ind
+binder 9818:9818 <> k:141
+R9831:9834 Coq.Init.Datatypes <> list ind
+R9836:9838 Coq.Init.Datatypes <> nat ind
+binder 9827:9827 <> L:142
+R9846:9849 old.Defs_Process <> Name ind
+binder 9842:9842 <> N:143
+R9855:9858 old.Defs_Process <> Name ind
+R9874:9874 old.Defs_Process <> k:141 var
+R9870:9870 old.Defs_Process <> L:142 var
+R9885:9887 Coq.Init.Datatypes <> nil constr
+R9897:9897 old.Defs_Process <> N:143 var
+R9904:9907 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R9918:9926 old.Defs_Process <> Open_Name def
+R9933:9946 old.Defs_Process <> MOpen_Name_Rec:144 def
+R9953:9953 old.Defs_Process <> N:143 var
+R9961:9964 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R9969:9969 Coq.Init.Datatypes <> S constr
+R9977:9985 old.Defs_Process <> Open_Name def
+R9992:10005 old.Defs_Process <> MOpen_Name_Rec:144 def
+R10012:10012 old.Defs_Process <> N:143 var
+def 10037:10045 <> MOpen_Rec
+R10052:10054 Coq.Init.Datatypes <> nat ind
+binder 10048:10048 <> k:147
+R10061:10064 Coq.Init.Datatypes <> list ind
+R10066:10068 Coq.Init.Datatypes <> nat ind
+binder 10057:10057 <> L:148
+R10076:10082 old.Defs_Process <> Process ind
+binder 10072:10072 <> T:149
+R10088:10094 old.Defs_Process <> Process ind
+R10110:10110 old.Defs_Process <> k:147 var
+R10106:10106 old.Defs_Process <> L:148 var
+R10121:10123 Coq.Init.Datatypes <> nil constr
+R10133:10133 old.Defs_Process <> T:149 var
+R10140:10143 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R10154:10155 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R10157:10160 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R10162:10165 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R10182:10182 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R10166:10174 old.Defs_Process <> MOpen_Rec:150 def
+R10181:10181 old.Defs_Process <> T:149 var
+R10189:10192 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R10197:10197 Coq.Init.Datatypes <> S constr
+R10205:10206 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R10208:10211 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R10213:10216 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R10233:10233 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R10217:10225 old.Defs_Process <> MOpen_Rec:150 def
+R10232:10232 old.Defs_Process <> T:149 var
+def 10257:10266 <> M2Open_Rec
+R10273:10275 Coq.Init.Datatypes <> nat ind
+binder 10269:10269 <> k:153
+R10282:10285 Coq.Init.Datatypes <> list ind
+R10287:10289 Coq.Init.Datatypes <> nat ind
+binder 10278:10278 <> L:154
+R10297:10303 old.Defs_Process <> Process ind
+binder 10293:10293 <> T:155
+R10309:10315 old.Defs_Process <> Process ind
+R10331:10331 old.Defs_Process <> k:153 var
+R10327:10327 old.Defs_Process <> L:154 var
+R10342:10344 Coq.Init.Datatypes <> nil constr
+R10354:10354 old.Defs_Process <> T:155 var
+R10361:10364 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R10375:10376 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R10378:10381 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R10383:10386 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R10404:10404 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R10387:10396 old.Defs_Process <> M2Open_Rec:156 def
+R10403:10403 old.Defs_Process <> T:155 var
+R10411:10414 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R10419:10419 Coq.Init.Datatypes <> S constr
+R10427:10428 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R10432:10435 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R10437:10440 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R10458:10458 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R10429:10429 Coq.Init.Datatypes <> S constr
+R10441:10450 old.Defs_Process <> M2Open_Rec:156 def
+R10457:10457 old.Defs_Process <> T:155 var
+ind 10711:10720 <> Congruence
+constr 11016:11033 <> Con_conmt_parallel
+constr 11102:11111 <> Con_res_ex
+constr 11202:11218 <> Con_asoc_parallel
+constr 11301:11319 <> Con_abs_restriction
+R10731:10734 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R10724:10730 old.Defs_Process <> Process ind
+R10742:10745 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R10735:10741 old.Defs_Process <> Process ind
+R12150:12159 old.Defs_Process <> Congruence:160 ind
+R11051:11057 old.Defs_Process <> Process ind
+binder 11045:11045 <> P:161
+binder 11047:11047 <> Q:162
+R11069:11069 old.Defs_Process <> :::x_'==='_x not
+R11075:11081 old.Defs_Process <> :::x_'==='_x not
+R11087:11087 old.Defs_Process <> :::x_'==='_x not
+R11071:11073 old.Defs_Process <> :::x_'↓'_x not
+R11070:11070 old.Defs_Process <> P:161 var
+R11074:11074 old.Defs_Process <> Q:162 var
+R11083:11085 old.Defs_Process <> :::x_'↓'_x not
+R11082:11082 old.Defs_Process <> Q:162 var
+R11086:11086 old.Defs_Process <> P:161 var
+R11127:11133 old.Defs_Process <> Process ind
+binder 11123:11123 <> P:163
+R11145:11145 old.Defs_Process <> :::x_'==='_x not
+R11155:11161 old.Defs_Process <> :::x_'==='_x not
+R11187:11187 old.Defs_Process <> :::x_'==='_x not
+R11146:11149 old.Defs_Process <> :::'ν'_x not
+R11154:11154 old.Defs_Process <> :::'ν'_x not
+R11150:11152 old.Defs_Process <> :::'ν'_x not
+R11153:11153 old.Defs_Process <> P:163 var
+R11162:11165 old.Defs_Process <> :::'ν'_x not
+R11185:11186 old.Defs_Process <> :::'ν'_x not
+R11166:11170 old.Defs_Process <> :::'ν'_x not
+R11183:11184 old.Defs_Process <> :::'ν'_x not
+R11171:11172 old.Defs_Process <> :::'{'_x_'<~>'_x_'}'_x not
+R11174:11178 old.Defs_Process <> :::'{'_x_'<~>'_x_'}'_x not
+R11180:11181 old.Defs_Process <> :::'{'_x_'<~>'_x_'}'_x not
+R11182:11182 old.Defs_Process <> P:163 var
+R11238:11244 old.Defs_Process <> Process ind
+binder 11230:11230 <> P:164
+binder 11232:11232 <> Q:165
+binder 11234:11234 <> R:166
+R11256:11256 old.Defs_Process <> :::x_'==='_x not
+R11268:11274 old.Defs_Process <> :::x_'==='_x not
+R11286:11286 old.Defs_Process <> :::x_'==='_x not
+R11257:11257 old.Defs_Process <> :::x_'↓'_x not
+R11263:11266 old.Defs_Process <> :::x_'↓'_x not
+R11259:11261 old.Defs_Process <> :::x_'↓'_x not
+R11258:11258 old.Defs_Process <> P:164 var
+R11262:11262 old.Defs_Process <> Q:165 var
+R11267:11267 old.Defs_Process <> R:166 var
+R11276:11279 old.Defs_Process <> :::x_'↓'_x not
+R11285:11285 old.Defs_Process <> :::x_'↓'_x not
+R11275:11275 old.Defs_Process <> P:164 var
+R11281:11283 old.Defs_Process <> :::x_'↓'_x not
+R11280:11280 old.Defs_Process <> Q:165 var
+R11284:11284 old.Defs_Process <> R:166 var
+R11337:11343 old.Defs_Process <> Process ind
+binder 11331:11331 <> P:167
+binder 11333:11333 <> Q:168
+R11359:11362 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R11355:11356 old.Defs_Process <> lc ind
+R11358:11358 old.Defs_Process <> P:167 var
+R11363:11363 old.Defs_Process <> :::x_'==='_x not
+R11374:11379 old.Defs_Process <> :::x_'==='_x not
+R11365:11368 old.Defs_Process <> :::x_'↓'_x not
+R11373:11373 old.Defs_Process <> :::x_'↓'_x not
+R11364:11364 old.Defs_Process <> P:167 var
+R11369:11371 old.Defs_Process <> :::'ν'_x not
+R11372:11372 old.Defs_Process <> Q:168 var
+R11380:11383 old.Defs_Process <> :::'ν'_x not
+R11389:11389 old.Defs_Process <> :::'ν'_x not
+R11385:11387 old.Defs_Process <> :::x_'↓'_x not
+R11384:11384 old.Defs_Process <> P:167 var
+R11388:11388 old.Defs_Process <> Q:168 var
+R12150:12159 old.Defs_Process <> Congruence ind
+not 12134:12134 <> :::x_'==='_x
+R12185:12194 old.Defs_Process <> Congruence ind
+ind 12456:12464 <> Reduction
+constr 12503:12518 <> Red_output_input
+constr 12685:12706 <> Red_parallel_replicate
+constr 12894:12911 <> Red_chzero_chclose
+constr 13031:13047 <> Red_parallel_fuse
+constr 13168:13189 <> Red_reduction_parallel
+constr 13290:13310 <> Red_reduction_chanres
+constr 13427:13446 <> Red_reduction_struct
+R12475:12478 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R12468:12474 old.Defs_Process <> Process ind
+R12486:12489 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R12479:12485 old.Defs_Process <> Process ind
+R13579:13587 old.Defs_Process <> Reduction:170 ind
+R12537:12539 Coq.Init.Datatypes <> nat ind
+binder 12531:12531 <> x:171
+binder 12533:12533 <> y:172
+R12551:12557 old.Defs_Process <> Process ind
+binder 12545:12545 <> P:173
+binder 12547:12547 <> Q:174
+R12570:12573 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R12566:12567 old.Defs_Process <> lc ind
+R12569:12569 old.Defs_Process <> P:173 var
+R12580:12590 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R12677:12678 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R12574:12577 old.Defs_Process <> Body ind
+R12579:12579 old.Defs_Process <> Q:174 var
+R12591:12592 old.Defs_Process <> :::x_'-->'_x not
+R12648:12655 old.Defs_Process <> :::x_'-->'_x not
+R12676:12676 old.Defs_Process <> :::x_'-->'_x not
+R12593:12594 old.Defs_Process <> :::x_'↓'_x not
+R12624:12632 old.Defs_Process <> :::x_'↓'_x not
+R12647:12647 old.Defs_Process <> :::x_'↓'_x not
+R12595:12595 old.Defs_Process <> :::x_'«'_x_'»·'_x not
+R12603:12608 old.Defs_Process <> :::x_'«'_x_'»·'_x not
+R12616:12622 old.Defs_Process <> :::x_'«'_x_'»·'_x not
+R12596:12600 old.Defs_Process <> FName constr
+R12602:12602 old.Defs_Process <> x:171 var
+R12609:12613 old.Defs_Process <> FName constr
+R12615:12615 old.Defs_Process <> y:172 var
+R12623:12623 old.Defs_Process <> P:173 var
+R12633:12633 old.Defs_Process <> :::x_'·'_x not
+R12641:12645 old.Defs_Process <> :::x_'·'_x not
+R12634:12638 old.Defs_Process <> FName constr
+R12640:12640 old.Defs_Process <> x:171 var
+R12646:12646 old.Defs_Process <> Q:174 var
+R12657:12663 old.Defs_Process <> :::x_'↓'_x not
+R12674:12675 old.Defs_Process <> :::x_'↓'_x not
+R12656:12656 old.Defs_Process <> P:173 var
+R12664:12664 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R12666:12669 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R12671:12672 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R12670:12670 old.Defs_Process <> y:172 var
+R12673:12673 old.Defs_Process <> Q:174 var
+R12724:12726 Coq.Init.Datatypes <> nat ind
+binder 12718:12718 <> x:175
+binder 12720:12720 <> y:176
+R12736:12742 old.Defs_Process <> Process ind
+binder 12730:12730 <> P:177
+binder 12732:12732 <> Q:178
+R12754:12757 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R12750:12751 old.Defs_Process <> lc ind
+R12753:12753 old.Defs_Process <> P:177 var
+R12764:12775 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R12887:12887 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R12758:12761 old.Defs_Process <> Body ind
+R12763:12763 old.Defs_Process <> Q:178 var
+R12776:12777 old.Defs_Process <> :::x_'-->'_x not
+R12834:12843 old.Defs_Process <> :::x_'-->'_x not
+R12885:12886 old.Defs_Process <> :::x_'-->'_x not
+R12778:12779 old.Defs_Process <> :::x_'↓'_x not
+R12809:12816 old.Defs_Process <> :::x_'↓'_x not
+R12832:12833 old.Defs_Process <> :::x_'↓'_x not
+R12780:12780 old.Defs_Process <> :::x_'«'_x_'»·'_x not
+R12788:12793 old.Defs_Process <> :::x_'«'_x_'»·'_x not
+R12801:12807 old.Defs_Process <> :::x_'«'_x_'»·'_x not
+R12781:12785 old.Defs_Process <> FName constr
+R12787:12787 old.Defs_Process <> x:175 var
+R12794:12798 old.Defs_Process <> FName constr
+R12800:12800 old.Defs_Process <> y:176 var
+R12808:12808 old.Defs_Process <> P:177 var
+R12817:12817 old.Defs_Process <> :::x_'!·'_x not
+R12825:12830 old.Defs_Process <> :::x_'!·'_x not
+R12818:12822 old.Defs_Process <> FName constr
+R12824:12824 old.Defs_Process <> x:175 var
+R12831:12831 old.Defs_Process <> Q:178 var
+R12862:12868 old.Defs_Process <> :::x_'↓'_x not
+R12884:12884 old.Defs_Process <> :::x_'↓'_x not
+R12845:12850 old.Defs_Process <> :::x_'↓'_x not
+R12861:12861 old.Defs_Process <> :::x_'↓'_x not
+R12844:12844 old.Defs_Process <> P:177 var
+R12851:12851 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R12853:12856 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R12858:12859 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R12857:12857 old.Defs_Process <> y:176 var
+R12860:12860 old.Defs_Process <> Q:178 var
+R12869:12869 old.Defs_Process <> :::x_'!·'_x not
+R12877:12882 old.Defs_Process <> :::x_'!·'_x not
+R12870:12874 old.Defs_Process <> FName constr
+R12876:12876 old.Defs_Process <> x:175 var
+R12883:12883 old.Defs_Process <> Q:178 var
+R12928:12934 old.Defs_Process <> Process ind
+binder 12924:12924 <> Q:179
+R12942:12944 Coq.Init.Datatypes <> nat ind
+binder 12938:12938 <> x:180
+R12957:12968 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R13023:13024 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R12953:12954 old.Defs_Process <> lc ind
+R12956:12956 old.Defs_Process <> Q:179 var
+R12969:12970 old.Defs_Process <> :::x_'-->'_x not
+R13014:13021 old.Defs_Process <> :::x_'-->'_x not
+R12971:12972 old.Defs_Process <> :::x_'↓'_x not
+R12987:12995 old.Defs_Process <> :::x_'↓'_x not
+R13012:13013 old.Defs_Process <> :::x_'↓'_x not
+R12973:12973 old.Defs_Process <> :::x_'·θ' not
+R12981:12986 old.Defs_Process <> :::x_'·θ' not
+R12974:12978 old.Defs_Process <> FName constr
+R12980:12980 old.Defs_Process <> x:180 var
+R12996:12996 old.Defs_Process <> :::x_'()·'_x not
+R13004:13010 old.Defs_Process <> :::x_'()·'_x not
+R12997:13001 old.Defs_Process <> FName constr
+R13003:13003 old.Defs_Process <> x:180 var
+R13011:13011 old.Defs_Process <> Q:179 var
+R13022:13022 old.Defs_Process <> Q:179 var
+R13066:13068 Coq.Init.Datatypes <> nat ind
+binder 13060:13060 <> x:181
+binder 13062:13062 <> y:182
+R13077:13083 old.Defs_Process <> Process ind
+binder 13073:13073 <> P:183
+R13095:13105 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R13160:13161 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R13091:13092 old.Defs_Process <> lc ind
+R13094:13094 old.Defs_Process <> P:183 var
+R13142:13147 old.Defs_Process <> :::x_'-->'_x not
+R13159:13159 old.Defs_Process <> :::x_'-->'_x not
+R13107:13112 old.Defs_Process <> :::x_'↓'_x not
+R13141:13141 old.Defs_Process <> :::x_'↓'_x not
+R13106:13106 old.Defs_Process <> P:183 var
+R13113:13114 old.Defs_Process <> :::'['_x_'←→'_x_']' not
+R13122:13131 old.Defs_Process <> :::'['_x_'←→'_x_']' not
+R13139:13140 old.Defs_Process <> :::'['_x_'←→'_x_']' not
+R13115:13119 old.Defs_Process <> FName constr
+R13121:13121 old.Defs_Process <> x:181 var
+R13132:13136 old.Defs_Process <> FName constr
+R13138:13138 old.Defs_Process <> y:182 var
+R13148:13152 old.Defs_Process <> Subst def
+R13154:13154 old.Defs_Process <> x:181 var
+R13156:13156 old.Defs_Process <> y:182 var
+R13158:13158 old.Defs_Process <> P:183 var
+R13210:13216 old.Defs_Process <> Process ind
+binder 13202:13202 <> P:184
+binder 13204:13204 <> Q:185
+binder 13206:13206 <> R:186
+R13229:13232 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R13225:13226 old.Defs_Process <> lc ind
+R13228:13228 old.Defs_Process <> P:184 var
+R13237:13244 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R13233:13234 old.Defs_Process <> lc ind
+R13236:13236 old.Defs_Process <> R:186 var
+R13245:13245 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R13253:13258 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R13283:13283 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R13247:13251 old.Defs_Process <> :::x_'-->'_x not
+R13246:13246 old.Defs_Process <> Q:185 var
+R13252:13252 old.Defs_Process <> R:186 var
+R13259:13259 old.Defs_Process <> :::x_'-->'_x not
+R13267:13274 old.Defs_Process <> :::x_'-->'_x not
+R13282:13282 old.Defs_Process <> :::x_'-->'_x not
+R13261:13265 old.Defs_Process <> :::x_'↓'_x not
+R13260:13260 old.Defs_Process <> P:184 var
+R13266:13266 old.Defs_Process <> Q:185 var
+R13276:13280 old.Defs_Process <> :::x_'↓'_x not
+R13275:13275 old.Defs_Process <> P:184 var
+R13281:13281 old.Defs_Process <> R:186 var
+R13328:13334 old.Defs_Process <> Process ind
+binder 13322:13322 <> P:187
+binder 13324:13324 <> Q:188
+R13342:13344 Coq.Init.Datatypes <> nat ind
+binder 13338:13338 <> x:189
+R13356:13359 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R13352:13353 old.Defs_Process <> lc ind
+R13355:13355 old.Defs_Process <> P:187 var
+R13364:13371 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R13360:13361 old.Defs_Process <> lc ind
+R13363:13363 old.Defs_Process <> Q:188 var
+R13372:13373 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R13381:13388 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R13418:13419 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R13375:13379 old.Defs_Process <> :::x_'-->'_x not
+R13374:13374 old.Defs_Process <> P:187 var
+R13380:13380 old.Defs_Process <> Q:188 var
+R13401:13405 old.Defs_Process <> :::x_'-->'_x not
+R13389:13391 old.Defs_Process <> :::'ν'_x not
+R13392:13396 old.Defs_Process <> Close def
+R13398:13398 old.Defs_Process <> x:189 var
+R13400:13400 old.Defs_Process <> P:187 var
+R13406:13408 old.Defs_Process <> :::'ν'_x not
+R13409:13413 old.Defs_Process <> Close def
+R13415:13415 old.Defs_Process <> x:189 var
+R13417:13417 old.Defs_Process <> Q:188 var
+R13471:13477 old.Defs_Process <> Process ind
+binder 13459:13459 <> P:190
+binder 13461:13461 <> Q:191
+binder 13463:13464 <> P':192
+binder 13466:13467 <> Q':193
+R13491:13494 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R13486:13487 old.Defs_Process <> lc ind
+R13489:13490 old.Defs_Process <> P':192 var
+R13495:13496 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R13505:13510 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R13499:13503 old.Defs_Process <> :::x_'==='_x not
+R13497:13498 old.Defs_Process <> P':192 var
+R13504:13504 old.Defs_Process <> P:190 var
+R13511:13512 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R13521:13530 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R13515:13519 old.Defs_Process <> :::x_'==='_x not
+R13513:13514 old.Defs_Process <> Q':193 var
+R13520:13520 old.Defs_Process <> Q:191 var
+R13531:13531 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R13541:13546 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R13554:13554 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R13534:13538 old.Defs_Process <> :::x_'-->'_x not
+R13532:13533 old.Defs_Process <> P':192 var
+R13539:13540 old.Defs_Process <> Q':193 var
+R13548:13552 old.Defs_Process <> :::x_'-->'_x not
+R13547:13547 old.Defs_Process <> P:190 var
+R13553:13553 old.Defs_Process <> Q:191 var
+R13579:13587 old.Defs_Process <> Reduction ind
+not 13563:13563 <> :::x_'-->'_x
+R13601:13613 old.Defs_Process <> Reduction_ind scheme
+R13644:13657 Coq.Arith.PeanoNat <> <> lib
+R13684:13694 Coq.Arith.EqNat <> <> lib
+R13721:13729 Coq.Bool.Bool <> <> lib
+R13756:13758 Coq.micromega.Lia <> <> lib
+prf 13775:13792 <> Open_Name_BName_Eq
+R13813:13815 Coq.Init.Datatypes <> nat ind
+binder 13805:13805 <> k:194
+binder 13807:13807 <> i:195
+binder 13809:13809 <> x:196
+R13824:13828 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R13820:13822 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R13819:13819 old.Defs_Process <> k:194 var
+R13823:13823 old.Defs_Process <> i:195 var
+R13852:13854 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R13829:13837 old.Defs_Process <> Open_Name def
+R13839:13839 old.Defs_Process <> k:194 var
+R13841:13841 old.Defs_Process <> x:196 var
+R13844:13848 old.Defs_Process <> BName constr
+R13850:13850 old.Defs_Process <> i:195 var
+R13855:13859 old.Defs_Process <> FName constr
+R13861:13861 old.Defs_Process <> x:196 var
+R13917:13924 Coq.Bool.Bool <> bool_dec thm
+R13928:13931 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R13935:13938 Coq.Init.Datatypes <> true constr
+R13917:13924 Coq.Bool.Bool <> bool_dec thm
+R13928:13931 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R13935:13938 Coq.Init.Datatypes <> true constr
+R13973:13990 Coq.Bool.Bool <> not_true_iff_false thm
+R13973:13990 Coq.Bool.Bool <> not_true_iff_false thm
+R14008:14020 Coq.Arith.EqNat <> beq_nat_false thm
+R14008:14020 Coq.Arith.EqNat <> beq_nat_false thm
+prf 14062:14079 <> Open_Name_BName_Gt
+R14100:14102 Coq.Init.Datatypes <> nat ind
+binder 14092:14092 <> k:197
+binder 14094:14094 <> i:198
+binder 14096:14096 <> x:199
+R14111:14115 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R14107:14109 Coq.Init.Peano <> ::nat_scope:x_'<'_x not
+R14106:14106 old.Defs_Process <> k:197 var
+R14110:14110 old.Defs_Process <> i:198 var
+R14139:14141 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R14116:14124 old.Defs_Process <> Open_Name def
+R14126:14126 old.Defs_Process <> k:197 var
+R14128:14128 old.Defs_Process <> x:199 var
+R14131:14135 old.Defs_Process <> BName constr
+R14137:14137 old.Defs_Process <> i:198 var
+R14142:14146 old.Defs_Process <> BName constr
+R14148:14148 old.Defs_Process <> i:198 var
+R14180:14187 Coq.Bool.Bool <> bool_dec thm
+R14191:14194 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R14198:14201 Coq.Init.Datatypes <> true constr
+R14180:14187 Coq.Bool.Bool <> bool_dec thm
+R14191:14194 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R14198:14201 Coq.Init.Datatypes <> true constr
+R14222:14233 Coq.Arith.EqNat <> beq_nat_true thm
+R14222:14233 Coq.Arith.EqNat <> beq_nat_true thm
+R14256:14273 Coq.Bool.Bool <> not_true_iff_false thm
+R14256:14273 Coq.Bool.Bool <> not_true_iff_false thm
+prf 14443:14459 <> Subst_Name_Output
+R14478:14480 Coq.Init.Datatypes <> nat ind
+binder 14472:14472 <> x:200
+binder 14474:14474 <> y:201
+R14489:14492 old.Defs_Process <> Name ind
+binder 14485:14485 <> z:202
+R14506:14510 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R14567:14567 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R14497:14503 old.Defs_Process <> lc_name ind
+R14505:14505 old.Defs_Process <> z:202 var
+R14511:14511 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R14540:14545 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R14566:14566 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R14528:14531 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R14539:14539 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R14512:14521 old.Defs_Process <> Subst_Name def
+R14523:14523 old.Defs_Process <> x:200 var
+R14525:14525 old.Defs_Process <> y:201 var
+R14527:14527 old.Defs_Process <> z:202 var
+R14532:14536 old.Defs_Process <> FName constr
+R14538:14538 old.Defs_Process <> y:201 var
+R14562:14564 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R14546:14555 old.Defs_Process <> Subst_Name def
+R14557:14557 old.Defs_Process <> x:200 var
+R14559:14559 old.Defs_Process <> y:201 var
+R14561:14561 old.Defs_Process <> z:202 var
+R14565:14565 old.Defs_Process <> z:202 var
+R14625:14632 Coq.Bool.Bool <> bool_dec thm
+R14637:14640 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R14644:14647 Coq.Init.Datatypes <> true constr
+R14625:14632 Coq.Bool.Bool <> bool_dec thm
+R14637:14640 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R14644:14647 Coq.Init.Datatypes <> true constr
+R14682:14699 Coq.Bool.Bool <> not_true_iff_false thm
+R14682:14699 Coq.Bool.Bool <> not_true_iff_false thm
+prf 14833:14849 <> Close_Name_Output
+R14869:14871 Coq.Init.Datatypes <> nat ind
+binder 14863:14863 <> i:203
+binder 14865:14865 <> x:204
+R14880:14883 old.Defs_Process <> Name ind
+binder 14876:14876 <> y:205
+R14897:14902 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R14957:14958 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R14888:14894 old.Defs_Process <> lc_name ind
+R14896:14896 old.Defs_Process <> y:205 var
+R14903:14903 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R14924:14929 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R14956:14956 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R14920:14922 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R14904:14913 old.Defs_Process <> Close_Name def
+R14915:14915 old.Defs_Process <> i:203 var
+R14917:14917 old.Defs_Process <> x:204 var
+R14919:14919 old.Defs_Process <> y:205 var
+R14923:14923 old.Defs_Process <> y:205 var
+R14946:14948 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R14930:14939 old.Defs_Process <> Close_Name def
+R14941:14941 old.Defs_Process <> i:203 var
+R14943:14943 old.Defs_Process <> x:204 var
+R14945:14945 old.Defs_Process <> y:205 var
+R14949:14953 old.Defs_Process <> BName constr
+R14955:14955 old.Defs_Process <> i:203 var
+R15014:15021 Coq.Bool.Bool <> bool_dec thm
+R15026:15029 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R15033:15036 Coq.Init.Datatypes <> true constr
+R15014:15021 Coq.Bool.Bool <> bool_dec thm
+R15026:15029 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R15033:15036 Coq.Init.Datatypes <> true constr
+R15071:15088 Coq.Bool.Bool <> not_true_iff_false thm
+R15071:15088 Coq.Bool.Bool <> not_true_iff_false thm
+prf 15136:15152 <> Open_BName_Output
+R15173:15175 Coq.Init.Datatypes <> nat ind
+binder 15165:15165 <> k:206
+binder 15167:15167 <> x:207
+binder 15169:15169 <> p:208
+R15212:15215 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R15202:15204 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R15179:15187 old.Defs_Process <> Open_Name def
+R15189:15189 old.Defs_Process <> k:206 var
+R15191:15191 old.Defs_Process <> x:207 var
+R15194:15198 old.Defs_Process <> BName constr
+R15200:15200 old.Defs_Process <> p:208 var
+R15205:15209 old.Defs_Process <> BName constr
+R15211:15211 old.Defs_Process <> p:208 var
+R15239:15241 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R15216:15224 old.Defs_Process <> Open_Name def
+R15226:15226 old.Defs_Process <> k:206 var
+R15228:15228 old.Defs_Process <> x:207 var
+R15231:15235 old.Defs_Process <> BName constr
+R15237:15237 old.Defs_Process <> p:208 var
+R15242:15246 old.Defs_Process <> FName constr
+R15248:15248 old.Defs_Process <> x:207 var
+R15289:15296 Coq.Bool.Bool <> bool_dec thm
+R15300:15303 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R15307:15310 Coq.Init.Datatypes <> true constr
+R15289:15296 Coq.Bool.Bool <> bool_dec thm
+R15300:15303 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R15307:15310 Coq.Init.Datatypes <> true constr
+R15345:15362 Coq.Bool.Bool <> not_true_iff_false thm
+R15345:15362 Coq.Bool.Bool <> not_true_iff_false thm
+prf 15410:15429 <> Output_LCName_Output
+R15446:15449 old.Defs_Process <> Name ind
+binder 15442:15442 <> p:209
+R15460:15462 Coq.Init.Datatypes <> nat ind
+binder 15454:15454 <> k:210
+binder 15456:15456 <> x:211
+R15476:15479 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R15467:15473 old.Defs_Process <> lc_name ind
+R15475:15475 old.Defs_Process <> p:209 var
+R15495:15497 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R15480:15488 old.Defs_Process <> Open_Name def
+R15490:15490 old.Defs_Process <> k:210 var
+R15492:15492 old.Defs_Process <> x:211 var
+R15494:15494 old.Defs_Process <> p:209 var
+R15498:15498 old.Defs_Process <> p:209 var
+prf 15561:15581 <> Open_BName_IsFName_Eq
+R15602:15604 Coq.Init.Datatypes <> nat ind
+binder 15594:15594 <> k:212
+binder 15596:15596 <> x:213
+binder 15598:15598 <> p:214
+R15641:15644 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R15631:15633 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R15608:15616 old.Defs_Process <> Open_Name def
+R15618:15618 old.Defs_Process <> k:212 var
+R15620:15620 old.Defs_Process <> x:213 var
+R15623:15627 old.Defs_Process <> BName constr
+R15629:15629 old.Defs_Process <> p:214 var
+R15634:15638 old.Defs_Process <> FName constr
+R15640:15640 old.Defs_Process <> x:213 var
+R15646:15648 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R15645:15645 old.Defs_Process <> k:212 var
+R15649:15649 old.Defs_Process <> p:214 var
+R15681:15688 Coq.Bool.Bool <> bool_dec thm
+R15692:15695 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R15699:15702 Coq.Init.Datatypes <> true constr
+R15681:15688 Coq.Bool.Bool <> bool_dec thm
+R15692:15695 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R15699:15702 Coq.Init.Datatypes <> true constr
+R15716:15727 Coq.Arith.EqNat <> beq_nat_true thm
+R15716:15727 Coq.Arith.EqNat <> beq_nat_true thm
+R15746:15763 Coq.Bool.Bool <> not_true_iff_false thm
+R15746:15763 Coq.Bool.Bool <> not_true_iff_false thm
+prf 15844:15864 <> Open_BName_IsBName_Eq
+R15885:15887 Coq.Init.Datatypes <> nat ind
+binder 15877:15877 <> k:215
+binder 15879:15879 <> x:216
+binder 15881:15881 <> p:217
+R15924:15927 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R15914:15916 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R15891:15899 old.Defs_Process <> Open_Name def
+R15901:15901 old.Defs_Process <> k:215 var
+R15903:15903 old.Defs_Process <> x:216 var
+R15906:15910 old.Defs_Process <> BName constr
+R15912:15912 old.Defs_Process <> p:217 var
+R15917:15921 old.Defs_Process <> BName constr
+R15923:15923 old.Defs_Process <> p:217 var
+R15929:15932 Coq.Init.Logic <> ::type_scope:x_'<>'_x not
+R15928:15928 old.Defs_Process <> k:215 var
+R15933:15933 old.Defs_Process <> p:217 var
+R15965:15972 Coq.Bool.Bool <> bool_dec thm
+R15976:15979 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R15983:15986 Coq.Init.Datatypes <> true constr
+R15965:15972 Coq.Bool.Bool <> bool_dec thm
+R15976:15979 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R15983:15986 Coq.Init.Datatypes <> true constr
+R16054:16071 Coq.Bool.Bool <> not_true_iff_false thm
+R16054:16071 Coq.Bool.Bool <> not_true_iff_false thm
+R16089:16101 Coq.Arith.EqNat <> beq_nat_false thm
+R16089:16101 Coq.Arith.EqNat <> beq_nat_false thm
+prf 16129:16140 <> Eq_Open_Name
+R16165:16167 Coq.Init.Datatypes <> nat ind
+binder 16153:16153 <> i:218
+binder 16155:16155 <> y:219
+binder 16157:16157 <> k:220
+binder 16159:16159 <> x:221
+binder 16161:16161 <> p:222
+R16177:16181 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R16172:16175 Coq.Init.Logic <> ::type_scope:x_'<>'_x not
+R16171:16171 old.Defs_Process <> i:218 var
+R16176:16176 old.Defs_Process <> k:220 var
+R16221:16223 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R16182:16190 old.Defs_Process <> Open_Name def
+R16192:16192 old.Defs_Process <> i:218 var
+R16194:16194 old.Defs_Process <> y:219 var
+R16197:16205 old.Defs_Process <> Open_Name def
+R16207:16207 old.Defs_Process <> k:220 var
+R16209:16209 old.Defs_Process <> x:221 var
+R16212:16216 old.Defs_Process <> BName constr
+R16218:16218 old.Defs_Process <> p:222 var
+R16224:16232 old.Defs_Process <> Open_Name def
+R16234:16234 old.Defs_Process <> k:220 var
+R16236:16236 old.Defs_Process <> x:221 var
+R16239:16247 old.Defs_Process <> Open_Name def
+R16249:16249 old.Defs_Process <> i:218 var
+R16251:16251 old.Defs_Process <> y:219 var
+R16254:16258 old.Defs_Process <> BName constr
+R16260:16260 old.Defs_Process <> p:222 var
+R16297:16313 old.Defs_Process <> Open_BName_Output thm
+R16297:16313 old.Defs_Process <> Open_BName_Output thm
+R16344:16360 old.Defs_Process <> Open_BName_Output thm
+R16344:16360 old.Defs_Process <> Open_BName_Output thm
+R16534:16554 old.Defs_Process <> Open_BName_IsFName_Eq thm
+R16534:16554 old.Defs_Process <> Open_BName_IsFName_Eq thm
+R16573:16593 old.Defs_Process <> Open_BName_IsFName_Eq thm
+R16573:16593 old.Defs_Process <> Open_BName_IsFName_Eq thm
+prf 16630:16647 <> Subst_BName_Output
+R16668:16670 Coq.Init.Datatypes <> nat ind
+binder 16660:16660 <> x:223
+binder 16662:16662 <> y:224
+binder 16664:16664 <> i:225
+R16699:16701 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R16675:16684 old.Defs_Process <> Subst_Name def
+R16686:16686 old.Defs_Process <> x:223 var
+R16688:16688 old.Defs_Process <> y:224 var
+R16691:16695 old.Defs_Process <> BName constr
+R16697:16697 old.Defs_Process <> i:225 var
+R16702:16706 old.Defs_Process <> BName constr
+R16708:16708 old.Defs_Process <> i:225 var
+prf 16764:16786 <> Subst_Name_Open_Name_Ex
+R16804:16807 old.Defs_Process <> Name ind
+binder 16800:16800 <> x:226
+R16825:16827 Coq.Init.Datatypes <> nat ind
+binder 16812:16813 <> x0:227
+binder 16815:16816 <> y0:228
+binder 16818:16818 <> z:229
+binder 16820:16820 <> w:230
+binder 16822:16822 <> k:231
+R16868:16872 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R16839:16841 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R16832:16836 old.Defs_Process <> FName constr
+R16838:16838 old.Defs_Process <> w:230 var
+R16842:16851 old.Defs_Process <> Subst_Name def
+R16853:16854 old.Defs_Process <> x0:227 var
+R16856:16857 old.Defs_Process <> y0:228 var
+R16860:16864 old.Defs_Process <> FName constr
+R16866:16866 old.Defs_Process <> z:229 var
+R16907:16909 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R16873:16882 old.Defs_Process <> Subst_Name def
+R16884:16885 old.Defs_Process <> x0:227 var
+R16887:16888 old.Defs_Process <> y0:228 var
+R16891:16899 old.Defs_Process <> Open_Name def
+R16901:16901 old.Defs_Process <> k:231 var
+R16903:16903 old.Defs_Process <> z:229 var
+R16905:16905 old.Defs_Process <> x:226 var
+R16910:16918 old.Defs_Process <> Open_Name def
+R16920:16920 old.Defs_Process <> k:231 var
+R16922:16922 old.Defs_Process <> w:230 var
+R16925:16934 old.Defs_Process <> Subst_Name def
+R16936:16937 old.Defs_Process <> x0:227 var
+R16939:16940 old.Defs_Process <> y0:228 var
+R16942:16942 old.Defs_Process <> x:226 var
+R17002:17009 Coq.Bool.Bool <> bool_dec thm
+R17013:17016 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R17021:17024 Coq.Init.Datatypes <> true constr
+R17002:17009 Coq.Bool.Bool <> bool_dec thm
+R17013:17016 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R17021:17024 Coq.Init.Datatypes <> true constr
+R17063:17080 Coq.Bool.Bool <> not_true_iff_false thm
+R17063:17080 Coq.Bool.Bool <> not_true_iff_false thm
+R17128:17144 old.Defs_Process <> Open_BName_Output thm
+R17128:17144 old.Defs_Process <> Open_BName_Output thm
+R17192:17209 old.Defs_Process <> Subst_BName_Output thm
+R17192:17209 old.Defs_Process <> Subst_BName_Output thm
+R17192:17209 old.Defs_Process <> Subst_BName_Output thm
+R17249:17265 old.Defs_Process <> Open_BName_Output thm
+R17249:17265 old.Defs_Process <> Open_BName_Output thm
+R17341:17361 old.Defs_Process <> Open_BName_IsFName_Eq thm
+R17341:17361 old.Defs_Process <> Open_BName_IsFName_Eq thm
+R17384:17404 old.Defs_Process <> Open_BName_IsBName_Eq thm
+R17384:17404 old.Defs_Process <> Open_BName_IsBName_Eq thm
+R17450:17467 old.Defs_Process <> Subst_BName_Output thm
+R17450:17467 old.Defs_Process <> Subst_BName_Output thm
+R17450:17467 old.Defs_Process <> Subst_BName_Output thm
+R17507:17523 old.Defs_Process <> Open_BName_Output thm
+R17507:17523 old.Defs_Process <> Open_BName_Output thm
+R17573:17593 old.Defs_Process <> Open_BName_IsFName_Eq thm
+R17573:17593 old.Defs_Process <> Open_BName_IsFName_Eq thm
+R17616:17636 old.Defs_Process <> Open_BName_IsBName_Eq thm
+R17616:17636 old.Defs_Process <> Open_BName_IsBName_Eq thm
+prf 17740:17755 <> Open_Close_FName
+R17775:17777 Coq.Init.Datatypes <> nat ind
+binder 17769:17769 <> x:232
+binder 17771:17771 <> y:233
+R17782:17782 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R17823:17827 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R17835:17835 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R17783:17791 old.Defs_Process <> Open_Name def
+R17795:17795 old.Defs_Process <> x:232 var
+R17798:17807 old.Defs_Process <> Close_Name def
+R17811:17811 old.Defs_Process <> y:233 var
+R17814:17818 old.Defs_Process <> FName constr
+R17820:17820 old.Defs_Process <> y:233 var
+R17828:17832 old.Defs_Process <> FName constr
+R17834:17834 old.Defs_Process <> x:232 var
+R17867:17874 Coq.Bool.Bool <> bool_dec thm
+R17878:17881 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R17885:17888 Coq.Init.Datatypes <> true constr
+R17867:17874 Coq.Bool.Bool <> bool_dec thm
+R17878:17881 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R17885:17888 Coq.Init.Datatypes <> true constr
+R17930:17947 Coq.Bool.Bool <> not_true_iff_false thm
+R17930:17947 Coq.Bool.Bool <> not_true_iff_false thm
+R17965:17977 Coq.Arith.EqNat <> beq_nat_false thm
+R17965:17977 Coq.Arith.EqNat <> beq_nat_false thm
+prf 18023:18041 <> Subst_Name_By_Equal
+R18059:18061 Coq.Init.Datatypes <> nat ind
+binder 18054:18055 <> x0:234
+R18070:18073 old.Defs_Process <> Name ind
+binder 18066:18066 <> x:235
+R18096:18098 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R18078:18087 old.Defs_Process <> Subst_Name def
+R18089:18090 old.Defs_Process <> x0:234 var
+R18092:18093 old.Defs_Process <> x0:234 var
+R18095:18095 old.Defs_Process <> x:235 var
+R18099:18099 old.Defs_Process <> x:235 var
+R18158:18165 Coq.Bool.Bool <> bool_dec thm
+R18169:18172 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R18177:18180 Coq.Init.Datatypes <> true constr
+R18158:18165 Coq.Bool.Bool <> bool_dec thm
+R18169:18172 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R18177:18180 Coq.Init.Datatypes <> true constr
+R18213:18224 Coq.Arith.EqNat <> beq_nat_true thm
+R18213:18224 Coq.Arith.EqNat <> beq_nat_true thm
+R18256:18273 Coq.Bool.Bool <> not_true_iff_false thm
+R18256:18273 Coq.Bool.Bool <> not_true_iff_false thm
+prf 18898:18913 <> Lc_Lca_Zero_Name
+R18930:18933 old.Defs_Process <> Name ind
+binder 18926:18926 <> x:236
+R18947:18950 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R18938:18944 old.Defs_Process <> lc_name ind
+R18946:18946 old.Defs_Process <> x:236 var
+R18951:18958 old.Defs_Process <> lca_name ind
+R18962:18962 old.Defs_Process <> x:236 var
+prf 19032:19047 <> Lca_Zero_Lc_Name
+R19064:19067 old.Defs_Process <> Name ind
+binder 19060:19060 <> x:237
+R19084:19087 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R19072:19079 old.Defs_Process <> lca_name ind
+R19083:19083 old.Defs_Process <> x:237 var
+R19088:19094 old.Defs_Process <> lc_name ind
+R19096:19096 old.Defs_Process <> x:237 var
+prf 19193:19205 <> Lca_Name_Open
+R19221:19224 old.Defs_Process <> Name ind
+binder 19217:19217 <> x:238
+R19231:19233 Coq.Init.Datatypes <> nat ind
+binder 19227:19227 <> i:239
+R19237:19237 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R19286:19290 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R19251:19253 Coq.Init.Datatypes <> nat ind
+binder 19246:19247 <> x0:240
+R19257:19264 old.Defs_Process <> lca_name ind
+R19266:19266 old.Defs_Process <> i:239 var
+R19269:19277 old.Defs_Process <> Open_Name def
+R19279:19279 old.Defs_Process <> i:239 var
+R19281:19282 old.Defs_Process <> x0:240 var
+R19284:19284 old.Defs_Process <> x:238 var
+R19291:19298 old.Defs_Process <> lca_name ind
+R19301:19301 Coq.Init.Datatypes <> S constr
+R19303:19303 old.Defs_Process <> i:239 var
+R19306:19306 old.Defs_Process <> x:238 var
+R19387:19394 Coq.Bool.Bool <> bool_dec thm
+R19398:19401 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R19406:19409 Coq.Init.Datatypes <> true constr
+R19387:19394 Coq.Bool.Bool <> bool_dec thm
+R19398:19401 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R19406:19409 Coq.Init.Datatypes <> true constr
+R19464:19475 Coq.Arith.EqNat <> beq_nat_true thm
+R19464:19475 Coq.Arith.EqNat <> beq_nat_true thm
+R19506:19523 Coq.Bool.Bool <> not_true_iff_false thm
+R19506:19523 Coq.Bool.Bool <> not_true_iff_false thm
+prf 19647:19657 <> Lca_Name_Rd
+R19674:19677 old.Defs_Process <> Name ind
+binder 19670:19670 <> x:241
+R19688:19690 Coq.Init.Datatypes <> nat ind
+binder 19682:19682 <> k:242
+binder 19684:19684 <> y:243
+R19711:19714 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R19695:19702 old.Defs_Process <> lca_name ind
+R19705:19705 Coq.Init.Datatypes <> S constr
+R19707:19707 old.Defs_Process <> k:242 var
+R19710:19710 old.Defs_Process <> x:241 var
+R19715:19722 old.Defs_Process <> lca_name ind
+R19724:19724 old.Defs_Process <> k:242 var
+R19727:19735 old.Defs_Process <> Open_Name def
+R19737:19737 old.Defs_Process <> k:242 var
+R19739:19739 old.Defs_Process <> y:243 var
+R19741:19741 old.Defs_Process <> x:241 var
+R19825:19828 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R19821:19823 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R19830:19832 Coq.Init.Peano <> ::nat_scope:x_'<'_x not
+R19825:19828 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R19821:19823 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R19830:19832 Coq.Init.Peano <> ::nat_scope:x_'<'_x not
+R19904:19906 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R19899:19902 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R19907:19910 Coq.Init.Datatypes <> true constr
+R19904:19906 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R19899:19902 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R19907:19910 Coq.Init.Datatypes <> true constr
+R19935:19942 Coq.Bool.Bool <> bool_dec thm
+R19946:19949 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R19953:19956 Coq.Init.Datatypes <> true constr
+R19935:19942 Coq.Bool.Bool <> bool_dec thm
+R19946:19949 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R19953:19956 Coq.Init.Datatypes <> true constr
+R19996:20013 Coq.Bool.Bool <> not_true_iff_false thm
+R19996:20013 Coq.Bool.Bool <> not_true_iff_false thm
+R20039:20051 Coq.Arith.EqNat <> beq_nat_false thm
+R20039:20051 Coq.Arith.EqNat <> beq_nat_false thm
+R20139:20141 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R20134:20137 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R20142:20146 Coq.Init.Datatypes <> false constr
+R20139:20141 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R20134:20137 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R20142:20146 Coq.Init.Datatypes <> false constr
+R20169:20176 Coq.Bool.Bool <> bool_dec thm
+R20180:20183 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R20187:20190 Coq.Init.Datatypes <> true constr
+R20169:20176 Coq.Bool.Bool <> bool_dec thm
+R20180:20183 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R20187:20190 Coq.Init.Datatypes <> true constr
+R20212:20223 Coq.Arith.EqNat <> beq_nat_true thm
+R20212:20223 Coq.Arith.EqNat <> beq_nat_true thm
+R20254:20271 Coq.Bool.Bool <> not_true_iff_false thm
+R20254:20271 Coq.Bool.Bool <> not_true_iff_false thm
+prf 20383:20396 <> Lca_Name_Close
+R20413:20416 old.Defs_Process <> Name ind
+binder 20409:20409 <> x:244
+R20427:20429 Coq.Init.Datatypes <> nat ind
+binder 20421:20421 <> k:245
+binder 20423:20423 <> y:246
+R20446:20449 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R20434:20441 old.Defs_Process <> lca_name ind
+R20443:20443 old.Defs_Process <> k:245 var
+R20445:20445 old.Defs_Process <> x:244 var
+R20450:20457 old.Defs_Process <> lca_name ind
+R20460:20460 Coq.Init.Datatypes <> S constr
+R20462:20462 old.Defs_Process <> k:245 var
+R20466:20475 old.Defs_Process <> Close_Name def
+R20477:20477 old.Defs_Process <> k:245 var
+R20479:20479 old.Defs_Process <> y:246 var
+R20481:20481 old.Defs_Process <> x:244 var
+R20532:20539 Coq.Bool.Bool <> bool_dec thm
+R20544:20547 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R20551:20554 Coq.Init.Datatypes <> true constr
+R20532:20539 Coq.Bool.Bool <> bool_dec thm
+R20544:20547 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R20551:20554 Coq.Init.Datatypes <> true constr
+R20619:20636 Coq.Bool.Bool <> not_true_iff_false thm
+R20619:20636 Coq.Bool.Bool <> not_true_iff_false thm
+prf 20736:20749 <> Subst_Lca_Name
+R20766:20769 old.Defs_Process <> Name ind
+binder 20762:20762 <> x:247
+R20784:20786 Coq.Init.Datatypes <> nat ind
+binder 20774:20774 <> k:248
+binder 20776:20777 <> x0:249
+binder 20779:20780 <> y0:250
+R20802:20805 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R20790:20797 old.Defs_Process <> lca_name ind
+R20799:20799 old.Defs_Process <> k:248 var
+R20801:20801 old.Defs_Process <> x:247 var
+R20806:20813 old.Defs_Process <> lca_name ind
+R20815:20815 old.Defs_Process <> k:248 var
+R20818:20827 old.Defs_Process <> Subst_Name def
+R20829:20830 old.Defs_Process <> x0:249 var
+R20832:20833 old.Defs_Process <> y0:250 var
+R20835:20835 old.Defs_Process <> x:247 var
+R20889:20905 old.Defs_Process <> Subst_Name_Output thm
+R20914:20918 old.Defs_Process <> FName constr
+R20889:20905 old.Defs_Process <> Subst_Name_Output thm
+R20914:20918 old.Defs_Process <> FName constr
+prf 21015:21026 <> Lca_Name_Bex
+R21043:21046 old.Defs_Process <> Name ind
+binder 21039:21039 <> N:251
+R21058:21060 Coq.Init.Datatypes <> nat ind
+binder 21050:21050 <> i:252
+binder 21052:21052 <> j:253
+binder 21054:21054 <> k:254
+R21069:21072 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R21065:21067 Coq.Init.Peano <> ::nat_scope:x_'<'_x not
+R21064:21064 old.Defs_Process <> i:252 var
+R21068:21068 old.Defs_Process <> j:253 var
+R21078:21081 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R21074:21076 Coq.Init.Peano <> ::nat_scope:x_'<'_x not
+R21073:21073 old.Defs_Process <> j:253 var
+R21077:21077 old.Defs_Process <> k:254 var
+R21094:21097 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R21082:21089 old.Defs_Process <> lca_name ind
+R21091:21091 old.Defs_Process <> k:254 var
+R21093:21093 old.Defs_Process <> N:251 var
+R21098:21105 old.Defs_Process <> lca_name ind
+R21107:21107 old.Defs_Process <> k:254 var
+R21110:21117 old.Defs_Process <> Bex_Name def
+R21119:21119 old.Defs_Process <> i:252 var
+R21121:21121 old.Defs_Process <> j:253 var
+R21123:21123 old.Defs_Process <> N:251 var
+R21208:21215 Coq.Bool.Bool <> bool_dec thm
+R21220:21223 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R21227:21230 Coq.Init.Datatypes <> true constr
+R21208:21215 Coq.Bool.Bool <> bool_dec thm
+R21220:21223 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R21227:21230 Coq.Init.Datatypes <> true constr
+R21295:21312 Coq.Bool.Bool <> not_true_iff_false thm
+R21295:21312 Coq.Bool.Bool <> not_true_iff_false thm
+R21360:21367 Coq.Bool.Bool <> bool_dec thm
+R21372:21375 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R21379:21382 Coq.Init.Datatypes <> true constr
+R21360:21367 Coq.Bool.Bool <> bool_dec thm
+R21372:21375 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R21379:21382 Coq.Init.Datatypes <> true constr
+R21452:21469 Coq.Bool.Bool <> not_true_iff_false thm
+R21452:21469 Coq.Bool.Bool <> not_true_iff_false thm
+R21564:21572 Coq.Sets.Ensembles <> <> lib
+R21599:21609 Coq.Sets.Finite_sets <> <> lib
+R21636:21652 Coq.Sets.Finite_sets_facts <> <> lib
+R21679:21687 Coq.Bool.Bool <> <> lib
+R21714:21727 Coq.Arith.PeanoNat <> <> lib
+R21754:21764 Coq.Arith.EqNat <> <> lib
+prf 21780:21795 <> No_Union_No_Each
+R21812:21814 Coq.Init.Datatypes <> nat ind
+binder 21808:21808 <> x:255
+R21824:21829 old.Defs_Process <> FVarsE def
+binder 21818:21818 <> X:256
+binder 21820:21820 <> Y:257
+R21852:21855 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R21834:21835 Coq.Init.Logic <> ::type_scope:'~'_x not
+R21851:21851 Coq.Init.Logic <> ::type_scope:'~'_x not
+R21837:21842 old.Defs_Process <> :::x_'∈'_x not
+R21850:21850 old.Defs_Process <> :::x_'∈'_x not
+R21844:21848 old.Defs_Process <> :::x_'∪'_x not
+R21843:21843 old.Defs_Process <> X:256 var
+R21849:21849 old.Defs_Process <> Y:257 var
+R21836:21836 old.Defs_Process <> x:255 var
+R21866:21869 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R21856:21857 Coq.Init.Logic <> ::type_scope:'~'_x not
+R21865:21865 Coq.Init.Logic <> ::type_scope:'~'_x not
+R21859:21863 old.Defs_Process <> :::x_'∈'_x not
+R21864:21864 old.Defs_Process <> X:256 var
+R21858:21858 old.Defs_Process <> x:255 var
+R21870:21871 Coq.Init.Logic <> ::type_scope:'~'_x not
+R21879:21879 Coq.Init.Logic <> ::type_scope:'~'_x not
+R21873:21877 old.Defs_Process <> :::x_'∈'_x not
+R21878:21878 old.Defs_Process <> Y:257 var
+R21872:21872 old.Defs_Process <> x:255 var
+prf 21913:21929 <> FVars_Name_Finite
+R21945:21948 old.Defs_Process <> Name ind
+binder 21941:21941 <> x:258
+R21952:21957 Coq.Sets.Finite_sets <> Finite ind
+R21962:21971 old.Defs_Process <> FVars_Name def
+R21973:21973 old.Defs_Process <> x:258 var
+R22015:22033 Coq.Sets.Finite_sets_facts <> Singleton_is_finite thm
+R22015:22033 Coq.Sets.Finite_sets_facts <> Singleton_is_finite thm
+prf 22079:22090 <> FVars_Finite
+R22106:22112 old.Defs_Process <> Process ind
+binder 22102:22102 <> P:259
+R22116:22121 Coq.Sets.Finite_sets <> Finite ind
+R22126:22130 old.Defs_Process <> FVars def
+R22132:22132 old.Defs_Process <> P:259 var
+R22203:22224 Coq.Sets.Finite_sets_facts <> Union_preserves_Finite thm
+R22233:22249 old.Defs_Process <> FVars_Name_Finite thm
+R22203:22224 Coq.Sets.Finite_sets_facts <> Union_preserves_Finite thm
+R22233:22249 old.Defs_Process <> FVars_Name_Finite thm
+R22233:22249 old.Defs_Process <> FVars_Name_Finite thm
+R22269:22290 Coq.Sets.Finite_sets_facts <> Union_preserves_Finite thm
+R22269:22290 Coq.Sets.Finite_sets_facts <> Union_preserves_Finite thm
+R22316:22337 Coq.Sets.Finite_sets_facts <> Union_preserves_Finite thm
+R22350:22371 Coq.Sets.Finite_sets_facts <> Union_preserves_Finite thm
+R22384:22400 old.Defs_Process <> FVars_Name_Finite thm
+R22316:22337 Coq.Sets.Finite_sets_facts <> Union_preserves_Finite thm
+R22350:22371 Coq.Sets.Finite_sets_facts <> Union_preserves_Finite thm
+R22350:22371 Coq.Sets.Finite_sets_facts <> Union_preserves_Finite thm
+R22384:22400 old.Defs_Process <> FVars_Name_Finite thm
+R22384:22400 old.Defs_Process <> FVars_Name_Finite thm
+R22384:22400 old.Defs_Process <> FVars_Name_Finite thm
+R22426:22442 old.Defs_Process <> FVars_Name_Finite thm
+R22426:22442 old.Defs_Process <> FVars_Name_Finite thm
+R22462:22483 Coq.Sets.Finite_sets_facts <> Union_preserves_Finite thm
+R22496:22517 Coq.Sets.Finite_sets_facts <> Union_preserves_Finite thm
+R22530:22546 old.Defs_Process <> FVars_Name_Finite thm
+R22462:22483 Coq.Sets.Finite_sets_facts <> Union_preserves_Finite thm
+R22496:22517 Coq.Sets.Finite_sets_facts <> Union_preserves_Finite thm
+R22496:22517 Coq.Sets.Finite_sets_facts <> Union_preserves_Finite thm
+R22530:22546 old.Defs_Process <> FVars_Name_Finite thm
+R22530:22546 old.Defs_Process <> FVars_Name_Finite thm
+R22582:22603 Coq.Sets.Finite_sets_facts <> Union_preserves_Finite thm
+R22616:22637 Coq.Sets.Finite_sets_facts <> Union_preserves_Finite thm
+R22650:22666 old.Defs_Process <> FVars_Name_Finite thm
+R22582:22603 Coq.Sets.Finite_sets_facts <> Union_preserves_Finite thm
+R22616:22637 Coq.Sets.Finite_sets_facts <> Union_preserves_Finite thm
+R22616:22637 Coq.Sets.Finite_sets_facts <> Union_preserves_Finite thm
+R22650:22666 old.Defs_Process <> FVars_Name_Finite thm
+R22650:22666 old.Defs_Process <> FVars_Name_Finite thm
+R22692:22713 Coq.Sets.Finite_sets_facts <> Union_preserves_Finite thm
+R22726:22747 Coq.Sets.Finite_sets_facts <> Union_preserves_Finite thm
+R22760:22776 old.Defs_Process <> FVars_Name_Finite thm
+R22692:22713 Coq.Sets.Finite_sets_facts <> Union_preserves_Finite thm
+R22726:22747 Coq.Sets.Finite_sets_facts <> Union_preserves_Finite thm
+R22726:22747 Coq.Sets.Finite_sets_facts <> Union_preserves_Finite thm
+R22760:22776 old.Defs_Process <> FVars_Name_Finite thm
+R22760:22776 old.Defs_Process <> FVars_Name_Finite thm
+prf 22804:22818 <> There_Is_A_Name
+R22835:22841 old.Defs_Process <> Process ind
+binder 22831:22831 <> P:260
+R22846:22854 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R22862:22865 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R22859:22861 Coq.Init.Datatypes <> nat ind
+binder 22855:22855 <> x:261
+R22866:22869 Coq.Init.Logic <> ::type_scope:'~'_x not
+R22885:22886 Coq.Init.Logic <> ::type_scope:'~'_x not
+R22871:22876 old.Defs_Process <> :::x_'∈'_x not
+R22884:22884 old.Defs_Process <> :::x_'∈'_x not
+R22877:22881 old.Defs_Process <> FVars def
+R22883:22883 old.Defs_Process <> P:260 var
+R22870:22870 old.Defs_Process <> x:261 var
+prf 22920:22938 <> FVars_Name_No_Close
+R22956:22958 Coq.Init.Datatypes <> nat ind
+binder 22950:22950 <> z:262
+binder 22952:22952 <> k:263
+R22965:22968 old.Defs_Process <> Name ind
+binder 22961:22961 <> x:264
+R22994:22998 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R23019:23019 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R22972:22974 Coq.Init.Logic <> ::type_scope:'~'_x not
+R22993:22993 Coq.Init.Logic <> ::type_scope:'~'_x not
+R22976:22980 old.Defs_Process <> :::x_'∈'_x not
+R22981:22990 old.Defs_Process <> FVars_Name def
+R22992:22992 old.Defs_Process <> x:264 var
+R22975:22975 old.Defs_Process <> z:262 var
+R23015:23017 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R22999:23008 old.Defs_Process <> Close_Name def
+R23010:23010 old.Defs_Process <> k:263 var
+R23012:23012 old.Defs_Process <> z:262 var
+R23014:23014 old.Defs_Process <> x:264 var
+R23018:23018 old.Defs_Process <> x:264 var
+R23038:23040 Coq.Init.Logic <> not def
+R23081:23088 Coq.Bool.Bool <> bool_dec thm
+R23092:23095 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R23099:23102 Coq.Init.Datatypes <> true constr
+R23081:23088 Coq.Bool.Bool <> bool_dec thm
+R23092:23095 Coq.Arith.PeanoNat <> ::nat_scope:x_'=?'_x not
+R23099:23102 Coq.Init.Datatypes <> true constr
+R23130:23139 Coq.Arith.PeanoNat Nat eqb_eq thm
+R23130:23139 Coq.Arith.PeanoNat Nat eqb_eq thm
+R23190:23194 old.Defs_Process <> :::x_'∈'_x not
+R23195:23203 Coq.Sets.Ensembles <> Singleton ind
+R23205:23207 Coq.Init.Datatypes <> nat ind
+R23190:23194 old.Defs_Process <> :::x_'∈'_x not
+R23195:23203 Coq.Sets.Ensembles <> Singleton ind
+R23205:23207 Coq.Init.Datatypes <> nat ind
+R23228:23229 Coq.Sets.Ensembles <> In def
+R23287:23304 Coq.Bool.Bool <> not_true_iff_false thm
+R23287:23304 Coq.Bool.Bool <> not_true_iff_false thm
+prf 23364:23378 <> Close_NoFVar_Eq
+R23395:23401 old.Defs_Process <> Process ind
+binder 23391:23391 <> P:265
+R23410:23412 Coq.Init.Datatypes <> nat ind
+binder 23405:23405 <> z:266
+binder 23407:23407 <> k:267
+R23437:23440 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R23416:23419 Coq.Init.Logic <> ::type_scope:'~'_x not
+R23435:23436 Coq.Init.Logic <> ::type_scope:'~'_x not
+R23421:23426 old.Defs_Process <> :::x_'∈'_x not
+R23434:23434 old.Defs_Process <> :::x_'∈'_x not
+R23427:23431 old.Defs_Process <> FVars def
+R23433:23433 old.Defs_Process <> P:265 var
+R23420:23420 old.Defs_Process <> z:266 var
+R23441:23442 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R23458:23462 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R23443:23451 old.Defs_Process <> Close_Rec def
+R23453:23453 old.Defs_Process <> k:267 var
+R23455:23455 old.Defs_Process <> z:266 var
+R23457:23457 old.Defs_Process <> P:265 var
+R23463:23463 old.Defs_Process <> P:265 var
+R23482:23486 old.Defs_Process <> Close def
+R23548:23563 old.Defs_Process <> No_Union_No_Each prfax
+R23548:23563 old.Defs_Process <> No_Union_No_Each prfax
+R23621:23639 old.Defs_Process <> FVars_Name_No_Close thm
+R23621:23639 old.Defs_Process <> FVars_Name_No_Close thm
+R23621:23639 old.Defs_Process <> FVars_Name_No_Close thm
+R23621:23639 old.Defs_Process <> FVars_Name_No_Close thm
+R23660:23678 old.Defs_Process <> FVars_Name_No_Close thm
+R23660:23678 old.Defs_Process <> FVars_Name_No_Close thm
+R23660:23678 old.Defs_Process <> FVars_Name_No_Close thm
+R23660:23678 old.Defs_Process <> FVars_Name_No_Close thm
+R23713:23728 old.Defs_Process <> No_Union_No_Each prfax
+R23713:23728 old.Defs_Process <> No_Union_No_Each prfax
+R23848:23863 old.Defs_Process <> No_Union_No_Each prfax
+R23848:23863 old.Defs_Process <> No_Union_No_Each prfax
+R23923:23938 old.Defs_Process <> No_Union_No_Each prfax
+R23923:23938 old.Defs_Process <> No_Union_No_Each prfax
+R24019:24037 old.Defs_Process <> FVars_Name_No_Close thm
+R24019:24037 old.Defs_Process <> FVars_Name_No_Close thm
+R24019:24037 old.Defs_Process <> FVars_Name_No_Close thm
+R24019:24037 old.Defs_Process <> FVars_Name_No_Close thm
+R24058:24076 old.Defs_Process <> FVars_Name_No_Close thm
+R24058:24076 old.Defs_Process <> FVars_Name_No_Close thm
+R24058:24076 old.Defs_Process <> FVars_Name_No_Close thm
+R24058:24076 old.Defs_Process <> FVars_Name_No_Close thm
+R24124:24142 old.Defs_Process <> FVars_Name_No_Close thm
+R24124:24142 old.Defs_Process <> FVars_Name_No_Close thm
+R24124:24142 old.Defs_Process <> FVars_Name_No_Close thm
+R24124:24142 old.Defs_Process <> FVars_Name_No_Close thm
+R24177:24192 old.Defs_Process <> No_Union_No_Each prfax
+R24177:24192 old.Defs_Process <> No_Union_No_Each prfax
+R24273:24291 old.Defs_Process <> FVars_Name_No_Close thm
+R24273:24291 old.Defs_Process <> FVars_Name_No_Close thm
+R24273:24291 old.Defs_Process <> FVars_Name_No_Close thm
+R24273:24291 old.Defs_Process <> FVars_Name_No_Close thm
+R24376:24391 old.Defs_Process <> No_Union_No_Each prfax
+R24376:24391 old.Defs_Process <> No_Union_No_Each prfax
+R24449:24467 old.Defs_Process <> FVars_Name_No_Close thm
+R24449:24467 old.Defs_Process <> FVars_Name_No_Close thm
+R24449:24467 old.Defs_Process <> FVars_Name_No_Close thm
+R24449:24467 old.Defs_Process <> FVars_Name_No_Close thm
+R24525:24540 old.Defs_Process <> No_Union_No_Each prfax
+R24525:24540 old.Defs_Process <> No_Union_No_Each prfax
+R24598:24616 old.Defs_Process <> FVars_Name_No_Close thm
+R24598:24616 old.Defs_Process <> FVars_Name_No_Close thm
+R24598:24616 old.Defs_Process <> FVars_Name_No_Close thm
+R24598:24616 old.Defs_Process <> FVars_Name_No_Close thm

@@ -12,9 +12,9 @@ From Coq Require Import Lia.
 From Coq Require Import Sets.Constructive_sets.
 
 From old Require Import Defs_Tactics.
-From old Require Import Defs_Typing.
 From old Require Import Defs_Process.
 From old Require Import Defs_Proposition.
+From old Require Import Defs_Typing.
 From old Require Import Facts_MOpen.
 From old Require Import Props_Process.
 
@@ -1151,7 +1151,14 @@ Proof.
     - right.
       rewrite (FVars_Open_Beq_Names y u x0 i); auto.
       constructor.
-  + admit.
+  + apply Union_inv in H0.
+    destruct H0.
+    - left.
+      rewrite (FVars_Open_Beq_Names_Inv _ u x0 i); auto.
+      constructor.
+    - right.
+      rewrite (FVars_Open_Beq_Names_Inv _ u x0 i); auto.
+      constructor.
   + apply Union_inv in H0.
     destruct H0.
     - left.
@@ -1164,10 +1171,34 @@ Proof.
       apply <- (IHP1 u x i); auto.
     - right.
       apply <- (IHP2 u x i); auto.
-  + admit.
-  + admit.
-  + admit.
-  + admit.
+  + apply Union_inv in H0.
+    destruct H0.
+    - apply Union_inv in H0.
+      destruct H0.
+      * left. left.
+        rewrite (FVars_Open_Beq_Names x u x0 i); auto.
+        constructor.
+      * left. right.
+        rewrite (FVars_Open_Beq_Names y u x0 i); auto.
+        constructor.
+    - right.
+      apply IHP; auto.
+  + apply Union_inv in H0.
+    destruct H0.
+    - apply Union_inv in H0.
+      destruct H0.
+      * left. left.
+        rewrite (FVars_Open_Beq_Names_Inv x u x0 i); auto.
+        constructor.
+      * left. right.
+        rewrite (FVars_Open_Beq_Names_Inv y u x0 i); auto.
+        constructor.
+    - right.
+      apply <- (IHP u x0 i); auto.
+  + rewrite (FVars_Open_Beq_Names x u x0 i); auto.
+    constructor.
+  + rewrite (FVars_Open_Beq_Names_Inv x u x0 i); auto.
+    constructor.
   + apply Union_inv in H0.
     destruct H0.
     - left. 
@@ -1206,7 +1237,565 @@ Proof.
       rewrite (FVars_Open_Beq_Names_Inv _ u x0 i); auto.
       constructor.
     - right; apply <- (IHP u x0 (S i)); auto.
+Qed.
+
+
+
+(*
+*)
+Lemma Double_WSubst_Equality_Names :
+forall (x : Name)(x0 u : nat),
+~ x0 ∈ FVars_Name x -> 
+Subst_Name x0 u (Subst_Name u x0 x) = x.
+Proof.
+  destruct x; intros; simpl; auto.
+  simpl in H.
+  assert( HA : x <> x0).
+    unfold not in *.
+    intros.
+    apply H.
+    rewrite H0; constructor.
+  EasyDec x u e n.
+  + specialize (beq_nat_refl x0) as Hx.
+    apply eq_sym in Hx.
+    rewrite Hx.
+    apply beq_nat_true in e.
+    rewrite e; auto.
+  + apply beq_nat_false_inv in HA.
+    rewrite HA.
+    auto.
+Qed.
+
+
+
+
+Lemma Double_WSubst_Equality :
+forall (P : Process)( x u : nat),
+Well_Subst P u x -> ({u \ x} ({x \ u} P)) = P.
+Proof.
+  intro.
+  dependent induction P; intros; simpl; inversions H;
+    try simpl in H0;
+    try apply No_Union_No_Each in H0;
+    try destruct H0 as [HA HC];
+    repeat rewrite Double_WSubst_Equality_Names;
+    try rewrite IHP1; try constructor;
+    try rewrite IHP2; try constructor;
+    try rewrite IHP;
+    try constructor;
+    auto.
+  + apply No_Union_No_Each in HA;
+    destruct HA as [HA HB]; auto.
+  + apply No_Union_No_Each in HA;
+    destruct HA as [HA HB]; auto.
+Qed.
+
+
+
+Lemma FVars_Open :
+forall (Q : Process)( y x i : nat),
+x ∈ FVars ( {i ~> y} Q ) ->  x = y \/ x ∈ FVars ( Q ).
+Proof.
+  induction Q; intros; simpl; auto.
+  + simpl in H.
+    apply Union_inv in H.
+    destruct H.
+    - destruct x.
+      * simpl in *.
+        apply Singleton_inv in H.
+        right; left. rewrite H; constructor.
+      * simpl in *.
+        EasyDec i i0 e n.
+        rewrite e in H.
+        simpl in H.
+        apply Singleton_inv in H.
+        auto.
+        rewrite n in H.
+        simpl in H.
+        contradiction.
+    - destruct y.
+      * simpl in *.
+        apply Singleton_inv in H.
+        right; right; rewrite H; constructor.
+      * simpl in *.
+        EasyDec i i0 e n.
+        rewrite e in H.
+        simpl in H.
+        apply Singleton_inv in H.
+        auto.
+        rewrite n in H.
+        simpl in H.
+        contradiction; auto.
+  + simpl in H.
+    apply Union_inv in H.
+    destruct H.
+    - apply IHQ1 in H.
+      destruct H; auto.
+      right; left; auto.
+    - apply IHQ2 in H.
+      destruct H; auto.
+      right; right; auto.
+  + simpl in H.
+    apply Union_inv in H.
+    destruct H.
+    - apply Union_inv in H.
+      destruct H.
+      * destruct x.
+        ** simpl in *.
+          apply Singleton_inv in H.
+          rewrite H.
+          right; left; left. constructor.
+        ** simpl in *.
+          EasyDec i i0 e n.
+          rewrite e in H.
+          simpl in H.
+          apply Singleton_inv in H.
+          rewrite H.
+          auto.
+          rewrite n in H.
+          simpl in H.
+          contradiction.
+      * destruct y.
+        ** simpl in *.
+          apply Singleton_inv in H.
+          rewrite H.
+          right; left; right. constructor.
+        ** simpl in *.
+          EasyDec i i0 e n.
+          rewrite e in H.
+          simpl in H.
+          apply Singleton_inv in H.
+          rewrite H.
+          auto.
+          rewrite n in H.
+          simpl in H.
+          contradiction.
+    - apply IHQ in H.
+      destruct H; auto.
+      right; right; auto.
+  + simpl in H.
+    destruct x.
+    - simpl in *.
+      apply Singleton_inv in H.
+      rewrite H.
+      right; constructor.
+    - simpl in *.
+      EasyDec i i0 e n.
+      rewrite e in H.
+      simpl in H.
+      apply Singleton_inv in H.
+      rewrite H.
+      auto.
+      rewrite n in H.
+      simpl in H.
+      contradiction.
+  + simpl in H.
+    apply Union_inv in H.
+    destruct H.
+    - destruct x.
+      * simpl in *.
+        apply Singleton_inv in H.
+        rewrite H.
+        right; left; constructor.
+      * simpl in *.
+        EasyDec i i0 e n.
+        rewrite e in H.
+        simpl in H.
+        apply Singleton_inv in H.
+        rewrite H.
+        auto.
+        rewrite n in H.
+        simpl in H.
+        contradiction.
+    - apply IHQ in H.
+      destruct H; auto.
+      right; right; auto.
+  + simpl in H.
+    apply (IHQ _ _ (S i)); auto.
+  + simpl in H.
+    apply Union_inv in H.
+    destruct H.
+    - destruct x.
+      * simpl in *.
+        apply Singleton_inv in H.
+        rewrite H.
+        right; left; constructor.
+      * simpl in *.
+        EasyDec i i0 e n.
+        rewrite e in H.
+        simpl in H.
+        apply Singleton_inv in H.
+        rewrite H.
+        auto.
+        rewrite n in H.
+        simpl in H.
+        contradiction.
+    - apply IHQ in H.
+      destruct H; auto.
+      right; right; auto.
+  + simpl in H.
+    apply Union_inv in H.
+    destruct H.
+    - destruct x.
+      * simpl in *.
+        apply Singleton_inv in H.
+        rewrite H.
+        right; left; constructor.
+      * simpl in *.
+        EasyDec i i0 e n.
+        rewrite e in H.
+        simpl in H.
+        apply Singleton_inv in H.
+        rewrite H.
+        auto.
+        rewrite n in H.
+        simpl in H.
+        contradiction.
+    - apply IHQ in H.
+      destruct H; auto.
+      right; right; auto.
+Qed.
+
+
+Lemma FVars_Beq_Close :
+forall ( Q : Process)(x x0 i : nat),
+x <> x0 -> x ∈ FVars (Close_Rec i x0 Q) -> 
+x ∈ FVars (Q).
+Proof.
+  induction Q; intros; simpl; auto.
+  + simpl in H0.
+    apply Union_inv in H0.
+    destruct H0.
+    - destruct x; 
+       simpl in H0; try contradiction; auto.
+      EasyDec x x1 e n.
+      rewrite e in H0.
+      simpl in H0.
+      contradiction.
+      rewrite n in H0.
+      apply Singleton_inv in H0.
+      rewrite H0.
+      left; constructor.
+    - destruct y; 
+       simpl in H0; try contradiction; auto.
+      EasyDec x2 x1 e n.
+      rewrite e in H0.
+      simpl in H0.
+      contradiction.
+      rewrite n in H0.
+      apply Singleton_inv in H0.
+      rewrite H0.
+      right; constructor.
+  + simpl in H0.
+    apply Union_inv in H0.
+    destruct H0.
+    - left.
+      apply (IHQ1 _ x0 i); auto.
+    - right.
+      apply (IHQ2 _ x0 i); auto.
+  + simpl in H0.
+    apply Union_inv in H0.
+    destruct H0.
+    - simpl in H0.
+      apply Union_inv in H0.
+      destruct H0.
+      * destruct x; 
+         simpl in H0; try contradiction; auto.
+        EasyDec x x1 e n.
+        rewrite e in H0.
+        simpl in H0.
+        contradiction.
+        rewrite n in H0.
+        apply Singleton_inv in H0.
+        rewrite H0.
+        left; left; constructor.
+      * destruct y;
+         simpl in H0; try contradiction; auto.
+        EasyDec x2 x1 e n.
+        rewrite e in H0.
+        simpl in H0.
+        contradiction.
+        rewrite n in H0.
+        apply Singleton_inv in H0.
+        rewrite H0.
+        left; right; constructor.
+    - right.
+      apply (IHQ x0 x1 i); auto.
+  + simpl in H0.
+    destruct x; 
+     simpl in H0; try contradiction; auto.
+    EasyDec x x1 e n.
+    rewrite e in H0.
+    simpl in H0.
+    contradiction.
+    rewrite n in H0.
+    apply Singleton_inv in H0.
+    rewrite H0.
+    constructor.
+  + simpl in H0.
+    apply Union_inv in H0.
+    destruct H0.
+    - destruct x; 
+       simpl in H0; try contradiction; auto.
+      EasyDec x x1 e n.
+      rewrite e in H0.
+      simpl in H0.
+      contradiction.
+      rewrite n in H0.
+      apply Singleton_inv in H0.
+      rewrite H0.
+      left; constructor.
+    - right.
+      apply (IHQ x0 x1 i); auto.
+  + simpl in H0.
+    apply (IHQ x x0 (S i)); auto.
+  + simpl in H0.
+    apply Union_inv in H0.
+    destruct H0.
+    - destruct x; 
+       simpl in H0; try contradiction; auto.
+      EasyDec x x1 e n.
+      rewrite e in H0.
+      simpl in H0.
+      contradiction.
+      rewrite n in H0.
+      apply Singleton_inv in H0.
+      rewrite H0.
+      left; constructor.
+    - right.
+      apply (IHQ x0 x1 (S i)); auto.
+  + simpl in H0.
+    apply Union_inv in H0.
+    destruct H0.
+    - destruct x; 
+       simpl in H0; try contradiction; auto.
+      EasyDec x x1 e n.
+      rewrite e in H0.
+      simpl in H0.
+      contradiction.
+      rewrite n in H0.
+      apply Singleton_inv in H0.
+      rewrite H0.
+      left; constructor.
+    - right.
+      apply (IHQ x0 x1 (S i)); auto.
+Qed.
+
+
+
+
+
+Lemma FVars_Close_NotIn :
+forall ( P : Process )( x x0 i: nat),
+x <> x0 -> ~ x ∈ FVars (Close_Rec i x0 P) -> ~ x ∈ FVars (P).
+Proof.
+  induction P; intros; simpl; unfold not; intro; apply H0; auto.
+  + apply Union_inv in H1.
+    destruct H1.
+    - destruct x; simpl in H1; try contradiction.
+      apply Singleton_inv in H1.
+      rewrite <- H1 in H.
+      apply beq_nat_false_inv in H.
+      simpl.
+      rewrite H.
+      left; simpl.
+      rewrite H1.
+      constructor.
+    - destruct y; simpl in H1; try contradiction.
+      apply Singleton_inv in H1.
+      rewrite <- H1 in H.
+      apply beq_nat_false_inv in H.
+      simpl.
+      rewrite H.
+      right; simpl.
+      rewrite H1.
+      constructor.
+  + admit.
+  + admit.
+  + admit.
+  + admit.
+  + simpl in H0.
+    apply IHP in H0; auto.
+    contradiction.
+  + apply Union_inv in H1.
+    destruct H1.
+    - destruct x; simpl in H1; try contradiction.
+      apply Singleton_inv in H1.
+      rewrite <- H1 in H.
+      apply beq_nat_false_inv in H.
+      simpl.
+      rewrite H.
+      left; simpl.
+      rewrite H1.
+      constructor.
+    - simpl in H0.
+      apply No_Union_No_Each in H0.
+      destruct H0 as [HA HB].
+      apply IHP in HB; auto.
+      contradiction.
+  + apply Union_inv in H1.
+    destruct H1.
+    - destruct x; simpl in H1; try contradiction.
+      apply Singleton_inv in H1.
+      rewrite <- H1 in H.
+      apply beq_nat_false_inv in H.
+      simpl.
+      rewrite H.
+      left; simpl.
+      rewrite H1.
+      constructor.
+    - simpl in H0.
+      apply No_Union_No_Each in H0.
+      destruct H0 as [HA HB].
+      apply IHP in HB; auto.
+      contradiction.
 Admitted.
+
+
+
+
+
+
+Lemma Well_Subst_Red_Well_Subst :
+forall (P Q : Process)(u x : nat),
+Well_Subst P u x -> P --> Q -> 
+Well_Subst Q u x.
+Proof.
+  intros.
+  dependent induction H0; try inversions H; try constructor; auto.
+  + unfold not.
+    intros.
+    simpl in H4.
+    apply Union_inv in H4.
+    simpl in H2.
+    apply No_Union_No_Each in H2.
+    destruct H2 as [HA HD].
+    apply No_Union_No_Each in HA.
+    destruct HA as [HA HC].
+    destruct H4.
+    - contradiction.
+    - apply FVars_Open in H2.
+      destruct H2.
+      * apply No_Union_No_Each in HA.
+        destruct HA as [HA HB].
+        rewrite H2 in HB.
+        assert ( Hx : y <> y ).
+          unfold not.
+          intros.
+          apply HB.
+          constructor.
+        contradiction.
+      * apply No_Union_No_Each in HD.
+        destruct HD as [HD HE].
+        auto.
+  + unfold not.
+    intro.
+    simpl in H2.
+    apply No_Union_No_Each in H2.
+    destruct H2 as [HA HD].
+    apply No_Union_No_Each in HA.
+    destruct HA as [HA HC].
+    apply No_Union_No_Each in HA.
+    destruct HA as [HA HB].
+    apply No_Union_No_Each in HD.
+    destruct HD as [HD HE]; auto.
+    simpl in H4.
+    apply Union_inv in H4.
+    destruct H4.
+    - apply Union_inv in H2.
+      destruct H2; auto.
+      apply FVars_Open in H2.
+      destruct H2; auto.
+      rewrite H2 in HB.
+      assert ( Hx : y <> y ).
+        unfold not.
+        intros.
+        apply HB.
+        constructor.
+      contradiction.
+    - apply Union_inv in H2.
+      destruct H2; auto.
+  + unfold not.
+    intros.
+    simpl in H1.
+    apply No_Union_No_Each in H1.
+    destruct H1 as [HA HC].
+    apply No_Union_No_Each in HC.
+    destruct HC as [HB HC].
+    contradiction.
+  + unfold not.
+    intros.
+    simpl in H1.
+    apply No_Union_No_Each in H1.
+    destruct H1 as [HA HC].
+    apply No_Union_No_Each in HC.
+    destruct HC as [HB HC].
+    
+    
+    
+    
+    
+    admit.
+  + unfold not.
+    intros.
+    simpl in H5.
+    apply Union_inv in H5.
+    simpl in H3.
+    apply No_Union_No_Each in H3.
+    destruct H3 as [HA HB].
+    destruct H5.
+    - contradiction.
+    - assert (Hx : Well_Subst Q u x); try constructor; auto.
+      apply IHReduction in Hx.
+      inversions Hx.
+      contradiction.
+  + unfold not.
+    intros.
+    simpl in H3.
+    simpl in H5.
+    EasyDec x x0 e n.
+    - admit. (* Impossible by construction - pi calculus *)
+    - apply beq_nat_false in n.
+      specialize (FVars_Beq_Close Q x x0 n H5) as Hx.
+      specialize (FVars_Close_NotIn P x x0 0 n H3) as Ht.
+      assert ( Hz : Well_Subst P u x ); try constructor; auto.
+      apply IHReduction in Hz.
+      inversions Hz; auto.
+  + unfold not.
+    intros.
+    specialize ( Cong_FVars P' P H1) as Hc1.
+    specialize ( Cong_FVars Q' Q H2) as Hc2.
+    rewrite <- Hc1 in H4.
+    rewrite <- Hc2 in H6.
+    assert (Hx : Well_Subst P' u x); try constructor; auto.
+    apply IHReduction in Hx.
+    inversions Hx.
+    contradiction.
+Admitted.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1292,174 +1881,43 @@ Proof.
     contradiction.
   + assert (H6 := H5).
     inversions H3.
+    specialize (Lc_WSubst_Subst_WSubst P u x H2 H3) as Hp.
+    specialize (Well_Subst_Red_Well_Subst ({x \ u} P) Q x u Hp H6) as Hx.
+    inversions Hx; auto.
     apply (Well_Subst_Reduction_Susbt ({x \ u} P) Q x u)  in H5; auto.
     rewrite <- Double_Subst_Expan_NFVar in H5; auto.
     rewrite Subst_By_Equal in H5.
     rewrite <- (Subst_By_Equal Q x).
-    rewrite (Double_Subst_Expan_NFVar Q x x u).
+    rewrite (Double_Subst_Expan_NFVar Q x x u); auto.
     constructor; auto.
     apply (ProcessReduction_WD P _ ); auto.
     apply Lc_WSubst_Subst_WSubst; auto.
     apply (ProcessReduction_WD ({x \ u} P) _ ); auto.
     apply Subst_Lc_Lc; auto.
-    constructor; auto.
-    admit.
-    admit.
-    apply Lc_WSubst_Subst_WSubst; auto.
     apply Subst_Lc_Lc; auto.
-  + admit.
+  + assert (H6 := H5).
+    inversions H3.
+    specialize (Lc_WSubst_Subst_WSubst P u x H2 H3) as Hp.
+    specialize (Well_Subst_Red_Well_Subst ({x \ u} P) Q x u Hp H6) as Hx.
+    inversions Hx; auto.
+    apply (Well_Subst_Reduction_Susbt ({x \ u} P) Q x u)  in H5; auto.
+    rewrite <- Double_Subst_Expan_NFVar in H5; auto.
+    rewrite Subst_By_Equal in H5.
+    rewrite <- (Subst_By_Equal Q x).
+    rewrite (Double_Subst_Expan_NFVar Q x x u); auto.
+    constructor; auto.
+    apply (ProcessReduction_WD P _ ); auto.
+    apply Lc_WSubst_Subst_WSubst; auto.
+    apply (ProcessReduction_WD ({x \ u} P) _ ); auto.
+    apply Subst_Lc_Lc; auto.
+    apply Subst_Lc_Lc; auto.
   + apply Rep_Input_No_Reduces in H3.
     contradiction.
   + apply Chan_Close_No_Reduces in H5. contradiction.
   + apply Zero_No_Reduces in H1. contradiction.
   + apply Chan_Close_No_Reduces in H5. contradiction.
   + apply Zero_No_Reduces in H1. contradiction.
-  + 
 Admitted.
-
-
-Lemma Double_WSubst_Equality_Names :
-forall (x : Name)(x0 u : nat),
-~ x0 ∈ FVars_Name x -> 
-Subst_Name x0 u (Subst_Name u x0 x) = x.
-Proof.
-  destruct x; intros; simpl; auto.
-  simpl in H.
-  assert( HA : x <> x0).
-    unfold not in *.
-    intros.
-    apply H.
-    rewrite H0; constructor.
-  EasyDec x u e n.
-  + specialize (beq_nat_refl x0) as Hx.
-    apply eq_sym in Hx.
-    rewrite Hx.
-    apply beq_nat_true in e.
-    rewrite e; auto.
-  + apply beq_nat_false_inv in HA.
-    rewrite HA.
-    auto.
-Qed.
-
-
-
-
-Lemma Double_WSubst_Equality :
-forall (P : Process)( x u : nat),
-Well_Subst P u x -> ({u \ x} ({x \ u} P)) = P.
-Proof.
-  intro.
-  dependent induction P; intros; simpl; inversions H;
-    try simpl in H0;
-    try apply No_Union_No_Each in H0;
-    try destruct H0 as [HA HC];
-    repeat rewrite Double_WSubst_Equality_Names;
-    try rewrite IHP1; try constructor;
-    try rewrite IHP2; try constructor;
-    try rewrite IHP;
-    try constructor;
-    auto.
-  + apply No_Union_No_Each in HA;
-    destruct HA as [HA HB]; auto.
-  + apply No_Union_No_Each in HA;
-    destruct HA as [HA HB]; auto.
-Qed.
-
-
-
-
-Lemma Subst_WSubst_WSubst :
-forall (P : Process)( u x : nat),
-Well_Subst ({x \ u} P) x u -> Well_Subst P u x.
-Proof.
-  induction P; intros; try inversions H; try constructor; simpl; auto.
-  + unfold not.
-    intros.
-    contradiction. 
-  + simpl in H0.
-    apply No_Union_No_Each in H0.
-    destruct H0 as [HA HB].
-    admit.
-  + simpl in H0.
-    apply No_Union_No_Each in H0.
-    destruct H0 as [HA HB].
-    unfold not.
-    intros.
-    admit.
-  + admit.
-  + admit.
-  + admit.
-  + unfold not.
-    intros.
-    simpl in H0.
-    assert (Ht : Well_Subst P u x). 
-      try apply IHP; try constructor; auto.
-    inversions Ht.
-    contradiction.
-Admitted.
-
-
-
-
-
-
-
-
-
-
-
-
-Lemma Well_Subst_Red_Well_Subst :
-forall (P Q : Process)(u x : nat),
-Well_Subst P u x -> P --> Q -> 
-Well_Subst Q u x.
-Proof.
-  intros.
-  inversions H.
-  constructor; auto.
-  unfold not in H1.
-  unfold not.
-  intros.
-  apply H1.
-  dependent induction H0.
-  + simpl in H4.
-    apply Union_inv in H4.
-    destruct H4.
-    - left; right; auto.
-    - admit.
-  + simpl in H4.
-    apply Union_inv in H4.
-    destruct H4.
-    - apply Union_inv in H4.
-      destruct H4.
-      * left; right; auto.
-      * admit.
-    - apply Union_inv in H4.
-      destruct H4.
-      * right; left; auto.
-      * right; right; auto.
-  + right; right; auto.
-  + admit.
-  + simpl in H5.
-    apply Union_inv in H5.
-    destruct H5.
-    - left; auto.
-    - right; auto.
-      inversions H.
-      simpl in H6.
-      apply No_Union_No_Each in H6.
-      destruct H6 as [HA HB].
-      apply IHReduction; try constructor; auto.
-  + simpl.
-  
-  
-  
-Admitted.
-
-
-
-
-
 
 
 

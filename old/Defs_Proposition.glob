@@ -1,0 +1,154 @@
+DIGEST 44eeae01d1b1060e410462b033e762b2
+Fold.Defs_Proposition
+ind 172:182 <> Proposition
+constr 199:201 <> ONE
+constr 221:223 <> ABS
+constr 243:245 <> TEN
+constr 301:303 <> PAR
+constr 417:419 <> EXP
+constr 457:459 <> MOD
+R205:215 old.Defs_Proposition <> Proposition:1 ind
+R227:237 old.Defs_Proposition <> Proposition:1 ind
+R252:262 old.Defs_Proposition <> Proposition:1 ind
+binder 248:248 <> A:3
+R270:280 old.Defs_Proposition <> Proposition:1 ind
+binder 266:266 <> B:4
+R285:295 old.Defs_Proposition <> Proposition:1 ind
+R310:320 old.Defs_Proposition <> Proposition:1 ind
+binder 306:306 <> A:5
+R328:338 old.Defs_Proposition <> Proposition:1 ind
+binder 324:324 <> B:6
+R343:353 old.Defs_Proposition <> Proposition:1 ind
+R426:436 old.Defs_Proposition <> Proposition:1 ind
+binder 422:422 <> A:7
+R441:451 old.Defs_Proposition <> Proposition:1 ind
+R466:476 old.Defs_Proposition <> Proposition:1 ind
+binder 462:462 <> A:8
+R481:491 old.Defs_Proposition <> Proposition:1 ind
+R512:522 old.Defs_Proposition <> Proposition ind
+R675:677 old.Defs_Proposition <> ONE constr
+not 667:667 <> :::'¶'
+R698:700 old.Defs_Proposition <> ABS constr
+not 689:689 <> :::'⊥'
+R726:728 old.Defs_Proposition <> TEN constr
+not 712:712 <> :::x_'⊗'_x
+R793:795 old.Defs_Proposition <> PAR constr
+not 779:779 <> :::x_'⅋'_x
+R936:938 old.Defs_Proposition <> EXP constr
+not 926:926 <> :::'!'_x
+R997:999 old.Defs_Proposition <> MOD constr
+not 987:987 <> :::'?'_x
+def 1081:1089 <> Dual_Prop
+R1097:1107 old.Defs_Proposition <> Proposition ind
+binder 1093:1093 <> T:9
+R1113:1123 old.Defs_Proposition <> Proposition ind
+R1135:1135 old.Defs_Proposition <> T:9 var
+R1147:1148 old.Defs_Proposition <> :::'¶' not
+R1153:1155 old.Defs_Proposition <> :::'⊥' not
+R1161:1163 old.Defs_Proposition <> :::'⊥' not
+R1168:1169 old.Defs_Proposition <> :::'¶' not
+R1176:1180 old.Defs_Proposition <> :::x_'⊗'_x not
+R1186:1186 old.Defs_Proposition <> :::x_'⅋'_x not
+R1198:1204 old.Defs_Proposition <> :::x_'⅋'_x not
+R1216:1216 old.Defs_Proposition <> :::x_'⅋'_x not
+R1187:1195 old.Defs_Proposition <> Dual_Prop:10 def
+R1205:1213 old.Defs_Proposition <> Dual_Prop:10 def
+R1223:1227 old.Defs_Proposition <> :::x_'⅋'_x not
+R1233:1233 old.Defs_Proposition <> :::x_'⊗'_x not
+R1245:1251 old.Defs_Proposition <> :::x_'⊗'_x not
+R1263:1263 old.Defs_Proposition <> :::x_'⊗'_x not
+R1234:1242 old.Defs_Proposition <> Dual_Prop:10 def
+R1252:1260 old.Defs_Proposition <> Dual_Prop:10 def
+R1269:1270 old.Defs_Proposition <> :::'!'_x not
+R1276:1278 old.Defs_Proposition <> :::'?'_x not
+R1290:1290 old.Defs_Proposition <> :::'?'_x not
+R1279:1287 old.Defs_Proposition <> Dual_Prop:10 def
+R1296:1297 old.Defs_Proposition <> :::'?'_x not
+R1303:1305 old.Defs_Proposition <> :::'!'_x not
+R1317:1317 old.Defs_Proposition <> :::'!'_x not
+R1306:1314 old.Defs_Proposition <> Dual_Prop:10 def
+R1336:1344 old.Defs_Proposition <> Dual_Prop def
+R1378:1386 old.Defs_Proposition <> Dual_Prop def
+not 1363:1363 <> :::x_'^⊥'
+def 1547:1554 <> ULLT_IMP
+R1561:1571 old.Defs_Proposition <> Proposition ind
+binder 1557:1557 <> A:12
+R1579:1589 old.Defs_Proposition <> Proposition ind
+binder 1575:1575 <> B:13
+R1594:1604 old.Defs_Proposition <> Proposition ind
+R1609:1609 old.Defs_Proposition <> :::x_'⅋'_x not
+R1615:1620 old.Defs_Proposition <> :::x_'⅋'_x not
+R1611:1614 old.Defs_Proposition <> :::x_'^⊥' not
+R1610:1610 old.Defs_Proposition <> A:12 var
+R1621:1621 old.Defs_Proposition <> B:13 var
+R1650:1657 old.Defs_Proposition <> ULLT_IMP def
+not 1633:1633 <> :::x_'−∘'_x
+prf 1812:1829 <> Doble_Duality_ULLT
+R1846:1856 old.Defs_Proposition <> Proposition ind
+binder 1842:1842 <> A:14
+R1872:1874 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R1861:1861 old.Defs_Proposition <> :::x_'^⊥' not
+R1867:1871 old.Defs_Proposition <> :::x_'^⊥' not
+R1863:1866 old.Defs_Proposition <> :::x_'^⊥' not
+R1862:1862 old.Defs_Proposition <> A:14 var
+R1875:1875 old.Defs_Proposition <> A:14 var
+prf 2200:2222 <> Dual_Implication_Tensor
+R2240:2250 old.Defs_Proposition <> Proposition ind
+binder 2234:2234 <> A:15
+binder 2236:2236 <> B:16
+R2255:2255 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R2272:2276 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R2290:2290 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R2256:2256 old.Defs_Proposition <> :::x_'^⊥' not
+R2267:2271 old.Defs_Proposition <> :::x_'^⊥' not
+R2258:2265 old.Defs_Proposition <> :::x_'−∘'_x not
+R2257:2257 old.Defs_Proposition <> A:15 var
+R2266:2266 old.Defs_Proposition <> B:16 var
+R2278:2283 old.Defs_Proposition <> :::x_'⊗'_x not
+R2289:2289 old.Defs_Proposition <> :::x_'⊗'_x not
+R2277:2277 old.Defs_Proposition <> A:15 var
+R2285:2288 old.Defs_Proposition <> :::x_'^⊥' not
+R2284:2284 old.Defs_Proposition <> B:16 var
+R2319:2326 old.Defs_Proposition <> ULLT_IMP def
+R2352:2369 old.Defs_Proposition <> Doble_Duality_ULLT thm
+R2352:2369 old.Defs_Proposition <> Doble_Duality_ULLT thm
+R2352:2369 old.Defs_Proposition <> Doble_Duality_ULLT thm
+prf 2409:2431 <> Dual_Tensor_Implication
+R2450:2460 old.Defs_Proposition <> Proposition ind
+binder 2444:2444 <> A:17
+binder 2446:2446 <> B:18
+R2464:2464 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R2479:2483 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R2500:2500 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R2465:2465 old.Defs_Proposition <> :::x_'^⊥' not
+R2473:2478 old.Defs_Proposition <> :::x_'^⊥' not
+R2467:2471 old.Defs_Proposition <> :::x_'⊗'_x not
+R2466:2466 old.Defs_Proposition <> A:17 var
+R2472:2472 old.Defs_Proposition <> B:18 var
+R2485:2493 old.Defs_Proposition <> :::x_'−∘'_x not
+R2499:2499 old.Defs_Proposition <> :::x_'−∘'_x not
+R2484:2484 old.Defs_Proposition <> A:17 var
+R2495:2498 old.Defs_Proposition <> :::x_'^⊥' not
+R2494:2494 old.Defs_Proposition <> B:18 var
+R2538:2545 old.Defs_Proposition <> ULLT_IMP def
+prf 2582:2603 <> Doble_Dual_Implication
+R2621:2631 old.Defs_Proposition <> Proposition ind
+binder 2615:2615 <> A:19
+binder 2617:2617 <> B:20
+R2635:2635 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R2658:2662 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R2673:2673 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R2636:2636 old.Defs_Proposition <> :::x_'^⊥' not
+R2653:2657 old.Defs_Proposition <> :::x_'^⊥' not
+R2637:2637 old.Defs_Proposition <> :::x_'^⊥' not
+R2648:2652 old.Defs_Proposition <> :::x_'^⊥' not
+R2639:2646 old.Defs_Proposition <> :::x_'−∘'_x not
+R2638:2638 old.Defs_Proposition <> A:19 var
+R2647:2647 old.Defs_Proposition <> B:20 var
+R2664:2671 old.Defs_Proposition <> :::x_'−∘'_x not
+R2663:2663 old.Defs_Proposition <> A:19 var
+R2672:2672 old.Defs_Proposition <> B:20 var
+R2702:2709 old.Defs_Proposition <> ULLT_IMP def
+R2726:2743 old.Defs_Proposition <> Doble_Duality_ULLT thm
+R2726:2743 old.Defs_Proposition <> Doble_Duality_ULLT thm
+R2726:2743 old.Defs_Proposition <> Doble_Duality_ULLT thm

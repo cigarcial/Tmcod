@@ -1,0 +1,443 @@
+DIGEST efd3f0c61338a9ac05da07679860a6ca
+Fold.Props_Process
+R144:152 Coq.Bool.Bool <> <> lib
+R179:188 Coq.Lists.List <> <> lib
+R239:250 old.Defs_Process <> <> lib
+R277:288 old.Defs_Tactics <> <> lib
+R315:325 old.Facts_MOpen <> <> lib
+prf 365:381 <> Process_ProcessAt
+R398:404 old.Defs_Process <> Process ind
+binder 394:394 <> P:1
+R414:417 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R410:411 old.Defs_Process <> lc ind
+R413:413 old.Props_Process <> P:1 var
+R418:420 old.Defs_Process <> lca ind
+R424:424 old.Props_Process <> P:1 var
+R489:504 old.Defs_Process <> Lc_Lca_Zero_Name thm
+R522:539 old.Facts_MOpen <> Process_Lca_Open_S thm
+R489:504 old.Defs_Process <> Lc_Lca_Zero_Name thm
+R489:504 old.Defs_Process <> Lc_Lca_Zero_Name thm
+R489:504 old.Defs_Process <> Lc_Lca_Zero_Name thm
+R489:504 old.Defs_Process <> Lc_Lca_Zero_Name thm
+R489:504 old.Defs_Process <> Lc_Lca_Zero_Name thm
+R489:504 old.Defs_Process <> Lc_Lca_Zero_Name thm
+R489:504 old.Defs_Process <> Lc_Lca_Zero_Name thm
+R489:504 old.Defs_Process <> Lc_Lca_Zero_Name thm
+R489:504 old.Defs_Process <> Lc_Lca_Zero_Name thm
+R489:504 old.Defs_Process <> Lc_Lca_Zero_Name thm
+R489:504 old.Defs_Process <> Lc_Lca_Zero_Name thm
+R489:504 old.Defs_Process <> Lc_Lca_Zero_Name thm
+R489:504 old.Defs_Process <> Lc_Lca_Zero_Name thm
+R489:504 old.Defs_Process <> Lc_Lca_Zero_Name thm
+R489:504 old.Defs_Process <> Lc_Lca_Zero_Name thm
+R522:539 old.Facts_MOpen <> Process_Lca_Open_S thm
+R522:539 old.Facts_MOpen <> Process_Lca_Open_S thm
+R522:539 old.Facts_MOpen <> Process_Lca_Open_S thm
+R522:539 old.Facts_MOpen <> Process_Lca_Open_S thm
+R522:539 old.Facts_MOpen <> Process_Lca_Open_S thm
+R522:539 old.Facts_MOpen <> Process_Lca_Open_S thm
+R522:539 old.Facts_MOpen <> Process_Lca_Open_S thm
+R522:539 old.Facts_MOpen <> Process_Lca_Open_S thm
+R522:539 old.Facts_MOpen <> Process_Lca_Open_S thm
+R522:539 old.Facts_MOpen <> Process_Lca_Open_S thm
+R522:539 old.Facts_MOpen <> Process_Lca_Open_S thm
+R522:539 old.Facts_MOpen <> Process_Lca_Open_S thm
+R522:539 old.Facts_MOpen <> Process_Lca_Open_S thm
+R522:539 old.Facts_MOpen <> Process_Lca_Open_S thm
+R522:539 old.Facts_MOpen <> Process_Lca_Open_S thm
+prf 576:592 <> ProcessAt_Process
+R609:615 old.Defs_Process <> Process ind
+binder 605:605 <> P:2
+R627:630 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R620:622 old.Defs_Process <> lca ind
+R626:626 old.Props_Process <> P:2 var
+R631:632 old.Defs_Process <> lc ind
+R634:634 old.Props_Process <> P:2 var
+R722:737 old.Defs_Process <> Lca_Zero_Lc_Name thm
+R810:829 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R835:835 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R837:837 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R867:886 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R892:892 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R895:895 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R722:737 old.Defs_Process <> Lca_Zero_Lc_Name thm
+R722:737 old.Defs_Process <> Lca_Zero_Lc_Name thm
+R722:737 old.Defs_Process <> Lca_Zero_Lc_Name thm
+R722:737 old.Defs_Process <> Lca_Zero_Lc_Name thm
+R722:737 old.Defs_Process <> Lca_Zero_Lc_Name thm
+R722:737 old.Defs_Process <> Lca_Zero_Lc_Name thm
+R722:737 old.Defs_Process <> Lca_Zero_Lc_Name thm
+R722:737 old.Defs_Process <> Lca_Zero_Lc_Name thm
+R722:737 old.Defs_Process <> Lca_Zero_Lc_Name thm
+R722:737 old.Defs_Process <> Lca_Zero_Lc_Name thm
+R722:737 old.Defs_Process <> Lca_Zero_Lc_Name thm
+R722:737 old.Defs_Process <> Lca_Zero_Lc_Name thm
+R722:737 old.Defs_Process <> Lca_Zero_Lc_Name thm
+R722:737 old.Defs_Process <> Lca_Zero_Lc_Name thm
+R722:737 old.Defs_Process <> Lca_Zero_Lc_Name thm
+R810:829 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R810:829 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R810:829 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R810:829 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R810:829 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R835:835 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R837:837 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R810:829 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R835:835 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R837:837 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R810:829 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R835:835 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R837:837 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R810:829 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R810:829 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R835:835 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R837:837 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R810:829 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R835:835 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R837:837 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R810:829 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R835:835 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R837:837 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R810:829 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R835:835 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R837:837 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R810:829 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R835:835 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R837:837 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R810:829 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R835:835 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R837:837 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R810:829 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R835:835 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R837:837 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R867:886 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R867:886 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R867:886 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R867:886 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R867:886 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R892:892 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R895:895 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R867:886 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R892:892 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R895:895 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R867:886 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R892:892 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R895:895 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R867:886 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R867:886 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R892:892 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R895:895 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R867:886 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R892:892 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R895:895 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R867:886 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R892:892 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R895:895 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R867:886 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R892:892 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R895:895 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R867:886 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R892:892 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R895:895 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R867:886 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R892:892 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R895:895 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R867:886 old.Facts_MOpen <> Lca_Lc_Process_MOpen thm
+R892:892 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R895:895 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+prf 969:979 <> Body_Lc_One
+R996:1002 old.Defs_Process <> Process ind
+binder 992:992 <> P:3
+R1013:1016 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1007:1010 old.Defs_Process <> Body ind
+R1012:1012 old.Props_Process <> P:3 var
+R1017:1019 old.Defs_Process <> lca ind
+R1023:1023 old.Props_Process <> P:3 var
+R1051:1078 old.Facts_MOpen <> Body_Process_Equivalence_Res thm
+R1051:1078 old.Facts_MOpen <> Body_Process_Equivalence_Res thm
+R1094:1110 old.Props_Process <> Process_ProcessAt thm
+R1094:1110 old.Props_Process <> Process_ProcessAt thm
+prf 1161:1172 <> Lca_One_Body
+R1189:1195 old.Defs_Process <> Process ind
+binder 1185:1185 <> P:4
+R1207:1210 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1200:1202 old.Defs_Process <> lca ind
+R1206:1206 old.Props_Process <> P:4 var
+R1211:1214 old.Defs_Process <> Body ind
+R1216:1216 old.Props_Process <> P:4 var
+R1244:1271 old.Facts_MOpen <> Body_Process_Equivalence_Res thm
+R1244:1271 old.Facts_MOpen <> Body_Process_Equivalence_Res thm
+R1282:1298 old.Props_Process <> ProcessAt_Process thm
+R1282:1298 old.Props_Process <> ProcessAt_Process thm
+prf 1343:1361 <> Lc_Open_Close_Subst
+R1378:1384 old.Defs_Process <> Process ind
+binder 1374:1374 <> P:5
+R1397:1399 Coq.Init.Datatypes <> nat ind
+binder 1389:1389 <> x:6
+binder 1391:1391 <> y:7
+binder 1393:1393 <> k:8
+R1409:1412 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1405:1406 old.Defs_Process <> lc ind
+R1408:1408 old.Props_Process <> P:5 var
+R1439:1441 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R1413:1414 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R1416:1419 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R1421:1423 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R1420:1420 old.Props_Process <> y:7 var
+R1424:1432 old.Defs_Process <> Close_Rec def
+R1436:1436 old.Props_Process <> x:6 var
+R1438:1438 old.Props_Process <> P:5 var
+R1442:1443 old.Defs_Process <> :::'{'_x_'\'_x_'}'_x not
+R1445:1447 old.Defs_Process <> :::'{'_x_'\'_x_'}'_x not
+R1449:1451 old.Defs_Process <> :::'{'_x_'\'_x_'}'_x not
+R1448:1448 old.Props_Process <> x:6 var
+R1444:1444 old.Props_Process <> y:7 var
+R1452:1452 old.Props_Process <> P:5 var
+R1480:1499 old.Facts_MOpen <> Lca_Open_Close_Subst thm
+R1480:1499 old.Facts_MOpen <> Lca_Open_Close_Subst thm
+R1510:1526 old.Props_Process <> Process_ProcessAt thm
+R1510:1526 old.Props_Process <> Process_ProcessAt thm
+prf 1555:1564 <> Open_Lc_Lc
+R1581:1587 old.Defs_Process <> Process ind
+binder 1577:1577 <> P:9
+R1596:1600 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1592:1593 old.Defs_Process <> lc ind
+R1595:1595 old.Props_Process <> P:9 var
+R1616:1618 Coq.Init.Datatypes <> nat ind
+binder 1610:1610 <> k:10
+binder 1612:1612 <> x:11
+R1623:1624 old.Defs_Process <> lc ind
+R1628:1628 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R1630:1633 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R1635:1635 old.Defs_Process <> :::'{'_x_'~>'_x_'}'_x not
+R1629:1629 old.Props_Process <> k:10 var
+R1634:1634 old.Props_Process <> x:11 var
+R1636:1636 old.Props_Process <> P:9 var
+R1714:1733 old.Defs_Process <> Output_LCName_Output thm
+R1714:1733 old.Defs_Process <> Output_LCName_Output thm
+R1714:1733 old.Defs_Process <> Output_LCName_Output thm
+R1714:1733 old.Defs_Process <> Output_LCName_Output thm
+R1754:1773 old.Defs_Process <> Output_LCName_Output thm
+R1754:1773 old.Defs_Process <> Output_LCName_Output thm
+R1754:1773 old.Defs_Process <> Output_LCName_Output thm
+R1754:1773 old.Defs_Process <> Output_LCName_Output thm
+R1845:1864 old.Defs_Process <> Output_LCName_Output thm
+R1845:1864 old.Defs_Process <> Output_LCName_Output thm
+R1845:1864 old.Defs_Process <> Output_LCName_Output thm
+R1845:1864 old.Defs_Process <> Output_LCName_Output thm
+R1885:1904 old.Defs_Process <> Output_LCName_Output thm
+R1885:1904 old.Defs_Process <> Output_LCName_Output thm
+R1885:1904 old.Defs_Process <> Output_LCName_Output thm
+R1885:1904 old.Defs_Process <> Output_LCName_Output thm
+R1925:1944 old.Defs_Process <> Output_LCName_Output thm
+R1925:1944 old.Defs_Process <> Output_LCName_Output thm
+R1925:1944 old.Defs_Process <> Output_LCName_Output thm
+R1925:1944 old.Defs_Process <> Output_LCName_Output thm
+R1965:1984 old.Defs_Process <> Output_LCName_Output thm
+R1965:1984 old.Defs_Process <> Output_LCName_Output thm
+R1965:1984 old.Defs_Process <> Output_LCName_Output thm
+R1965:1984 old.Defs_Process <> Output_LCName_Output thm
+R2034:2046 old.Facts_MOpen <> Exchange_Open thm
+R2034:2046 old.Facts_MOpen <> Exchange_Open thm
+R2034:2046 old.Facts_MOpen <> Exchange_Open thm
+R2034:2046 old.Facts_MOpen <> Exchange_Open thm
+R2084:2103 old.Defs_Process <> Output_LCName_Output thm
+R2084:2103 old.Defs_Process <> Output_LCName_Output thm
+R2084:2103 old.Defs_Process <> Output_LCName_Output thm
+R2084:2103 old.Defs_Process <> Output_LCName_Output thm
+R2136:2148 old.Facts_MOpen <> Exchange_Open thm
+R2136:2148 old.Facts_MOpen <> Exchange_Open thm
+R2136:2148 old.Facts_MOpen <> Exchange_Open thm
+R2136:2148 old.Facts_MOpen <> Exchange_Open thm
+R2186:2205 old.Defs_Process <> Output_LCName_Output thm
+R2186:2205 old.Defs_Process <> Output_LCName_Output thm
+R2186:2205 old.Defs_Process <> Output_LCName_Output thm
+R2186:2205 old.Defs_Process <> Output_LCName_Output thm
+R2238:2250 old.Facts_MOpen <> Exchange_Open thm
+R2238:2250 old.Facts_MOpen <> Exchange_Open thm
+R2238:2250 old.Facts_MOpen <> Exchange_Open thm
+R2238:2250 old.Facts_MOpen <> Exchange_Open thm
+prf 2278:2288 <> All_Lc_Body
+R2304:2310 old.Defs_Process <> Process ind
+binder 2300:2300 <> P:12
+R2318:2321 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2314:2315 old.Defs_Process <> lc ind
+R2317:2317 old.Props_Process <> P:12 var
+R2322:2325 old.Defs_Process <> Body ind
+R2327:2327 old.Props_Process <> P:12 var
+R2380:2389 old.Props_Process <> Open_Lc_Lc thm
+R2380:2389 old.Props_Process <> Open_Lc_Lc thm
+prf 2417:2425 <> Close_Lca
+R2442:2448 old.Defs_Process <> Process ind
+binder 2438:2438 <> P:13
+R2457:2459 Coq.Init.Datatypes <> nat ind
+binder 2452:2452 <> x:14
+binder 2454:2454 <> k:15
+R2470:2473 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2463:2465 old.Defs_Process <> lca ind
+R2467:2467 old.Props_Process <> k:15 var
+R2469:2469 old.Props_Process <> P:13 var
+R2474:2476 old.Defs_Process <> lca ind
+R2479:2479 Coq.Init.Datatypes <> S constr
+R2481:2481 old.Props_Process <> k:15 var
+R2485:2493 old.Defs_Process <> Close_Rec def
+R2495:2495 old.Props_Process <> k:15 var
+R2497:2497 old.Props_Process <> x:14 var
+R2499:2499 old.Props_Process <> P:13 var
+R2593:2606 old.Defs_Process <> Lca_Name_Close thm
+R2593:2606 old.Defs_Process <> Lca_Name_Close thm
+R2593:2606 old.Defs_Process <> Lca_Name_Close thm
+R2593:2606 old.Defs_Process <> Lca_Name_Close thm
+R2593:2606 old.Defs_Process <> Lca_Name_Close thm
+R2593:2606 old.Defs_Process <> Lca_Name_Close thm
+R2593:2606 old.Defs_Process <> Lca_Name_Close thm
+R2593:2606 old.Defs_Process <> Lca_Name_Close thm
+R2593:2606 old.Defs_Process <> Lca_Name_Close thm
+R2593:2606 old.Defs_Process <> Lca_Name_Close thm
+R2593:2606 old.Defs_Process <> Lca_Name_Close thm
+R2593:2606 old.Defs_Process <> Lca_Name_Close thm
+R2593:2606 old.Defs_Process <> Lca_Name_Close thm
+R2593:2606 old.Defs_Process <> Lca_Name_Close thm
+R2593:2606 old.Defs_Process <> Lca_Name_Close thm
+R2593:2606 old.Defs_Process <> Lca_Name_Close thm
+prf 2634:2646 <> Lc_Close_Body
+R2663:2669 old.Defs_Process <> Process ind
+binder 2659:2659 <> P:16
+R2677:2679 Coq.Init.Datatypes <> nat ind
+binder 2673:2673 <> x:17
+R2687:2690 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2683:2684 old.Defs_Process <> lc ind
+R2686:2686 old.Props_Process <> P:16 var
+R2691:2694 old.Defs_Process <> Body ind
+R2697:2705 old.Defs_Process <> Close_Rec def
+R2709:2709 old.Props_Process <> x:17 var
+R2711:2711 old.Props_Process <> P:16 var
+R2740:2756 old.Props_Process <> Process_ProcessAt thm
+R2740:2756 old.Props_Process <> Process_ProcessAt thm
+R2773:2781 old.Props_Process <> Close_Lca thm
+R2773:2781 old.Props_Process <> Close_Lca thm
+R2805:2816 old.Props_Process <> Lca_One_Body thm
+R2805:2816 old.Props_Process <> Lca_One_Body thm
+prf 2850:2865 <> Lc_Close_Is_Body
+R2882:2888 old.Defs_Process <> Process ind
+binder 2878:2878 <> P:18
+R2896:2898 Coq.Init.Datatypes <> nat ind
+binder 2892:2892 <> x:19
+R2906:2911 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2957:2957 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R2902:2903 old.Defs_Process <> lc ind
+R2905:2905 old.Props_Process <> P:18 var
+R2924:2926 Coq.Init.Datatypes <> nat ind
+binder 2920:2920 <> y:20
+R2930:2931 old.Defs_Process <> lc ind
+R2935:2935 old.Defs_Process <> :::x_'^'_x not
+R2951:2954 old.Defs_Process <> :::x_'^'_x not
+R2955:2955 old.Props_Process <> y:20 var
+R2936:2944 old.Defs_Process <> Close_Rec def
+R2948:2948 old.Props_Process <> x:19 var
+R2950:2950 old.Props_Process <> P:18 var
+R2986:2998 old.Props_Process <> Lc_Close_Body thm
+R2986:2998 old.Props_Process <> Lc_Close_Body thm
+prf 3058:3072 <> Subst_Body_Body
+R3088:3094 old.Defs_Process <> Process ind
+binder 3084:3084 <> P:21
+R3104:3107 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3098:3101 old.Defs_Process <> Body ind
+R3103:3103 old.Props_Process <> P:21 var
+R3122:3124 Coq.Init.Datatypes <> nat ind
+binder 3116:3116 <> x:22
+binder 3118:3118 <> y:23
+R3128:3131 old.Defs_Process <> Body ind
+R3134:3134 old.Defs_Process <> :::'{'_x_'\'_x_'}'_x not
+R3136:3138 old.Defs_Process <> :::'{'_x_'\'_x_'}'_x not
+R3140:3141 old.Defs_Process <> :::'{'_x_'\'_x_'}'_x not
+R3139:3139 old.Props_Process <> x:22 var
+R3135:3135 old.Props_Process <> y:23 var
+R3142:3142 old.Props_Process <> P:21 var
+R3171:3181 old.Props_Process <> Body_Lc_One thm
+R3171:3181 old.Props_Process <> Body_Lc_One thm
+R3197:3208 old.Props_Process <> Lca_One_Body thm
+R3197:3208 old.Props_Process <> Lca_One_Body thm
+R3219:3235 old.Facts_MOpen <> Subst_Lca_Process thm
+R3219:3235 old.Facts_MOpen <> Subst_Lca_Process thm
+prf 3265:3275 <> Subst_Lc_Lc
+R3291:3297 old.Defs_Process <> Process ind
+binder 3287:3287 <> P:24
+R3306:3308 Coq.Init.Datatypes <> nat ind
+binder 3300:3300 <> x:25
+binder 3302:3302 <> y:26
+R3316:3319 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3312:3313 old.Defs_Process <> lc ind
+R3315:3315 old.Props_Process <> P:24 var
+R3320:3321 old.Defs_Process <> lc ind
+R3324:3324 old.Defs_Process <> :::'{'_x_'\'_x_'}'_x not
+R3326:3328 old.Defs_Process <> :::'{'_x_'\'_x_'}'_x not
+R3330:3331 old.Defs_Process <> :::'{'_x_'\'_x_'}'_x not
+R3329:3329 old.Props_Process <> x:25 var
+R3325:3325 old.Props_Process <> y:26 var
+R3332:3332 old.Props_Process <> P:24 var
+R3405:3421 old.Defs_Process <> Subst_Name_Output thm
+R3405:3421 old.Defs_Process <> Subst_Name_Output thm
+R3454:3470 old.Defs_Process <> Subst_Name_Output thm
+R3454:3470 old.Defs_Process <> Subst_Name_Output thm
+R3680:3696 old.Defs_Process <> Subst_Name_Output thm
+R3680:3696 old.Defs_Process <> Subst_Name_Output thm
+R3729:3745 old.Defs_Process <> Subst_Name_Output thm
+R3729:3745 old.Defs_Process <> Subst_Name_Output thm
+R3921:3937 old.Defs_Process <> Subst_Name_Output thm
+R3921:3937 old.Defs_Process <> Subst_Name_Output thm
+R4067:4083 old.Defs_Process <> Subst_Name_Output thm
+R4067:4083 old.Defs_Process <> Subst_Name_Output thm
+R4203:4217 old.Props_Process <> Subst_Body_Body thm
+R4203:4217 old.Props_Process <> Subst_Body_Body thm
+R4258:4261 old.Defs_Process <> Body ind
+R4258:4261 old.Defs_Process <> Body ind
+R4375:4389 old.Props_Process <> Subst_Body_Body thm
+R4375:4389 old.Props_Process <> Subst_Body_Body thm
+R4430:4433 old.Defs_Process <> Body ind
+R4430:4433 old.Defs_Process <> Body ind
+R4542:4558 old.Defs_Process <> Subst_Name_Output thm
+R4542:4558 old.Defs_Process <> Subst_Name_Output thm
+R4701:4715 old.Props_Process <> Subst_Body_Body thm
+R4701:4715 old.Props_Process <> Subst_Body_Body thm
+R4756:4759 old.Defs_Process <> Body ind
+R4756:4759 old.Defs_Process <> Body ind
+R4868:4884 old.Defs_Process <> Subst_Name_Output thm
+R4868:4884 old.Defs_Process <> Subst_Name_Output thm
+prf 5131:5143 <> Congruence_WD
+R5160:5166 old.Defs_Process <> Process ind
+binder 5154:5154 <> P:27
+binder 5156:5156 <> Q:28
+R5170:5170 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5178:5182 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5172:5176 old.Defs_Process <> :::x_'==='_x not
+R5171:5171 old.Props_Process <> P:27 var
+R5177:5177 old.Props_Process <> Q:28 var
+R5188:5192 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5183:5184 old.Defs_Process <> lc ind
+R5186:5186 old.Props_Process <> P:27 var
+R5193:5194 old.Defs_Process <> lc ind
+R5196:5196 old.Props_Process <> Q:28 var
+R5263:5279 old.Props_Process <> ProcessAt_Process thm
+R5263:5279 old.Props_Process <> ProcessAt_Process thm
+R5314:5330 old.Props_Process <> Process_ProcessAt thm
+R5314:5330 old.Props_Process <> Process_ProcessAt thm
+R5387:5393 old.Facts_MOpen <> Lca_Bex thm
+R5387:5393 old.Facts_MOpen <> Lca_Bex thm
+R5478:5487 old.Props_Process <> Open_Lc_Lc thm
+R5478:5487 old.Props_Process <> Open_Lc_Lc thm
+R5791:5810 Coq.Program.Equality <> <> lib
+prf 5939:5957 <> ProcessReduction_WD
+R5975:5981 old.Defs_Process <> Process ind
+binder 5969:5969 <> P:29
+binder 5971:5971 <> Q:30
+R5985:5985 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5993:5997 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5987:5991 old.Defs_Process <> :::x_'-->'_x not
+R5986:5986 old.Props_Process <> P:29 var
+R5992:5992 old.Props_Process <> Q:30 var
+R6003:6007 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5998:5999 old.Defs_Process <> lc ind
+R6001:6001 old.Props_Process <> P:29 var
+R6008:6009 old.Defs_Process <> lc ind
+R6011:6011 old.Props_Process <> Q:30 var
