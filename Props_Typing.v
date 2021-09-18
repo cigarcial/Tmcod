@@ -11,12 +11,17 @@ From Coq Require Import Arith.EqNat.
 From Coq Require Import Lia.
 From Coq Require Import Sets.Constructive_sets.
 
-From old Require Import Defs_Tactics.
-From old Require Import Defs_Process.
-From old Require Import Defs_Proposition.
-From old Require Import Defs_Typing.
-From old Require Import Facts_MOpen.
-From old Require Import Props_Process.
+From Tmcod Require Import Defs_Tactics.
+From Tmcod Require Import Defs_Process.
+From Tmcod Require Import Defs_Proposition.
+From Tmcod Require Import Defs_Typing.
+
+From Tmcod Require Import Facts_Process.
+From Tmcod Require Import Facts_FVars.
+
+
+From Tmcod Require Import Facts_MOpen.
+From Tmcod Require Import Props_Process.
 
 
 
@@ -1072,13 +1077,12 @@ Proof.
         rewrite Subst_Close_Dif_Name; auto.
         constructor; auto.
         apply Subst_Lc_Lc; auto.
-        apply Subst_Lc_Lc; auto.
         apply IHReduction; auto.
         inversions H.
         constructor; auto.
         unfold not.
         intros.
-        apply H4.
+        apply H3.
         simpl.
         apply FVars_Close_Beq; auto.
   + assert (HX : Well_Subst P' x u).
@@ -1752,12 +1756,12 @@ Proof.
   + unfold not.
     intros.
     simpl in H3.
-    simpl in H5.
+    simpl in H4.
     EasyDec x x0 e n.
     - admit. (* Impossible by construction - pi calculus *)
     - apply beq_nat_false in n.
-      specialize (FVars_Beq_Close Q x x0 n H5) as Hx.
-      specialize (FVars_Close_NotIn P x x0 0 n H3) as Ht.
+      specialize (FVars_Beq_Close Q x x0 _ n H4) as Hx.
+      specialize (FVars_Close_NotIn P x x0 0 n H2) as Ht.
       assert ( Hz : Well_Subst P u x ); try constructor; auto.
       apply IHReduction in Hz.
       inversions Hz; auto.
@@ -1913,10 +1917,6 @@ Proof.
     apply Subst_Lc_Lc; auto.
   + apply Rep_Input_No_Reduces in H3.
     contradiction.
-  + apply Chan_Close_No_Reduces in H5. contradiction.
-  + apply Zero_No_Reduces in H1. contradiction.
-  + apply Chan_Close_No_Reduces in H5. contradiction.
-  + apply Zero_No_Reduces in H1. contradiction.
 Admitted.
 
 

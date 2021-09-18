@@ -270,7 +270,7 @@ Notation " { y \ x } P " := (Subst x y P) (at level 60).
 
 Inductive Well_Subst : Process -> nat -> nat -> Prop := 
   | Is_Well_Subst : forall ( P : Process)(x y : nat),
-    ~( y ∈ (FVars P) ) -> (Well_Subst P x y).
+    ~( y ∈ (FVars P) ) -> x <> y -> (Well_Subst P x y).
 
 
 (*
@@ -352,8 +352,11 @@ Inductive Congruence : Process -> Process -> Prop :=
         (P↓θ) === P
     
     | Con_res_zero : 
-        ( ν θ)  === (θ) *)
-      
+        ( ν θ)  === (θ) 
+        
+    | Con_conmt_fuses : forall (n m : Name),
+        [n ←→ m] === ([m ←→ n])   
+*)
       
     | Con_conmt_parallel : forall (P Q : Process),
         (P↓Q) === (Q↓P)
@@ -364,12 +367,9 @@ Inductive Congruence : Process -> Process -> Prop :=
     | Con_asoc_parallel : forall (P Q R : Process),
         ((P↓Q)↓R) === (P↓(Q↓R))
       
-    | Con_conmt_fuses : forall (n m : Name),
-        [n ←→ m] === ([m ←→ n])
-      
     | Con_abs_restriction : forall (P Q : Process),
         lc P -> (P↓(ν Q)) === ν (P↓Q)
-
+(*
     | Con_con_res : forall (P Q : Process)(x : nat), 
       lc P -> P === Q -> (ν Close x P) === (ν Close x Q)
       
@@ -387,8 +387,7 @@ Inductive Congruence : Process -> Process -> Prop :=
       
     | Con_con_chan_close : forall (P Q : Process)(n : Name), 
       P === Q -> ( n ()· P) === ( n ()· Q)  
-
-    
+*)
 where "R '===' S" := (Congruence R S).
 Hint Constructors Congruence : core.
 
@@ -400,11 +399,11 @@ Reserved Notation "R '-->' S" (at level 60).
 Inductive Reduction : Process -> Process -> Prop :=
 
   | Red_output_input : forall ( x y : nat ) ( P Q : Process ),
-    lc P -> Body Q -> Well_Open Q y ->
+    lc P -> Body Q ->
     ( ( ( (FName x) « (FName y) »· P)  ↓ ( (FName x) · Q) ) --> (P ↓ ( {0 ~> y} Q )) )
 
   | Red_parallel_replicate : forall (x y : nat) (P Q : Process),
-    lc P -> Body Q -> Well_Open Q y ->
+    lc P -> Body Q ->
       (( ( (FName x) « (FName y) »· P) ↓ ( (FName x) !· Q )  ) --> ( P ↓ ({0 ~> y} Q) ↓ ( (FName x) !· Q) ))
 
   | Red_chzero_chclose : forall ( Q : Process) (x : nat),
@@ -412,7 +411,7 @@ Inductive Reduction : Process -> Process -> Prop :=
      ( ( ( (FName x) ·θ ) ↓ ( (FName x) ()· Q ) ) -->  Q )
 
   | Red_parallel_fuse : forall ( x y : nat) ( P : Process),
-    lc P -> Well_Subst P x y ->
+    lc P -> 
     ( P ↓ ([(FName x) ←→ (FName y)]) --> (Subst x y P) )
 
   | Red_reduction_parallel : forall ( P Q R : Process), 
