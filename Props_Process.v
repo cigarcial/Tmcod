@@ -253,6 +253,28 @@ Proof.
     - auto.
 Qed.
 
+
+
+
+(*
+*)
+Lemma Cong_Subst_Cong :
+forall (P Q : Process)( x u : nat),
+P === Q -> ({u \ x}P) === ({u \ x}Q).
+Proof.
+  intros.
+  induction H; try simpl; auto.
+  + simpl.
+    rewrite Subst_Bex_Exchange; auto.
+  + constructor.
+    apply Subst_Lc_Lc.
+    auto.
+Qed.
+
+
+
+
+
 (*
 Primer teorema fuerte, la representación local libre de nombres preserva sentido bajo congruencias.
 *)
@@ -295,3 +317,6 @@ Proof.
     apply Lc_Close_Is_Body; auto.
   (* los casos que faltan son aplicaciones del lema anterior *)
 Admitted.
+
+
+

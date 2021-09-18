@@ -20,6 +20,7 @@ From Coq Require Import Arith.PeanoNat.
 From Coq Require Import Arith.EqNat.
 From Coq Require Import Bool.Bool.
 From Coq Require Import Lia.
+From Coq Require Import Sets.Constructive_sets.
 
 From Tmcod Require Import Defs_Process.
 From Tmcod Require Import Defs_Tactics.
@@ -405,5 +406,77 @@ Proof.
         simpl. rewrite n0.
         constructor. auto.
 Qed.
+
+
+
+
+(*
+*)
+Lemma Subst_Name_Gen_Output :
+forall (u x0 : nat)(x : Name),
+u <> x0 -> 
+u ∈ FVars_Name (Subst_Name u x0 x) -> False.
+Proof.
+  intros.
+  destruct x; simpl in H0; try inversions H0.
+  unfold not in *.
+  apply H.
+  destruct (bool_dec (x =? u) true).
+  + rewrite e in H0.
+    apply Singleton_inv in H0.
+    auto.
+  + apply not_true_iff_false in n.
+    rewrite n in H0.
+    simpl in H0.
+    apply Singleton_inv in H0.
+    apply beq_nat_false in n.
+    contradiction.
+Qed.
+
+
+Lemma beq_nat_false_inv :
+forall ( x y : nat),
+x <> y -> 
+(x =? y) = false.
+Proof.
+  intros.
+  apply not_true_iff_false.
+  unfold not.
+  intros.
+  apply beq_nat_true in H0.
+  contradiction.
+Qed.
+
+
+Lemma beq_nat_true_inv :
+forall ( x y : nat),
+x = y -> 
+(x =? y) = true.
+Proof.
+  intros.
+  rewrite H.
+  apply eq_sym.
+  apply beq_nat_refl.
+Qed.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
