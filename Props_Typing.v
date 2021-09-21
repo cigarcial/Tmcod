@@ -90,7 +90,11 @@ Proof.
   unfold not.
   intros.
   inversions H.
-Admitted.
+  destruct P0; try discriminate.
+  inversions H2.
+  inversions H4.
+  inversions H1.
+Qed.
 
 
 Lemma Output_No_Reduces :
@@ -100,61 +104,34 @@ Proof.
   unfold not.
   intros.
   inversions H.
-Admitted.
-
-Lemma Close_Inv :
-forall ( P Q : Process )( x y i : nat ),
-Close_Rec i x P = Close_Rec i y Q -> P = { x \ y } Q.
-Proof.
-  induction P; intros; unfold Close in H; simpl; auto.
-  + destruct Q; try discriminate.
-    simpl; auto.
-  + destruct Q; try discriminate.
-    simpl in H.
-    simpl.
-    inversions H.
-    (* error hay que pedir condiciones de x en Q *)
-    admit.
-  + destruct Q; try discriminate.
-    simpl.
-    simpl in H.
-    inversions H.
-    rewrite (IHP1 Q1 x y i); auto.
-    rewrite (IHP2 Q2 x y i); auto.
-  + destruct Q; try discriminate.
-    simpl in H.
-    inversions H.
-    simpl.
-    admit.
-  + admit.
-  + admit.
-  + destruct Q; try discriminate.
-    simpl in H.
-    inversions H.
-    simpl.
-    rewrite (IHP Q x y (S i)); auto.
-Admitted.
+  destruct P0; try discriminate.
+  inversions H2.
+  inversions H4.
+  inversions H1.
+Qed.
 
 
-
-Lemma Close_Inv_Names :
-forall (x x1 : Name)(i x0 y0 : nat),
-Close_Name i x0 x = Close_Name i y0 x1 -> x = Subst_Name y0 x0 x1.
+Lemma Extl2 :
+forall (P Q P0_2 P0_1 : Process)(x0 u x : nat)(x1 : Name),
+lc ((x1 !· P0_1) ↓ P0_2) ->
+Close x0 ((x1 !· P0_1) ↓ P0_2) = Close u ((FName u !· Close x P) ↓ Q) -> x1 = FName x0.
 Proof.
   intros.
-  destruct x.
-  + admit.
-  + destruct x1.
-    - simpl in H.
-      EasyDec x y0 e n.
-      * rewrite e in H.
-        rewrite e.
-    - simpl in H.
-      simpl.
-      rewrite H; auto.
-      
-  
-  
+  inversions H0.
+  specialize (beq_nat_refl u) as Hx.
+  apply eq_sym in Hx.
+  rewrite Hx in *.
+  inversions H.
+  inversions H6.
+  inversions H8.
+  simpl in H2.
+  EasyDec x2 x0 e n; try rewrite n in H2; try discriminate.
+  apply beq_nat_true in e.
+  rewrite e; auto.
+Qed.
+
+
+
 (*
 Teorema 2.1 del artículo.
 *)
@@ -201,20 +178,82 @@ Proof.
     apply Subst_Lc_Lc; auto.
   + apply Rep_Input_No_Reduces in H3; contradiction.
   + apply Chan_Input_No_Reduces in H5; contradiction.
-  + admit.
+  + apply Parallel_Res_No_Reduces in H9; contradiction.
   + apply Chan_Input_No_Reduces in H5; contradiction.
-  + admit.
+  + apply Parallel_Res_No_Reduces in H9; contradiction.
   + apply Chan_Input_No_Reduces in H5; contradiction.
-  + admit.
+  + apply Parallel_Res_No_Reduces in H9; contradiction.
   + apply Chan_Close_No_Reduces in H5; contradiction.
   + apply Zero_No_Reduces in H1; contradiction.
   + apply Chan_Close_No_Reduces in H5; contradiction.
   + apply Zero_No_Reduces in H1; contradiction.
-  + admit.
-  + admit.
+  + apply Output_No_Reduces in H4; contradiction.
+  + apply Output_No_Reduces in H4; contradiction.
+  + inversions H8.
+    - destruct P0; try discriminate.
+      destruct P0_1; try discriminate.
+      specialize (Extl2 _ _ _ _ _ _ _ x1 H10 H9) as Ht.
+      rewrite Ht in H9.
+      inversions H9.
+      rewrite <- H9 in H8.
+      
+      admit.
+    - inversions H10.
+      specialize (beq_nat_refl u) as Hx.
+      apply eq_sym in Hx.
+      rewrite Hx in *.
+      inversions H15.
+      inversions H16.
 Admitted.
 
 
+Lemma Close_Inv_Names :
+forall (x x1 : Name)(i x0 y0 : nat),
+lca_name i x -> lca_name i x1 ->
+Close_Name i x0 x = Close_Name i y0 x1 -> x = x1 \/ x = Subst_Name y0 x0 x1.
+Proof.
+  intros.
+  destruct x.
+  + simpl in H1.
+    EasyDec x x0 e n.
+    - rewrite e in H1.
+      destruct x1.
+      * simpl in H1.
+        EasyDec x1 y0 e n.
+        ++ rewrite e0.
+            apply beq_nat_true in e.
+            rewrite e.
+            auto.
+        ++ rewrite n in H1.
+           inversions H1.
+      * simpl in H1.
+        inversion H1.
+        inversions H0.
+        lia.
+    - rewrite n in H1.
+      destruct x1.
+      * simpl in H1.
+        EasyDec x1 y0 e0 n0.
+        ++ rewrite e in H1.
+           inversions H1.
+        ++ rewrite n0 in H1.
+           inversions H1.
+           auto.
+      * simpl in H1.
+        inversion H1.
+  + simpl in H1.
+    destruct x1.
+    - simpl in H1.
+      EasyDec x y0 e n.
+      * rewrite e in H1.
+        inversions H.
+        inversion H1.
+        lia.
+      * rewrite n in H1; inversions H1.
+    - simpl in H1.
+      inversions H1.
+      auto.
+Qed.
 
 
 
@@ -231,3 +270,160 @@ Admitted.
 
 
 
+
+
+
+
+
+
+
+Lemma Exl :
+forall ( P Q Q0 : Process )( u x : nat),
+(ν Close u ((FName u !· Close x P) ↓ Q)) --> Q0
+-> Q0 = P.
+Proof.
+  intros.
+  inversions H.
+  + destruct P0; try discriminate.
+    destruct P0_1; try discriminate.
+    specialize (Extl2 _ _ _ _ _ _ _ x1 H1 H0) as Ht.
+    rewrite Ht in H0.
+    inversions H2.
+    - admit.
+    - admit.
+    - inversion H4.
+      * destruct Q0; try discriminate.
+        inversions H9.
+        inversions H6.
+        ** admit.
+        ** inversions H13.
+           inversions H8.
+(* 
+    admit.
+  + inversions H1.
+    specialize (beq_nat_refl u) as Hx.
+    apply eq_sym in Hx.
+    rewrite Hx in *.
+    inversions H6.
+    inversions H7. *)
+Admitted.
+
+Lemma Close_Same_Inv_Names :
+forall ( x y : Name)(i x0 : nat),
+lca_name i x -> lca_name i y ->
+Close_Name i x0 x = Close_Name i x0 y -> x = y. 
+Proof.
+  intros.
+  destruct x.
+  + simpl in H1.
+    EasyDec x x0 e n.
+    - rewrite e in H1.
+      destruct y.
+      * simpl in H1.
+        EasyDec x1 x0 e0 n.
+        apply beq_nat_true in e.
+        apply beq_nat_true in e0.
+        rewrite e.
+        rewrite e0.
+        auto.
+        rewrite n in H1.
+        inversions H1.
+      * simpl in H1.
+        inversions H1.
+        inversions H0.
+        lia.
+    - rewrite n in H1.
+      destruct y.
+      * simpl in H1.
+        EasyDec x1 x0 e n0.
+        rewrite e in H1.
+        inversions H1.
+        rewrite n0 in H1.
+        inversions H1; auto.
+      * simpl in H1.
+        inversions H1.
+  + simpl in H1.
+    destruct y.
+    - simpl in H1.
+      EasyDec x x0 e n.
+      * rewrite e in H1.
+        inversions H1.
+        inversions H.
+        lia.
+      * rewrite n in H1.
+        inversions H1.
+    - simpl in H1.
+      inversion H1.
+      auto.
+Qed.
+
+
+Lemma Close_Same_Inv :
+forall ( P Q : Process )( x i : nat ),
+lca i P -> lca i Q ->
+Close_Rec i x P = Close_Rec i x Q -> P = Q.
+Proof.
+  induction P; intros; try destruct Q; try discriminate; auto.
+  + simpl in H1.
+    inversions H1.
+    try inversions H; try inversions H0.
+    apply Close_Same_Inv_Names in H3; auto.
+    apply Close_Same_Inv_Names in H4; auto.
+    subst; auto.
+  + simpl in H1.
+    inversions H1.
+    inversions H0.
+    inversions H.
+    apply IHP1 in H3; auto.
+    apply IHP2 in H4; auto.
+    subst; auto.
+  + simpl in H1.
+    inversions H1.
+    inversions H.
+    inversions H0.
+    apply Close_Same_Inv_Names in H3; auto.
+    apply Close_Same_Inv_Names in H4; auto.
+    apply IHP in H5; auto.
+    subst; auto.
+  + simpl in H1.
+    inversions H1.
+    inversion H.
+    inversions H0.
+    apply Close_Same_Inv_Names in H3; auto.
+    subst; auto.
+  + simpl in H1.
+    inversions H1.
+    inversions H.
+    inversions H0.
+    apply Close_Same_Inv_Names in H3; auto.
+    apply IHP in H4; auto.
+    subst; auto.
+  + simpl in H1.
+    inversions H1.
+    inversions H; inversions H0.
+    specialize (IHP _ _ (S i) H5 H6 H3).
+    subst; auto.
+  + simpl in H1.
+    inversions H1.
+    inversions H.
+    inversions H0.
+    apply Close_Same_Inv_Names in H3; auto.
+    specialize (IHP _ _ (S i) H8 H10 H4).
+    subst; auto.
+  + simpl in H1.
+    inversions H1.
+    inversions H.
+    inversions H0.
+    apply Close_Same_Inv_Names in H3; auto.
+    specialize (IHP _ _ (S i) H8 H10 H4).
+    subst; auto.
+Qed.
+  
+  
+Lemma xxxx :
+forall ( P : Process), 
+lc P -> ν P = P.
+Proof.
+  induction P; intros.
+  + simpl.
+  
