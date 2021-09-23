@@ -1,32 +1,23 @@
-# Tarea 2 - Verificación Formal 
-# Unam 2020-II
-## Ciro Iván García López - Cta: 520463240
+# Session Types Verification
+# Unam 2021
+## Ciro Iván García López
 
-### Objetivo
+### Abstract
 
-Mecanizar en Coq el artículo: Heuvel, B. & Perez, J., Session Type Systems based on Linear Logic: Classical versus Intuitionistic. 
+This project searches to verify the Subject Reduction and liveness Theorems using Coq. The work uses
+the typing system proposed in Heuvel, B. & Perez, J., Session Type Systems based on Linear Logic: Classical versus Intuitionistic. 
 
 ### Introdución
 
-En [1] se presenta el sistema de tipos <img src="https://render.githubusercontent.com/render/math?math=\pi">-ULL, dicho sistema busca establecer una relación Curry-Howard entre un pedazo de la lógica lineal y el cálculo <img src="https://render.githubusercontent.com/render/math?math=\pi">. A su vez, tal como se expone en [2] resulta importante la mecanización en sistemas de verificación formal de dichas pruebas dados los diversos factores que que emergen al desarrollar estos conceptos. 
+Heuvel & Perez [1] proposed the <img src="https://render.githubusercontent.com/render/math?math=\pi">-ULL type system. This system search for a Curry-Howard relation between the classic linear logic and the <img src="https://render.githubusercontent.com/render/math?math=\pi">-Calculus. Actually Charguéraud [2] speaks about the importance of implementing this kind of theories due to the concepts that are involved.
 
-No obstante la mecanización de estas teorías involucra manejar abstracciones, variables ligadas y <img src="https://render.githubusercontent.com/render/math?math=\alpha">-equivalencias, tarea que no resulta sencillo de abordar. Una primera aproximación a esta tarea son los conocidos índices de De Bruijn, concepto en el cual todas las variables obtienen un indice y se van modificando por medio de operaciones de corrimiento [3]. El manejo de índices de De Bruijn resulta complicado ya que su corazón, funciones de corrimiento, complejiza el razonamiento con los términos.
+Nevertheless the verification of this kind of systems is not easy. The representation for free and bound variables are critical due to the notion of <img src="https://render.githubusercontent.com/render/math?math=\alpha">-equivalence. De Bruijn proposed a representation known as Bruijn indices; such representation requires the definition of the shift functions [3]. This functions are critical in the representation and should be implemented without bugs .
 
-En [3] se introduce la "representación local libre de nombres" una segunda aproximación en la mecanización de variables, en esta representación se hace distinción entre variable libre y ligada lo cual permite eliminar la noción de <img src="https://render.githubusercontent.com/render/math?math=\alpha">-equivalencia y su manejo resulta más sencillo al de los índices de De Bruijn. El precio a pagar por la simplicidad de la representación local libre de nombres es el incremento en las reglas de la gramática y las proposiciones auxiliares, ya que se introducen términos no deseados en la gramática. 
 
-Con el fin de poder hablar de los "Process" tal como estan definidos en [1] se introduce la operación "Process"
+In [3] Charguéraud intoduces the locally nameless representation; in this representation the bound variables are represented in the same way as Bruijn Indices and the free names remains represented as strings. Within this framework the notion of <img src="https://render.githubusercontent.com/render/math?math=\alpha">-equivalence is no longer require, and understanding the representation is easier than the Bruijn Indices. 
 
-Otro de los requisitos que se deben cubrir durante la mecanización es que toda operación definida para sobre los "Process" es necesario verificar que esta bien definida, es decir que operar sobre "Process" da como resultado un "Process"; por ejemplo considere el hacer reducciones sobre un término.
+One of the mayor drawbacks in the LN representation is that there exists terms that does not have any sense. Hence is require the locally closed predicate in order to refer to the well formed expresions.
 
-El repositorio contiene actualmente dos archivos:
-
-- Documento.pdf : informe escrito en donde se detalla la mecanización. 
-- Defs\_Proposition : Definiciones relativas a la noción de proposición.
-- Props\_Proposition : Pruebas de algunos hechos que involucran los proposición.
-- Defs\_Process : Definiciones relativas a la noción de proceso.
-- Props\_Process : Pruebas de algunos hechos que involucran los procesos.
-- Defs\_Typing : Definiciones relativas al sistema de tipos.
-- Props\_Typing : Pruebas de algunos hechos que involucran el sistema de tipos.
 
 ### Referencias: 
 1. Bas van den Heuvel and Jorge A. P ́erez.  Session type systems based on linear logic: Classicalversus intuitionistic.Electronic Proceedings in Theoretical Computer Science, 314:1–11, Apr2020.
