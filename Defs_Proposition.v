@@ -1,12 +1,14 @@
-(*
-  Verificación Formal - Unam 2020-2
-  Ciro Iván García López 
-  Proyecto 1. Session Type Systems Verification
+(**
+  Ciro Iván García López
+  Tesis de Maestría
+  Session Type Systems Verification
+  Unam - 2021
 *)
+From Tmcod Require Import Defs_Tactics.
 
 
-(*
-Definición 2.1, ULL Propositions
+(**
+Definition 2.1 - ULL propositions
 *)
 Inductive Proposition : Type := 
   | ONE : Proposition
@@ -16,12 +18,13 @@ Inductive Proposition : Type :=
 (*   | ULLT_IMP (A : ULLType) (B : ULLType) : ULLType  *)
   | EXP (A : Proposition) : Proposition
   | MOD (A : Proposition) : Proposition.
-Hint Constructors Proposition : core.
+#[global]
+Hint Constructors Proposition : Piull.
 
 
-(*
-Notación análoga a la propuesta por el artículo.
-Los niveles de asociatividad se dan siguiendo las ideas de Honda.
+(**
+Similar notation to the given in the article. 
+The associativity and levels follows the ideas from Honda.
 *)
 Notation "¶" := ONE.
 Notation "⊥" := ABS.
@@ -32,8 +35,8 @@ Notation "! A" := (EXP A)(at level 60, right associativity).
 Notation "? A" := (MOD A)(at level 60, right associativity).
 
 
-(*
-Definicion 2.2, Dualidad
+(**
+Definition 2.2 - Duals
 *)
 Fixpoint Dual_Prop ( T : Proposition ) : Proposition := 
 match T with 
@@ -44,15 +47,23 @@ match T with
   | ! A => ? (Dual_Prop A)
   | ? A => ! (Dual_Prop A)
 end.
-Hint Unfold Dual_Prop : core.
+#[global]
+Hint Resolve Dual_Prop : Piull.
+
+
 Notation "A '^⊥'" := (Dual_Prop A)(at level 60, right associativity).
 
 
-(*
-Definición del operador −∘ de acuerdo a los descrito en el primer parrafo de la Definición 2.2.
+(**
+Alternative definition for the operator (−∘), it is given in the first paragraph in the definition 2.2.
 *)
 Definition ULLT_IMP (A : Proposition) (B : Proposition) : Proposition := (A^⊥) ⅋ B.
+#[global]
+Hint Resolve ULLT_IMP : Piull.
+
+
 Notation "A −∘ B" := (ULLT_IMP A B)(at level 70, right associativity).
+
 
 (*
 ⊥

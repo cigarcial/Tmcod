@@ -1,8 +1,10 @@
-(*
+(**
   Ciro Iván García López
-  Tesis de Maestría - Master Thesis
+  Tesis de Maestría
   Session Type Systems Verification
   Unam - 2021
+
+  This file contains the basic facts concerning names.
 *)
 From Coq Require Import Ensembles.
 From Coq Require Import Finite_sets.
@@ -12,38 +14,44 @@ From Coq Require Import Arith.PeanoNat.
 From Coq Require Import Arith.EqNat.
 From Coq Require Import Lia.
 
-
 From Tmcod Require Import Defs_Tactics.
 From Tmcod Require Import Defs_Process.
 From Tmcod Require Import Facts_Names.
 
-(*
+
+(**
 *)
 Lemma No_Union_No_Each : 
 forall (x : nat)( X Y : FVarsE ),
 ~(x ∈ (X ∪ Y)) -> ~(x ∈ X) /\ ~(x ∈ Y).
 Proof.
 Admitted.
+#[global]
+Hint Resolve No_Union_No_Each : Piull.
 
 
-(*
+(**
 *)
 Lemma There_Is_A_Name :
 forall ( P : Process ),
 exists ( x : nat ), ~ ( x ∈ (FVars P) ).
 Proof.
 Admitted.
+#[global]
+Hint Resolve There_Is_A_Name : Piull.
 
 
-(*
+(**
 *)
 Lemma FVar_Process_Is_Or_Not :
 forall (P : Process)( x : nat),
 (x ∈ FVars P) \/ (~ x ∈ FVars P).
 Admitted.
+#[global]
+Hint Resolve FVar_Process_Is_Or_Not : Piull.
 
 
-(*
+(**
 *)
 Lemma FVars_Name_Finite :
 forall (x : Name),
@@ -53,29 +61,27 @@ Proof.
   + simpl. apply Singleton_is_finite.
   + simpl. constructor.
 Qed.
+#[global]
+Hint Resolve FVars_Name_Finite : Piull.
 
 
-(*
+(**
 *)
 Lemma FVars_Finite :
 forall (P : Process),
 Finite _ (FVars P).
 Proof.
-  induction P.
-  + simpl.
-    constructor.
-  + simpl. apply Union_preserves_Finite; apply FVars_Name_Finite.
-  + simpl. apply Union_preserves_Finite; auto.
-  + simpl. apply Union_preserves_Finite; try apply Union_preserves_Finite; try apply FVars_Name_Finite; auto.
-  + simpl. apply FVars_Name_Finite.
-  + simpl. apply Union_preserves_Finite; try apply Union_preserves_Finite; try apply FVars_Name_Finite; auto.
-  + auto.
-  + simpl. apply Union_preserves_Finite; try apply Union_preserves_Finite; try apply FVars_Name_Finite; auto.
-  + simpl. apply Union_preserves_Finite; try apply Union_preserves_Finite; try apply FVars_Name_Finite; auto.
+  induction P;
+  repeat apply Union_preserves_Finite;
+  repeat apply FVars_Name_Finite; 
+  Piauto.
+  constructor.
 Qed.
+#[global]
+Hint Resolve FVars_Finite : Piull.
 
 
-(*
+(**
 *)
 Lemma FVars_Name_No_Close :
 forall (z k : nat)(x : Name),
@@ -83,17 +89,16 @@ forall (z k : nat)(x : Name),
 Proof.
   unfold not.
   intros.
-  destruct x.
-  + destruct (bool_dec (x =? z) true).
-    - simpl in H. apply Nat.eqb_eq in e.
-      rewrite e in H.
-      assert ( HB : z ∈ Singleton nat z).
-      { unfold In. constructor. }
-      contradiction.
-    - simpl. apply not_true_iff_false in n.
-      rewrite n. auto.
-  + auto.
+  destruct x; Piauto.
+  simpl.
+  DecidSimple x z.
+  apply beq_nat_true in e.
+  rewrite e in H.
+  assert ( HB : z ∈ Singleton nat z); try constructor.
+  contradiction.
 Qed.
+#[global]
+Hint Resolve FVars_Name_No_Close : Piull.
 
 
 (*

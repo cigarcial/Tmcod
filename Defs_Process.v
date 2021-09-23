@@ -1,8 +1,10 @@
-(*
+(**
   Ciro Iván García López
-  Tesis de Maestría - Master Thesis
+  Tesis de Maestría
   Session Type Systems Verification
   Unam - 2021
+  
+  This file contains the definitions for the processes.
 *)
 From Coq Require Import Nat.
 From Coq Require Import Arith.Peano_dec.
@@ -10,11 +12,11 @@ From Coq Require Import Ensembles.
 From Coq Require Import Finite_sets.
 From Coq Require Import Finite_sets_facts.
 
-
-
 From Tmcod Require Import Defs_Tactics.
 
-(*
+
+(**
+  The following definitions are required to work with Ensembles or the representation for sets given by Coq.
 *)
 Definition FVarsE := Ensemble nat.
 
@@ -24,54 +26,57 @@ Notation " A ⊆ B " := ( Included _ A B ) (at level 100, no associativity).
 Notation " A ∪ B " := ( Union _ A B ) (at level 80, no associativity).
 Notation " A ∩ B " := ( Intersection _ A B ) (at level 80, no associativity).
 
-(*
+
+(**
+  Definition for the names, two types bound or free.
+  The definition use natural numbers to represent free names, this can be changed for any datatype that implements equality comparision at syntactic level and boolean level.
 *)
 Inductive Name : Type := 
   | FName ( x : nat) : Name
   | BName ( i : nat) : Name.
+#[global]
+Hint Constructors Name : Piull.
 
 Inductive Process : Type  := 
-  (*  *)
   | Pzero : Process 
   | Fuse (x y : Name) : Process
   | Parallel (P Q : Process ) : Process
   | Chan_output ( x y : Name ) (P : Process) : Process
   | Chan_zero (x : Name ) : Process
   | Chan_close ( x : Name ) ( P : Process ) : Process
-  (* procesos con variables ligadas *)
+  (* Processes with bounded names *)
   | Chan_res (P : Process ) : Process
   | Chan_input ( x : Name ) (P : Process) : Process
   | Chan_replicate ( x : Name)(P : Process ) : Process.
+#[global]
+Hint Constructors Process : Piull.
 
 
-(*
-
+(**
+  Notation for the processes.
+  In most cases the notation is the same, but in others the notation is changed due to conflicts with Coq syntax, e.g. | for ↓.
 *)
 Notation "'θ'" := Pzero (at level 60).
 Notation "[ x ←→ y ]" := (Fuse x y ) ( at level 60).
-(*
-Cambio la notación respecto al artículo, no uso el | porque genera problemas en las definiciones Inductive
-*)
 Notation "P ↓ Q" :=  (Parallel P Q ) ( at level 60).
 Notation "x « y »· P " := (Chan_output x y P ) (at level 60).
 Notation "x ·θ " :=  (Chan_zero x ) (at level 60).
 Notation "x ()· P" := (Chan_close x P)(at level 60).
-(*
-Procesos con variables ligadas
-*)
 Notation " 'ν' P " := (Chan_res P ) ( at level 60).
 Notation "x · P " := (Chan_input x P)(at level 60).
 Notation " x !· P " :=  (Chan_replicate x P)(at level 60).
 
 
-(*
-Se computan las variables libres de un término.
+(**
+  Free names for a given term.
 *)
 Definition FVars_Name ( N : Name ) : FVarsE :=
 match N with
   | FName x => Singleton nat x
   | BName i => Empty_set nat
 end.
+#[global]
+Hint Resolve FVars_Name : Piull.
 
 Fixpoint FVars ( T : Process ) {struct T} : FVarsE := 
 match T with
@@ -85,25 +90,22 @@ match T with
   | Chan_input x P => (FVars_Name x) ∪ (FVars P)
   | Chan_replicate x P => (FVars_Name x) ∪ (FVars P)
 end.
+#[global]
+Hint Resolve FVars : Piull.
 
 
-(*
-Se necesitan las nociones de apertura y clausura de preprocesos, por lo que se procede a definirlas apropiadamente.
-
-Se usa la misma notación del artículo de Charguéraud
-
-Se necesita ahora distinguir dos aperturas uno para preprocesos y otra para los nombres.
+(**
+  Open functions for names and processes.
+  The notation follows the paper from Charguéraud.
 *) 
 Definition Open_Name ( k z : nat )( N : Name ) : Name := 
 match N with 
   | FName x => FName x
   | BName i => if ( k =? i ) then (FName z) else (BName i)
 end.
+#[global]
+Hint Resolve Open_Name : Piull.
 
-
-(*
-Apertura para los preprocesos
-*)
 Fixpoint Open_Rec (k z : nat)( T : Process ) {struct T} : Process := 
 match T with
   | Pzero => Pzero
@@ -116,32 +118,37 @@ match T with
   | Chan_input x P => Chan_input (Open_Name k z x) (Open_Rec (S k) z P)
   | Chan_replicate x P => Chan_replicate (Open_Name k z x) (Open_Rec (S k) z P)
 end.
+#[global]
+Hint Resolve Open_Rec : Piull.
+
 Notation "{ k ~> z } P " := (Open_Rec k z P)(at level 60).
 Definition Open ( z : nat )( T : Process ): Process := Open_Rec 0 z T.
+#[global]
+Hint Resolve Open : Piull.
 Notation "P ^ z" := (Open_Rec 0 z P).
 
 
-(*
-Chargeroud Menciona que siempre se debe pensar que la variable con la que se abre debe ser un nombre que no aparece en P
+(**
+  In his article, Chargeroud warn that the variable which is used to open a name should now be free in the term.
 *)
 Inductive Well_Open : Process -> nat -> Prop := 
   | Is_Well_Open : forall ( P : Process)(z : nat),
     ~( z ∈ (FVars P) ) -> (Well_Open P z).
+#[global]
+Hint Constructors Well_Open : Piull.
 
 
-(*
-De manera análoga se necesitan dos cerraduras; una para nombres y otra para preprocesos.
+(**
+  Definition for the closed functions.
 *)
 Definition Close_Name ( k z: nat )( N : Name ) : Name := 
 match N with
   | FName n0 => if ( n0 =? z ) then (BName k) else N
   | BName i => N
 end.
+#[global]
+Hint Resolve Close_Name : Piull.
 
-
-(*
-Cerradura de preprocesos bajo la nueva gramática
-*)
 Fixpoint Close_Rec (k z : nat)( T : Process ) {struct T} : Process := 
 match T with
   | Pzero => Pzero
@@ -154,17 +161,20 @@ match T with
   | Chan_input x P => Chan_input (Close_Name k z x) (Close_Rec (S k) z P)
   | Chan_replicate x P => Chan_replicate (Close_Name k z x) (Close_Rec (S k) z P)
 end.
+#[global]
+Hint Resolve Close_Rec : Piull.
 
-
-(* *)
 Definition Close ( z : nat )( T : Process ): Process := Close_Rec 0 z T.
+#[global]
+Hint Resolve Close : Piull.
 
-
-(*
-
+(**
+  Locally closed predicate.
 *)
 Inductive lc_name : Name -> Prop := 
   | lc_fname : forall (x : nat), lc_name (FName x).
+#[global]
+Hint Constructors lc_name : Piull.
 
 Inductive lc : Process -> Prop :=
   | lc_pzero : lc(θ)
@@ -194,24 +204,29 @@ Inductive lc : Process -> Prop :=
   | lc_chan_replicate : forall (x : Name) (P : Process),
     lc_name x -> 
     ( forall (x : nat), lc ({ 0 ~> x }P) ) -> lc ( x !· P ).
-Hint Constructors lc : core.
+#[global]
+Hint Constructors lc : Piull.
 
 
-(*
-
+(**
+  Definition of a body.
 *)
 Inductive Body : Process -> Prop := 
   | is_body : forall (P : Process), 
     ( forall (x : nat), lc ({ 0 ~> x
      }P) ) -> Body(P).
+#[global]
+Hint Constructors Body : Piull.
 
 
-(*
-
+(**
+  Locally closed at predicate.
 *)
 Inductive lca_name : nat -> Name -> Prop := 
   | lca_Fname : forall ( k x : nat), lca_name k (FName x)
   | lca_Bname : forall ( k i : nat), ( i < k ) -> lca_name k (BName i).
+#[global]
+Hint Constructors lca_name : Piull.
 
 Inductive lca : nat -> Process -> Prop :=
   | lca_pzero : forall k : nat, lca k (θ)
@@ -239,18 +254,20 @@ Inductive lca : nat -> Process -> Prop :=
    
   | lca_chan_replicate : forall ( k : nat )( x : Name )( P : Process ),
     lca_name k x -> lca (S k) P -> lca k ( x !· P ).
-Hint Constructors Process : core.
+#[global]
+Hint Constructors lca : Piull.
 
 
-(*
-
+(**
+  Definnition for substitution of free names.
 *)
 Definition Subst_Name ( x y : nat )( N : Name ) : Name :=
 match N with 
   | FName n0 => if ( n0 =? x ) then (FName y) else N
   | BName i => N
 end.
-
+#[global]
+Hint Resolve Subst_Name : Piull.
 
 Fixpoint Subst ( x y : nat )( T : Process ) {struct T} : Process := 
 match T with
@@ -265,27 +282,32 @@ match T with
   | Chan_input u P  => Chan_input (Subst_Name x y u) (Subst x y P)
   | Chan_replicate u P => Chan_replicate (Subst_Name x y u) (Subst x y P)
 end.
-Notation " { y \ x } P " := (Subst x y P) (at level 60). 
+#[global]
+Hint Resolve Subst : Piull.
+
+Notation " { y \ x } P " := (Subst x y P) (at level 60).
 
 
+(**
+*)
 Inductive Well_Subst : Process -> nat -> nat -> Prop := 
   | Is_Well_Subst : forall ( P : Process)(x y : nat),
     ~( y ∈ (FVars P) ) -> x <> y -> (Well_Subst P x y).
+#[global]
+Hint Constructors Well_Subst : Piull.
 
 
-(*
-
+(**
+  Definition for the bound names exchange function.
 *) 
 Definition Bex_Name ( i j : nat )( N : Name ) : Name := 
 match N with 
   | FName x => FName x
   | BName k => if ( k =? i ) then (BName j) else (if ( k =? j ) then (BName i) else (BName k) ) 
 end.
+#[global]
+Hint Resolve Bex_Name : Piull.
 
-
-(*
-Apertura para los preprocesos
-*)
 Fixpoint Bex_Rec (i j : nat)( T : Process ) {struct T} : Process := 
 match T with
   | Pzero => Pzero
@@ -298,21 +320,21 @@ match T with
   | Chan_input x P => Chan_input (Bex_Name i j x) (Bex_Rec (S i) (S j) P)
   | Chan_replicate x P => Chan_replicate (Bex_Name i j x) (Bex_Rec (S i) (S j) P)
 end.
+#[global]
+Hint Resolve Bex_Rec : Piull.
+
 Notation "{ i <~> j } P " := (Bex_Rec i j P)(at level 60).
 
 
-
-
-
-
-
-
-
+(**
+  Require for the MOpen definitions.
+*)
 From Coq Require Import Lists.List.
 Import ListNotations.
 
 
-(*
+(**
+  Definition for multiple open function in names
 *)
 Fixpoint MOpen_Name_Rec (k : nat)(L : list nat)( N : Name ) : Name := 
 match L , k with
@@ -320,19 +342,21 @@ match L , k with
   | x :: L0, 0 =>  Open_Name 0 x (MOpen_Name_Rec 0 L0 N)
   | x :: L0, S t =>  Open_Name t x (MOpen_Name_Rec t L0 N)
 end.
+#[global]
+Hint Resolve MOpen_Name_Rec : Piull.
 
-
-(*
-*)
 Fixpoint MOpen_Rec (k : nat)(L : list nat)( T : Process ) : Process := 
 match L , k with
   | nil , _  => T
   | x :: L0, 0 =>  { 0 ~> x } (MOpen_Rec 0 L0 T)
   | x :: L0, S t =>  { t ~> x } (MOpen_Rec t L0 T)
 end.
+#[global]
+Hint Resolve MOpen_Rec : Piull.
 
 
-(*
+(**
+  Multiple open at second level.
 *)
 Fixpoint M2Open_Rec (k : nat)(L : list nat)( T : Process ) : Process := 
 match L , k with
@@ -340,11 +364,12 @@ match L , k with
   | x :: L0, 0 =>  { 0 ~> x } (M2Open_Rec 0 L0 T)
   | x :: L0, S t =>  { S t ~> x } (M2Open_Rec t L0 T)
 end.
+#[global]
+Hint Resolve M2Open_Rec : Piull.
 
 
-
-(*
-Definición 2.4, equivalencias entre términos, observe que usando NLR no es necesario hablar de alpha-equivalencia pero si es necesario introducir las equivalencias entre procesos.
+(**
+  Definition 2.4 - Structural congruence
 *)
 Reserved Notation "R '===' S" (at level 60).
 Inductive Congruence : Process -> Process -> Prop :=
@@ -369,31 +394,14 @@ Inductive Congruence : Process -> Process -> Prop :=
       
     | Con_abs_restriction : forall (P Q : Process),
         lc P -> (P↓(ν Q)) === ν (P↓Q)
-(*
-    | Con_con_res : forall (P Q : Process)(x : nat), 
-      lc P -> P === Q -> (ν Close x P) === (ν Close x Q)
-      
-    | Con_con_output : forall (P Q : Process)(n m : Name), 
-      P === Q -> ( n « m »· P) === ( n « m »· Q)
-      
-    | Con_con_repli : forall (P Q : Process)(n : Name)(x : nat), 
-      lc P -> P === Q -> ( n !· Close x P) === (n !· Close x Q)
-      
-    | Con_con_parallel : forall (P Q R : Process), 
-      P === Q -> (R↓P) === (R↓Q)
-      
-    | Con_con_input : forall (P Q : Process)(n : Name)(x : nat), 
-      lc P -> P === Q -> ( n · Close x P) === ( n · Close x Q)  
-      
-    | Con_con_chan_close : forall (P Q : Process)(n : Name), 
-      P === Q -> ( n ()· P) === ( n ()· Q)  
-*)
+        
 where "R '===' S" := (Congruence R S).
-Hint Constructors Congruence : core.
+#[global]
+Hint Constructors Congruence : Piull.
 
 
-(*
-Definición 2.5, reducciones. Observe que la última reducción queda congelada, esto debido a que no ha sido posible reconciliar Coq (genera argumentos circulares) con la prueba en papel.
+(**
+  Definition 2.5 - Processes Reductions.
 *)
 Reserved Notation "R '-->' S" (at level 60).
 Inductive Reduction : Process -> Process -> Prop :=
@@ -426,4 +434,5 @@ Inductive Reduction : Process -> Process -> Prop :=
     lc P' -> ( P' === P ) -> ( Q' === Q ) ->
     (P' --> Q') -> (P --> Q) 
 where "R '-->' S" := (Reduction R S).
-
+#[global]
+Hint Constructors Reduction: Piull.

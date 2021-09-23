@@ -1,0 +1,68 @@
+DIGEST ccf756dfd39689b9ae15db49bcd001b1
+FTmcod.Props_Propositions
+R132:147 Tmcod.Defs_Proposition <> <> lib
+R176:187 Tmcod.Defs_Tactics <> <> lib
+prf 247:264 <> Doble_Duality_ULLT
+R281:291 Tmcod.Defs_Proposition <> Proposition ind
+binder 277:277 <> A:1
+R307:309 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R296:296 Tmcod.Defs_Proposition <> :::x_'^⊥' not
+R302:306 Tmcod.Defs_Proposition <> :::x_'^⊥' not
+R298:301 Tmcod.Defs_Proposition <> :::x_'^⊥' not
+R297:297 Tmcod.Props_Propositions <> A:1 var
+R310:310 Tmcod.Props_Propositions <> A:1 var
+prf 483:505 <> Dual_Implication_Tensor
+R523:533 Tmcod.Defs_Proposition <> Proposition ind
+binder 517:517 <> A:2
+binder 519:519 <> B:3
+R538:538 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R555:559 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R573:573 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R539:539 Tmcod.Defs_Proposition <> :::x_'^⊥' not
+R550:554 Tmcod.Defs_Proposition <> :::x_'^⊥' not
+R541:548 Tmcod.Defs_Proposition <> :::x_'−∘'_x not
+R540:540 Tmcod.Props_Propositions <> A:2 var
+R549:549 Tmcod.Props_Propositions <> B:3 var
+R561:566 Tmcod.Defs_Proposition <> :::x_'⊗'_x not
+R572:572 Tmcod.Defs_Proposition <> :::x_'⊗'_x not
+R560:560 Tmcod.Props_Propositions <> A:2 var
+R568:571 Tmcod.Defs_Proposition <> :::x_'^⊥' not
+R567:567 Tmcod.Props_Propositions <> B:3 var
+R602:609 Tmcod.Defs_Proposition <> ULLT_IMP def
+R635:652 Tmcod.Props_Propositions <> Doble_Duality_ULLT thm
+R635:652 Tmcod.Props_Propositions <> Doble_Duality_ULLT thm
+R635:652 Tmcod.Props_Propositions <> Doble_Duality_ULLT thm
+prf 854:876 <> Dual_Tensor_Implication
+R895:905 Tmcod.Defs_Proposition <> Proposition ind
+binder 889:889 <> A:4
+binder 891:891 <> B:5
+R909:909 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R924:928 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R945:945 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R910:910 Tmcod.Defs_Proposition <> :::x_'^⊥' not
+R918:923 Tmcod.Defs_Proposition <> :::x_'^⊥' not
+R912:916 Tmcod.Defs_Proposition <> :::x_'⊗'_x not
+R911:911 Tmcod.Props_Propositions <> A:4 var
+R917:917 Tmcod.Props_Propositions <> B:5 var
+R930:938 Tmcod.Defs_Proposition <> :::x_'−∘'_x not
+R944:944 Tmcod.Defs_Proposition <> :::x_'−∘'_x not
+R929:929 Tmcod.Props_Propositions <> A:4 var
+R940:943 Tmcod.Defs_Proposition <> :::x_'^⊥' not
+R939:939 Tmcod.Props_Propositions <> B:5 var
+prf 1169:1190 <> Doble_Dual_Implication
+R1208:1218 Tmcod.Defs_Proposition <> Proposition ind
+binder 1202:1202 <> A:6
+binder 1204:1204 <> B:7
+R1222:1222 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R1245:1249 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R1260:1260 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R1223:1223 Tmcod.Defs_Proposition <> :::x_'^⊥' not
+R1240:1244 Tmcod.Defs_Proposition <> :::x_'^⊥' not
+R1224:1224 Tmcod.Defs_Proposition <> :::x_'^⊥' not
+R1235:1239 Tmcod.Defs_Proposition <> :::x_'^⊥' not
+R1226:1233 Tmcod.Defs_Proposition <> :::x_'−∘'_x not
+R1225:1225 Tmcod.Props_Propositions <> A:6 var
+R1234:1234 Tmcod.Props_Propositions <> B:7 var
+R1251:1258 Tmcod.Defs_Proposition <> :::x_'−∘'_x not
+R1250:1250 Tmcod.Props_Propositions <> A:6 var
+R1259:1259 Tmcod.Props_Propositions <> B:7 var

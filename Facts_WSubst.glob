@@ -1,0 +1,12 @@
+DIGEST 35cdd319c4beff3276acef6e5059d06f
+FTmcod.Facts_WSubst
+R134:153 Coq.Program.Equality <> <> lib
+R181:189 Coq.Bool.Bool <> <> lib
+R216:229 Coq.Arith.PeanoNat <> <> lib
+R256:266 Coq.Arith.EqNat <> <> lib
+R293:295 Coq.micromega.Lia <> <> lib
+R322:343 Coq.Sets.Constructive_sets <> <> lib
+R373:384 Tmcod.Defs_Tactics <> <> lib
+R413:424 Tmcod.Defs_Process <> <> lib
+R453:463 Tmcod.Defs_Typing <> <> lib
+R494:504 Tmcod.Facts_Names <> <> lib

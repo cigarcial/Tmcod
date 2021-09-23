@@ -1,0 +1,12 @@
+DIGEST 47ca57511ebecf026f32a0e135abfe14
+FTmcod.Facts_FVars
+R145:153 Coq.Sets.Ensembles <> <> lib
+R180:190 Coq.Sets.Finite_sets <> <> lib
+R217:233 Coq.Sets.Finite_sets_facts <> <> lib
+R260:268 Coq.Bool.Bool <> <> lib
+R295:308 Coq.Arith.PeanoNat <> <> lib
+R335:345 Coq.Arith.EqNat <> <> lib
+R372:374 Coq.micromega.Lia <> <> lib
+R405:416 Tmcod.Defs_Tactics <> <> lib
+R445:456 Tmcod.Defs_Process <> <> lib
+R485:495 Tmcod.Facts_Names <> <> lib

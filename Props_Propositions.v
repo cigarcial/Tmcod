@@ -1,29 +1,28 @@
-(*
-  Verificación Formal - Unam 2020-2
+(**
   Ciro Iván García López
-  Proyecto 1. Session Type Systems Verification
+  Tesis de Maestría
+  Session Type Systems Verification
+  Unam - 2021
 *)
-From Tmcod Require Import  Defs_Proposition.
+From Tmcod Require Import Defs_Proposition.
+From Tmcod Require Import Defs_Tactics.
 
 
-(*
-Observación presente en la definición 2.2 (primer parrafo).
+(**
+  The dual operation is idempotent.
 *)
 Proposition Doble_Duality_ULLT  : 
 forall A : Proposition , 
 (A^⊥)^⊥ = A. 
 Proof.
-  intros.
-  induction A; auto. 
-  - simpl. rewrite -> IHA1. rewrite -> IHA2. reflexivity.
-  - simpl. rewrite -> IHA1. rewrite -> IHA2. reflexivity.
-  - simpl. rewrite -> IHA. reflexivity. 
-  - simpl. rewrite -> IHA. reflexivity. 
+  StructuralInduction A.
 Qed.
+#[global]
+Hint Resolve Doble_Duality_ULLT : Piull.
 
 
-(*
-Prueba de las propiedades descritas en la definición 2.2.
+(**
+  The definition of the linear implication is well defined.
 *)
 Proposition Dual_Implication_Tensor : 
 forall A B : Proposition , 
@@ -35,25 +34,33 @@ Proof.
   rewrite -> (Doble_Duality_ULLT A).
   reflexivity.
 Qed.
+#[global]
+Hint Resolve Dual_Implication_Tensor : Piull.
 
 
+(**
+  Relation between duals, tensor and linear implication.
+  The proof follows fron the definitions.
+*)
 Proposition Dual_Tensor_Implication :  
 forall A B : Proposition, 
 ((A ⊗ B )^⊥) = (A −∘ (B^⊥)).
 Proof.
-  intros.
-  simpl.
-  unfold ULLT_IMP.
-  reflexivity.
+  auto with Piull.
 Qed.
+#[global]
+Hint Resolve Dual_Implication_Tensor : Piull.
 
 
+(**
+  The linar implication respect the idempotent property of the tensor.
+  The proof follows from the definitions.
+*)
 Proposition Doble_Dual_Implication : 
 forall A B : Proposition, 
 (((A −∘ B)^⊥)^⊥) = (A −∘ B).
 Proof.
-  intros.
-  unfold ULLT_IMP.
-  rewrite -> (Doble_Duality_ULLT).
-  reflexivity.
+  auto with Piull.
 Qed.
+#[global]
+Hint Resolve Dual_Implication_Tensor : Piull.
