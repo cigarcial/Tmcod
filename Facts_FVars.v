@@ -101,7 +101,7 @@ Qed.
 Hint Resolve FVars_Name_No_Close : Piull.
 
 
-(*
+(**
 *)
 Lemma Close_NoFVar_Eq :
 forall ( P : Process )(z k: nat),
