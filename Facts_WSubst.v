@@ -413,13 +413,17 @@ Proof.
     intros.
     apply H.
     rewrite H0; constructor.
-  EasyDec x u e n.
+  DecidSimple x u.
   + specialize (beq_nat_refl x0) as Hx.
     apply eq_sym in Hx.
+    simpl.
     rewrite Hx.
     apply beq_nat_true in e.
     rewrite e; auto.
   + apply beq_nat_false_inv in HA.
+    simpl.
+    rewrite n.
+    simpl.
     rewrite HA.
     auto.
 Qed.
@@ -546,7 +550,7 @@ Proof.
     intros.
     simpl in H3.
     simpl in H4.
-    EasyDec x x0 e n.
+    DecidSimple x x0.
     - admit. (* Impossible by construction - pi calculus *)
     - apply beq_nat_false in n.
       specialize (FVars_Beq_Close Q x x0 _ n H4) as Hx.

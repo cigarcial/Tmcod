@@ -103,146 +103,85 @@ Hint Resolve FVars_Name_No_Close : Piull.
 
 (**
 *)
-Lemma Close_NoFVar_Eq :
-forall ( P : Process )(z k: nat),
-~ ( z ∈ (FVars P) ) -> ( Close_Rec k z P ) = P.
-Proof.
-  unfold Close.
-  induction P; intros.
-  + auto.
-  + simpl in H.
-    apply No_Union_No_Each in H.
-    destruct H as [HA HB].
-    simpl.
-    rewrite FVars_Name_No_Close; auto.
-    rewrite FVars_Name_No_Close; auto.
-  + simpl in H.
-    apply No_Union_No_Each in H.
-    destruct H as [HA HB].
-    simpl.
-    rewrite IHP1; auto.
-    rewrite IHP2; auto.
-  + simpl in H.
-    apply No_Union_No_Each in H.
-    destruct H as [H HC].
-    simpl in H.
-    apply No_Union_No_Each in H.
-    destruct H as [HA HB].
-    simpl.
-    rewrite IHP; auto.
-    rewrite FVars_Name_No_Close; auto.
-    rewrite FVars_Name_No_Close; auto.
-  + simpl in H.
-    simpl.
-    rewrite FVars_Name_No_Close; auto.
-  + simpl in H.
-    apply No_Union_No_Each in H.
-    destruct H as [HA HB].
-    simpl.
-    rewrite IHP; auto.
-    rewrite FVars_Name_No_Close; auto.
-  + simpl in H.
-    simpl.
-    rewrite IHP; auto.
-  + simpl in H.
-    apply No_Union_No_Each in H.
-    destruct H as [HA HB].
-    simpl.
-    rewrite FVars_Name_No_Close; auto.
-    rewrite IHP; auto.
-  + simpl in H.
-    apply No_Union_No_Each in H.
-    destruct H as [HA HB].
-    simpl.
-    rewrite FVars_Name_No_Close; auto.
-    rewrite IHP; auto.
-Qed.
-
-
-
 Lemma FVars_Bex_Name :
 forall ( x : Name)(i j : nat),
 FVars_Name (Bex_Name i j x) = FVars_Name x.
 Proof.
-  destruct x; intros; simpl; auto.
-  EasyDec i i0 e n; try EasyDec i j e n0.
+  destruct x; Piauto.
+  intros; simpl.
+  DecidSimple i i0.
+  rewrite n.
+  DecidSimple i j.
 Qed.
+#[global]
+Hint Resolve FVars_Bex_Name : Piull.
 
 
-
+(**
+*)
 Lemma FVars_Bex_Process:
 forall (P : Process)(i j : nat),
 FVars P = FVars ({i <~> j} P).
 Proof.
   InductionProcessRev P FVars_Bex_Name.
 Qed.
+#[global]
+Hint Resolve FVars_Bex_Process : Piull.
 
 
-(*
+(**
+*)
+Lemma Close_NoFVar_Eq :
+forall ( P : Process )(z k: nat),
+~ ( z ∈ (FVars P) ) -> ( Close_Rec k z P ) = P.
+Proof.
+  induction P; intros; 
+    try simpl in *;
+    repeat (apply No_Union_No_Each in H; destruct H as [H ?HA]);
+    repeat (rewrite IHP || rewrite IHP1 || rewrite IHP2);
+    repeat rewrite FVars_Name_No_Close;
+    Piauto.
+Qed.
+#[global]
+Hint Resolve Close_NoFVar_Eq : Piull.
+
+
+(**
 *)
 Lemma Cong_FVars :
 forall (P Q : Process), 
 P === Q -> FVars P = FVars Q.
 Proof.
   intros.
-  induction H.
-  + simpl.
-    apply Extensionality_Ensembles.
-    constructor.
-    - unfold Included. 
-      intros.
-      apply Union_inv in H.
-      destruct H.
-      right. auto.
-      left. auto.
-    - unfold Included. 
-      intros.
-      apply Union_inv in H.
-      destruct H.
-      right. auto.
-      left. auto.
-  + simpl.
-    apply FVars_Bex_Process.  
-  + simpl.
-    apply Extensionality_Ensembles.
-    constructor.
-    - unfold Included.
-      intros.
-      apply Union_inv in H.
-      destruct H.
-      apply Union_inv in H.
-      destruct H.
-      left. auto.
-      right. left. auto.
-      right. right. auto.
-    - unfold Included.
-      intros.
-      apply Union_inv in H.
-      destruct H.
-      left. left. auto.
-      apply Union_inv in H.
-      destruct H.
-      left. right. auto.
-      right. auto.
-  + auto.
+  induction H; simpl; Piauto;
+  try apply Extensionality_Ensembles;
+  try constructor;
+  try unfold Included;
+  try intros;
+  repeat (apply Union_inv in H; destruct H); 
+  try OrSearch.
 Qed.
+#[global]
+Hint Resolve Cong_FVars : Piull.
 
 
+(**
+*)
 Lemma No_FVars_Parallel :
 forall (P Q : Process)( u : nat),
 ( ~(u ∈ FVars (P ↓ Q))) -> (~ u ∈ FVars P) /\ (~ u ∈ FVars Q).
 Proof.
   unfold not.
   intros.
-  constructor.
-  + intros.
-    assert ( HA : u ∈ FVars (P ↓ Q));
-      try constructor; auto.
-  + intros.
-    assert ( HA : u ∈ FVars (P ↓ Q));
-      try right; auto.
+  constructor; 
+  (intros; assert ( HA : u ∈ FVars (P ↓ Q)); OrSearch).
 Qed.
+#[global]
+Hint Resolve No_FVars_Parallel : Piull.
 
+
+(**
+*)
 Lemma In_FVars_Name_Subst :
 forall (u x x1 : nat),
 u ∈ FVars_Name (Subst_Name u x (FName x1)) -> 
@@ -256,8 +195,7 @@ Proof.
     apply Singleton_inv in H.
     apply beq_nat_true in e.
     rewrite e.
-    left.
-    auto.
+    OrSearch.
   * apply not_true_iff_false in n.
     rewrite n in H.
     simpl in H.
@@ -266,12 +204,14 @@ Proof.
     apply beq_nat_false in n.
     contradiction.
 Qed.
-
+#[global]
+Hint Resolve In_FVars_Name_Subst : Piull.
 
 
 Require Import Coq.Program.Equality.
 
-(*
+
+(**
 *)
 Lemma After_Subst_No_FVar :
 forall (P : Process)(u x : nat),
@@ -279,40 +219,40 @@ u <> x ->
 u ∈ FVars ({x \ u} P) -> False.
 Proof.
   intro.
-  dependent induction P; intros; try simpl in H0.
+  dependent induction P; 
+  intros; try simpl in H0;
+  try apply Union_inv in H0.
   + inversions H0.
-  + apply Union_inv in H0.
-    destruct H0.
+  + destruct H0.
     - apply (Subst_Name_Gen_Output u x0 x); auto.
     - apply (Subst_Name_Gen_Output u x0 y); auto.
-  + apply Union_inv in H0.
-    destruct H0.
+  + destruct H0.
     - apply (IHP1 u x); auto.
     - apply (IHP2 u x); auto.
-  + apply Union_inv in H0.
-    destruct H0.
+  + destruct H0.
     apply Union_inv in H0.
     destruct H0.
     - apply (Subst_Name_Gen_Output u x0 x); auto.
     - apply (Subst_Name_Gen_Output u x0 y); auto.
     - apply (IHP u x0); auto.
   + apply (Subst_Name_Gen_Output u x0 x); auto.
-  + apply Union_inv in H0.
-    destruct H0.
+  + destruct H0.
     - apply (Subst_Name_Gen_Output u x0 x); auto.
     - apply (IHP u x0); auto.
   + apply (IHP u x); auto.
-  + apply Union_inv in H0.
-    destruct H0.
+  + destruct H0.
     - apply (Subst_Name_Gen_Output u x0 x); auto.
     - apply (IHP u x0); auto.
-  + apply Union_inv in H0.
-    destruct H0.
+  + destruct H0.
     - apply (Subst_Name_Gen_Output u x0 x); auto.
     - apply (IHP u x0); auto.
 Qed.
+#[global]
+Hint Resolve After_Subst_No_FVar : Piull.
 
 
+(**
+*)
 Lemma FVars_Close_Beq_Names :
 forall(x : Name)(u x0 i : nat),
 u <> x0 -> u ∈ FVars_Name x -> 
@@ -321,77 +261,52 @@ Proof.
   intros.
   destruct x; simpl in H0; try contradiction; auto.
   apply Singleton_inv in H0.
-  destruct (bool_dec (x =? x0) true); simpl.
-  + apply beq_nat_true in e.
-    lia.
-  + apply not_true_iff_false in n; rewrite n.
-    auto.
+  simpl.
+  DecidSimple x x0.
 Qed.
+#[global]
+Hint Resolve FVars_Close_Beq_Names : Piull.
 
 
+(**
+*)
 Lemma FVars_Close_Beq :
 forall ( P : Process ) (u x i : nat),
 u <> x -> u ∈ FVars P -> u ∈ FVars (Close_Rec i x P).
 Proof.
-  induction P; intros; simpl; auto.
-  + simpl in H0.
-    apply Union_inv in H0.
-    destruct H0.
-    - left.
-      rewrite (FVars_Close_Beq_Names _ u _ _ ); auto.
-      simpl; constructor.
-    - right.
-      rewrite (FVars_Close_Beq_Names _ u _ _ ); auto.
-      simpl; constructor.
-  + simpl in H0.
-    apply Union_inv in H0.
-    destruct H0.
-    - left; apply IHP1; auto.
-    - right; apply IHP2; auto.
-  + simpl in H0.
-    apply Union_inv in H0.
-    destruct H0.
+  induction P; intros; 
+  try simpl in H0; try apply Union_inv in H0; Piauto.
+  + destruct H0.
+    - OrSearchRew (FVars_Close_Beq_Names x u x0 i).
+    - OrSearchRew (FVars_Close_Beq_Names y u x0 i).
+  + destruct H0.
+    - OrSearchApp (IHP1).
+    - OrSearchApp (IHP2).
+  + destruct H0.
     - apply Union_inv in H0.
       destruct H0.
-      * left; left.
-        rewrite (FVars_Close_Beq_Names _ u _ _ ); auto.
-        simpl; constructor.
-      * left; right.
-        rewrite (FVars_Close_Beq_Names _ u _ _ ); auto.
-        simpl; constructor.
-    - right.
-      apply IHP; auto.
-  + simpl in H0.
-    rewrite (FVars_Close_Beq_Names _ u _ _ ); auto.
-    simpl; constructor.
-  + simpl in H0.
-    apply Union_inv in H0.
-    destruct H0.
-    - left.
-      rewrite (FVars_Close_Beq_Names _ u _ _ ); auto.
-      simpl; constructor.
-    - right.
-      apply IHP; auto.
-  + simpl in H0.
-    apply Union_inv in H0.
-    destruct H0.
-    - left.
-      rewrite (FVars_Close_Beq_Names _ u _ _ ); auto.
-      simpl; constructor.
-    - right.
-      apply IHP; auto.
-  + simpl in H0.
-    apply Union_inv in H0.
-    destruct H0.
-    - left.
-      rewrite (FVars_Close_Beq_Names _ u _ _ ); auto.
-      simpl; constructor.
-    - right.
-      apply IHP; auto.
+      * OrSearchRew (FVars_Close_Beq_Names x u x0 i).
+      * OrSearchRew (FVars_Close_Beq_Names y u x0 i).
+    - OrSearchApp (IHP).
+  + simpl.
+    OrSearchRew (FVars_Close_Beq_Names x u x0 i).
+  + destruct H0.
+    - OrSearchRew (FVars_Close_Beq_Names x u x0 i).
+    - OrSearchApp (IHP).
+  + simpl; apply IHP; auto.
+  + destruct H0.
+    - OrSearchRew (FVars_Close_Beq_Names x u x0 i).
+    - OrSearchApp (IHP).
+  + destruct H0.
+    - OrSearchRew (FVars_Close_Beq_Names x u x0 i).
+    - OrSearchApp (IHP).
 Qed.
+#[global]
+Hint Resolve FVars_Close_Beq : Piull.
 
 
-
+(**
+*)
 Lemma FVars_Open_Beq_Names :
 forall (x : Name)(u x0 i: nat),
 u ∈ FVars_Name x -> FVars_Name (Open_Name i x0 x) = Singleton nat u.
@@ -402,10 +317,11 @@ Proof.
   rewrite H.
   auto.
 Qed.
+#[global]
+Hint Resolve FVars_Open_Beq_Names : Piull.
 
 
-
-(*
+(**
 *)
 Lemma FVars_Open_Beq_Names_Inv :
 forall (x : Name)(u x0 i: nat),
@@ -430,9 +346,11 @@ Proof.
       simpl in H0.
       contradiction.
 Qed.
+#[global]
+Hint Resolve FVars_Open_Beq_Names_Inv : Piull.
 
 
-(*
+(**
 *)
 Lemma FVars_Open_Beq :
 forall ( P : Process)(u x i: nat),
@@ -442,26 +360,16 @@ Proof.
   induction P; intros; simpl; try constructor; try intros; try contradiction.
   + apply Union_inv in H0.
     destruct H0.
-    - left.
-      rewrite (FVars_Open_Beq_Names x u x0 i); auto.
-      constructor.
-    - right.
-      rewrite (FVars_Open_Beq_Names y u x0 i); auto.
-      constructor.
+    - OrSearchRew (FVars_Open_Beq_Names x u x0 i).
+    - OrSearchRew (FVars_Open_Beq_Names y u x0 i).
   + apply Union_inv in H0.
     destruct H0.
-    - left.
-      rewrite (FVars_Open_Beq_Names_Inv _ u x0 i); auto.
-      constructor.
-    - right.
-      rewrite (FVars_Open_Beq_Names_Inv _ u x0 i); auto.
-      constructor.
+    - OrSearchRew (FVars_Open_Beq_Names_Inv x u x0 i).
+    - OrSearchRew (FVars_Open_Beq_Names_Inv y u x0 i).
   + apply Union_inv in H0.
     destruct H0.
-    - left.
-      apply IHP1; auto.
-    - right.
-      apply IHP2; auto.
+    - OrSearchApp (IHP1).
+    - OrSearchApp (IHP2).
   + apply Union_inv in H0.
     destruct H0.
     - left.
@@ -472,367 +380,192 @@ Proof.
     destruct H0.
     - apply Union_inv in H0.
       destruct H0.
-      * left. left.
-        rewrite (FVars_Open_Beq_Names x u x0 i); auto.
-        constructor.
-      * left. right.
-        rewrite (FVars_Open_Beq_Names y u x0 i); auto.
-        constructor.
-    - right.
-      apply IHP; auto.
+      * OrSearchRew (FVars_Open_Beq_Names x u x0 i).
+      * OrSearchRew (FVars_Open_Beq_Names y u x0 i).
+    - OrSearchApp (IHP).
   + apply Union_inv in H0.
     destruct H0.
     - apply Union_inv in H0.
       destruct H0.
-      * left. left.
-        rewrite (FVars_Open_Beq_Names_Inv x u x0 i); auto.
-        constructor.
-      * left. right.
-        rewrite (FVars_Open_Beq_Names_Inv y u x0 i); auto.
-        constructor.
+      * OrSearchRew (FVars_Open_Beq_Names_Inv x u x0 i).
+      * OrSearchRew (FVars_Open_Beq_Names_Inv y u x0 i).
     - right.
       apply <- (IHP u x0 i); auto.
-  + rewrite (FVars_Open_Beq_Names x u x0 i); auto.
-    constructor.
-  + rewrite (FVars_Open_Beq_Names_Inv x u x0 i); auto.
-    constructor.
+  + OrSearchRew (FVars_Open_Beq_Names x u x0 i).
+  + OrSearchRew (FVars_Open_Beq_Names_Inv x u x0 i).
   + apply Union_inv in H0.
     destruct H0.
-    - left. 
-      rewrite (FVars_Open_Beq_Names x u x0 i); auto.
-      constructor.
-    - right; apply IHP; auto.
+    - OrSearchRew (FVars_Open_Beq_Names x u x0 i).
+    - OrSearchApp (IHP).
   + apply Union_inv in H0.
     destruct H0.
-    - left.
-      rewrite (FVars_Open_Beq_Names_Inv _ u x0 i); auto.
-      constructor.
+    - OrSearchRew (FVars_Open_Beq_Names_Inv x u x0 i).
     - right; apply <- (IHP u x0 i); auto.
   + apply IHP; auto.
   + apply <- (IHP u x (S i)); auto.
   + apply Union_inv in H0.
     destruct H0.
-    - left.
-      rewrite (FVars_Open_Beq_Names x u x0 i); auto.
-      constructor.
-    - right; apply IHP; auto.
+    - OrSearchRew (FVars_Open_Beq_Names x u x0 i).
+    - OrSearchApp (IHP).
   + apply Union_inv in H0.
     destruct H0.
-    - left.
-      rewrite (FVars_Open_Beq_Names_Inv _ u x0 i); auto.
-      constructor.
+    - OrSearchRew (FVars_Open_Beq_Names_Inv x u x0 i).
     - right; apply <- (IHP u x0 (S i)); auto.
   + apply Union_inv in H0.
     destruct H0.
-    - left.
-      rewrite (FVars_Open_Beq_Names x u x0 i); auto.
-      constructor.
-    - right; apply IHP; auto.
+    - OrSearchRew (FVars_Open_Beq_Names x u x0 i).
+    - OrSearchApp (IHP).
   + apply Union_inv in H0.
     destruct H0.
-    - left.
-      rewrite (FVars_Open_Beq_Names_Inv _ u x0 i); auto.
-      constructor.
+    - OrSearchRew (FVars_Open_Beq_Names_Inv x u x0 i).
     - right; apply <- (IHP u x0 (S i)); auto.
 Qed.
+#[global]
+Hint Resolve FVars_Open_Beq : Piull.
 
 
-
-
-
+(**
+*)
 Lemma FVars_Open :
 forall (Q : Process)( y x i : nat),
 x ∈ FVars ( {i ~> y} Q ) ->  x = y \/ x ∈ FVars ( Q ).
 Proof.
-  induction Q; intros; simpl; auto.
-  + simpl in H.
-    apply Union_inv in H.
-    destruct H.
-    - destruct x.
-      * simpl in *.
-        apply Singleton_inv in H.
-        right; left. rewrite H; constructor.
-      * simpl in *.
-        EasyDec i i0 e n.
-        rewrite e in H.
-        simpl in H.
-        apply Singleton_inv in H.
-        auto.
-        rewrite n in H.
-        simpl in H.
-        contradiction.
-    - destruct y.
-      * simpl in *.
-        apply Singleton_inv in H.
-        right; right; rewrite H; constructor.
-      * simpl in *.
-        EasyDec i i0 e n.
-        rewrite e in H.
-        simpl in H.
-        apply Singleton_inv in H.
-        auto.
-        rewrite n in H.
-        simpl in H.
-        contradiction; auto.
-  + simpl in H.
-    apply Union_inv in H.
-    destruct H.
+  induction Q; 
+  intros;
+  try simpl in *; try apply Union_inv in H; Piauto.
+  + destruct H.
+    - destruct x; simpl in *.
+      * apply Singleton_inv in H.
+        OrSearchRew H.
+      * FVars_Open_Lt H i i0.
+    - destruct y; simpl in *.
+      * apply Singleton_inv in H.
+        OrSearchRew H.
+      * FVars_Open_Lt H i i0.
+  + destruct H.
     - apply IHQ1 in H.
       destruct H; auto.
-      right; left; auto.
+      OrSearch.
     - apply IHQ2 in H.
       destruct H; auto.
-      right; right; auto.
-  + simpl in H.
-    apply Union_inv in H.
-    destruct H.
+      OrSearch.
+  + destruct H.
     - apply Union_inv in H.
       destruct H.
-      * destruct x.
-        ** simpl in *.
-          apply Singleton_inv in H.
+      * destruct x; simpl in *.
+        ** apply Singleton_inv in H.
           rewrite H.
-          right; left; left. constructor.
-        ** simpl in *.
-          EasyDec i i0 e n.
-          rewrite e in H.
-          simpl in H.
-          apply Singleton_inv in H.
+          OrSearch.
+        ** FVars_Open_Lt H i i0.
+      * destruct y; simpl in *.
+        ** apply Singleton_inv in H.
           rewrite H.
-          auto.
-          rewrite n in H.
-          simpl in H.
-          contradiction.
-      * destruct y.
-        ** simpl in *.
-          apply Singleton_inv in H.
-          rewrite H.
-          right; left; right. constructor.
-        ** simpl in *.
-          EasyDec i i0 e n.
-          rewrite e in H.
-          simpl in H.
-          apply Singleton_inv in H.
-          rewrite H.
-          auto.
-          rewrite n in H.
-          simpl in H.
-          contradiction.
+          OrSearch.
+        ** FVars_Open_Lt H i i0.
     - apply IHQ in H.
       destruct H; auto.
-      right; right; auto.
-  + simpl in H.
-    destruct x.
-    - simpl in *.
-      apply Singleton_inv in H.
+      OrSearch.
+  + destruct x; simpl in *.
+    - apply Singleton_inv in H.
       rewrite H.
-      right; constructor.
-    - simpl in *.
-      EasyDec i i0 e n.
-      rewrite e in H.
-      simpl in H.
-      apply Singleton_inv in H.
-      rewrite H.
-      auto.
-      rewrite n in H.
-      simpl in H.
-      contradiction.
-  + simpl in H.
-    apply Union_inv in H.
-    destruct H.
-    - destruct x.
-      * simpl in *.
-        apply Singleton_inv in H.
+      OrSearch.
+    - FVars_Open_Lt H i i0.
+  + destruct H.
+    - destruct x; simpl in *.
+      * apply Singleton_inv in H.
         rewrite H.
-        right; left; constructor.
-      * simpl in *.
-        EasyDec i i0 e n.
-        rewrite e in H.
-        simpl in H.
-        apply Singleton_inv in H.
-        rewrite H.
-        auto.
-        rewrite n in H.
-        simpl in H.
-        contradiction.
+        OrSearch.
+      * FVars_Open_Lt H i i0.
     - apply IHQ in H.
       destruct H; auto.
-      right; right; auto.
-  + simpl in H.
-    apply (IHQ _ _ (S i)); auto.
-  + simpl in H.
-    apply Union_inv in H.
-    destruct H.
-    - destruct x.
-      * simpl in *.
-        apply Singleton_inv in H.
+      OrSearch.
+  + apply (IHQ _ _ (S i)); auto.
+  + destruct H.
+    - destruct x; simpl in *.
+      * apply Singleton_inv in H.
         rewrite H.
-        right; left; constructor.
-      * simpl in *.
-        EasyDec i i0 e n.
-        rewrite e in H.
-        simpl in H.
-        apply Singleton_inv in H.
-        rewrite H.
-        auto.
-        rewrite n in H.
-        simpl in H.
-        contradiction.
+        OrSearch.
+      * FVars_Open_Lt H i i0.
     - apply IHQ in H.
       destruct H; auto.
-      right; right; auto.
-  + simpl in H.
-    apply Union_inv in H.
-    destruct H.
-    - destruct x.
-      * simpl in *.
-        apply Singleton_inv in H.
+      OrSearch.
+  + destruct H.
+    - destruct x; simpl in *.
+      * apply Singleton_inv in H.
         rewrite H.
-        right; left; constructor.
-      * simpl in *.
-        EasyDec i i0 e n.
-        rewrite e in H.
-        simpl in H.
-        apply Singleton_inv in H.
-        rewrite H.
-        auto.
-        rewrite n in H.
-        simpl in H.
-        contradiction.
+        OrSearch.
+      * FVars_Open_Lt H i i0.
     - apply IHQ in H.
       destruct H; auto.
-      right; right; auto.
+      OrSearch.
 Qed.
+#[global]
+Hint Resolve FVars_Open : Piull.
 
 
+(**
+*)
 Lemma FVars_Beq_Close :
 forall ( Q : Process)(x x0 i : nat),
 x <> x0 -> x ∈ FVars (Close_Rec i x0 Q) -> 
 x ∈ FVars (Q).
 Proof.
-  induction Q; intros; simpl; auto.
-  + simpl in H0.
-    apply Union_inv in H0.
-    destruct H0.
+  induction Q; 
+  intros; simpl in *; 
+  try apply Union_inv in H0; Piauto.
+  + destruct H0.
     - destruct x; 
        simpl in H0; try contradiction; auto.
-      EasyDec x x1 e n.
-      rewrite e in H0.
-      simpl in H0.
-      contradiction.
-      rewrite n in H0.
-      apply Singleton_inv in H0.
-      rewrite H0.
-      left; constructor.
+      FVars_Beq_Close_Lt H0 x x1.
     - destruct y; 
        simpl in H0; try contradiction; auto.
-      EasyDec x2 x1 e n.
-      rewrite e in H0.
-      simpl in H0.
-      contradiction.
-      rewrite n in H0.
-      apply Singleton_inv in H0.
-      rewrite H0.
-      right; constructor.
-  + simpl in H0.
-    apply Union_inv in H0.
-    destruct H0.
+      FVars_Beq_Close_Lt H0 x2 x1.
+  + destruct H0.
     - left.
       apply (IHQ1 _ x0 i); auto.
     - right.
       apply (IHQ2 _ x0 i); auto.
-  + simpl in H0.
-    apply Union_inv in H0.
-    destruct H0.
+  + destruct H0.
     - simpl in H0.
       apply Union_inv in H0.
       destruct H0.
       * destruct x; 
          simpl in H0; try contradiction; auto.
-        EasyDec x x1 e n.
-        rewrite e in H0.
-        simpl in H0.
-        contradiction.
-        rewrite n in H0.
-        apply Singleton_inv in H0.
-        rewrite H0.
-        left; left; constructor.
+        FVars_Beq_Close_Lt H0 x x1.
       * destruct y;
          simpl in H0; try contradiction; auto.
-        EasyDec x2 x1 e n.
-        rewrite e in H0.
-        simpl in H0.
-        contradiction.
-        rewrite n in H0.
-        apply Singleton_inv in H0.
-        rewrite H0.
-        left; right; constructor.
+        FVars_Beq_Close_Lt H0 x2 x1.
     - right.
       apply (IHQ x0 x1 i); auto.
-  + simpl in H0.
-    destruct x; 
+  + destruct x; 
      simpl in H0; try contradiction; auto.
-    EasyDec x x1 e n.
-    rewrite e in H0.
-    simpl in H0.
-    contradiction.
-    rewrite n in H0.
-    apply Singleton_inv in H0.
-    rewrite H0.
-    constructor.
-  + simpl in H0.
-    apply Union_inv in H0.
-    destruct H0.
+    FVars_Beq_Close_Lt H0 x x1.
+  + destruct H0.
     - destruct x; 
        simpl in H0; try contradiction; auto.
-      EasyDec x x1 e n.
-      rewrite e in H0.
-      simpl in H0.
-      contradiction.
-      rewrite n in H0.
-      apply Singleton_inv in H0.
-      rewrite H0.
-      left; constructor.
+      FVars_Beq_Close_Lt H0 x x1.
     - right.
       apply (IHQ x0 x1 i); auto.
-  + simpl in H0.
-    apply (IHQ x x0 (S i)); auto.
-  + simpl in H0.
-    apply Union_inv in H0.
-    destruct H0.
+  + apply (IHQ x x0 (S i)); auto.
+  + destruct H0.
     - destruct x; 
        simpl in H0; try contradiction; auto.
-      EasyDec x x1 e n.
-      rewrite e in H0.
-      simpl in H0.
-      contradiction.
-      rewrite n in H0.
-      apply Singleton_inv in H0.
-      rewrite H0.
-      left; constructor.
+      FVars_Beq_Close_Lt H0 x x1.
     - right.
       apply (IHQ x0 x1 (S i)); auto.
-  + simpl in H0.
-    apply Union_inv in H0.
-    destruct H0.
+  + destruct H0.
     - destruct x; 
        simpl in H0; try contradiction; auto.
-      EasyDec x x1 e n.
-      rewrite e in H0.
-      simpl in H0.
-      contradiction.
-      rewrite n in H0.
-      apply Singleton_inv in H0.
-      rewrite H0.
-      left; constructor.
+      FVars_Beq_Close_Lt H0 x x1.
     - right.
       apply (IHQ x0 x1 (S i)); auto.
 Qed.
+#[global]
+Hint Resolve FVars_Beq_Close : Piull.
 
 
-
-
-
+(**
+*)
 Lemma FVars_Close_NotIn :
 forall ( P : Process )( x x0 i: nat),
 x <> x0 -> ~ x ∈ FVars (Close_Rec i x0 P) -> ~ x ∈ FVars (P).
@@ -954,10 +687,12 @@ Proof.
       apply IHP in HB; auto.
       contradiction.
 Qed.
+#[global]
+Hint Resolve FVars_Close_NotIn : Piull.
 
 
-
-
+(**
+*)
 Lemma FVars_Subst :
 forall ( P : Process )( x y x0 : nat ), 
 x ∈ FVars ({y \ x0} P) -> x = y \/ x ∈ FVars (P).
@@ -968,7 +703,7 @@ Proof.
     destruct H.
     - destruct x; try contradiction.
       simpl in H.
-      EasyDec x x1 e n.
+      DecidSimple x x1.
       rewrite e in H.
       apply Singleton_inv in H; auto.
       rewrite n in H.
@@ -978,7 +713,7 @@ Proof.
       constructor.
     - destruct y; try contradiction.
       simpl in H.
-      EasyDec x2 x1 e n.
+      DecidSimple x2 x1.
       rewrite e in H.
       apply Singleton_inv in H; auto.
       rewrite n in H.
@@ -1002,7 +737,7 @@ Proof.
       destruct H.
       * destruct x; try contradiction.
         simpl in H.
-        EasyDec x x1 e n.
+        DecidSimple x x1.
         rewrite e in H.
         apply Singleton_inv in H; auto.
         rewrite n in H.
@@ -1012,7 +747,7 @@ Proof.
         constructor.
       * destruct y; try contradiction.
         simpl in H.
-        EasyDec x2 x1 e n.
+        DecidSimple x2 x1.
         rewrite e in H.
         apply Singleton_inv in H; auto.
         rewrite n in H.
@@ -1026,7 +761,7 @@ Proof.
   + simpl in H.
     destruct x; try contradiction.
     simpl in H.
-    EasyDec x x1 e n.
+    DecidSimple x x1.
     rewrite e in H.
     apply Singleton_inv in H; auto.
     rewrite n in H.
@@ -1039,7 +774,7 @@ Proof.
     destruct H.
     - destruct x; try contradiction.
       simpl in H.
-      EasyDec x x1 e n.
+      DecidSimple x x1.
       rewrite e in H.
       apply Singleton_inv in H; auto.
       rewrite n in H.
@@ -1057,7 +792,7 @@ Proof.
     destruct H.
     - destruct x; try contradiction.
       simpl in H.
-      EasyDec x x1 e n.
+      DecidSimple x x1.
       rewrite e in H.
       apply Singleton_inv in H; auto.
       rewrite n in H.
@@ -1073,7 +808,7 @@ Proof.
     destruct H.
     - destruct x; try contradiction.
       simpl in H.
-      EasyDec x x1 e n.
+      DecidSimple x x1.
       rewrite e in H.
       apply Singleton_inv in H; auto.
       rewrite n in H.
@@ -1085,7 +820,8 @@ Proof.
       destruct H; auto.
       right; right; auto.
 Qed.
-
+#[global]
+Hint Resolve FVars_Subst : Piull.
 
 
 

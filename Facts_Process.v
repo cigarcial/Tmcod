@@ -424,9 +424,11 @@ Proof.
   intros.
   destruct N.
   + simpl.
-    EasyDec x0 x e n.
+    DecidSimple x0 x.
   + simpl.
-    EasyDec i0 i e n; try EasyDec i0 j e n0.
+    DecidSimple i0 i.
+    rewrite n.
+    DecidSimple i0 j.
 Qed.
 
 
@@ -451,8 +453,7 @@ Proof.
   simpl.
   rewrite (Subst_Open_Exchange Q x u y y 0); auto.
   simpl.
-  EasyDec y x e n.
-  apply beq_nat_true in e; lia.
+  DecidSimple y x.
 Qed.
 
 
@@ -465,13 +466,11 @@ Proof.
   intros.
   destruct N.
   + simpl.
-    EasyDec x0 x e n.
+    DecidSimple x0 x.
   + simpl.
-    EasyDec i i0 e n.
-    specialize (beq_nat_refl x) as HT.
-    apply eq_sym in HT.
-    rewrite HT.
-    auto.
+    DecidSimple i i0.
+    simpl.
+    DecidSimple x x.
 Qed.
 
 
@@ -502,9 +501,13 @@ Subst_Name y u (Close_Name i y x) = Close_Name i y x.
 Proof.
   destruct x; auto.
    simpl.
-   EasyDec x y e n.
+   DecidSimple x y.
    rewrite n.
-   auto.
+   simpl.
+   DecidSimple x y.
+   apply beq_nat_true in e.
+   apply beq_nat_false in n.
+   lia.
 Qed.
 
 
@@ -660,7 +663,7 @@ Proof.
       specialize (beq_nat_refl x0) as HX.
       apply eq_sym in HX.
       rewrite HX.
-      EasyDec u x1 e1 n.
+      DecidSimple u x1.
     - apply not_true_iff_false in n.
       rewrite n.
       simpl.
@@ -674,7 +677,7 @@ Proof.
     - rewrite e.
       simpl.
       rewrite e.
-      EasyDec u x1 e0 n0.
+      DecidSimple u x1.
     - apply not_true_iff_false in n0.
       rewrite n0.
       simpl.

@@ -10,6 +10,7 @@ From Coq Require Import Bool.Bool.
 From Coq Require Import Arith.PeanoNat.
 From Coq Require Import Arith.EqNat.
 From Coq Require Import Lia.
+From Coq Require Import Finite_sets_facts.
 
 (**
   Custom database for the hints.
@@ -56,6 +57,63 @@ Ltac DecidSimple x y :=
 (**
 *)
 Ltac Piauto := auto with Piull.
+
+
+(**
+  Searching a proof where the goal contains multiple or operators.
+  Keep in mind that this tactics is exponential.
+*)
+Ltac OrSearch :=
+  (progress auto with *) +
+  (left; OrSearch) + 
+  (right; OrSearch).
+
+
+(**
+*)
+Ltac OrSearchRew L :=
+  (rewrite L; simpl; progress auto with *) +
+  (left; OrSearchRew L) +
+  (right; OrSearchRew L).
+
+
+(**
+*)
+Ltac OrSearchApp L :=
+  (apply L; simpl; progress auto with *) +
+  (left; OrSearchApp L) +
+  (right; OrSearchApp L).
+
+
+(**
+*)
+Ltac FVars_Open_Lt H i i0 := 
+  DecidSimple i i0;
+  match goal with
+    | e : (i =? i0 ) = true |- _ => rewrite e in H;
+          simpl in H;
+          apply Singleton_inv in H;
+          rewrite H
+    | n : (i =? i0 ) = false |- _ => rewrite n in H;
+        simpl in H;
+        contradiction
+  end; Piauto.
+
+
+(**
+*)
+Ltac FVars_Beq_Close_Lt H x x1 := 
+  DecidSimple x x1;
+  match goal with
+    | e : (x =? x1 ) = true |- _ => try rewrite e in H;
+          simpl in H;
+          contradiction
+    | n : (x =? x1 ) = false |- _ => rewrite n in H;
+        apply Singleton_inv in H;
+        rewrite H;
+        simpl
+  end; OrSearch.
+
 
 
 

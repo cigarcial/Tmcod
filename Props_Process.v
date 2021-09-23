@@ -97,16 +97,16 @@ forall ( k x : nat ), lc ( {k ~> x}P ).
 Proof.
   intros P H.
   induction H; intros; simpl.
-  + auto.
-  + rewrite Output_LCName_Output; auto.
-    rewrite Output_LCName_Output; auto.
+  + Piauto.
+  + rewrite Output_LCName_Output; Piauto.
+    rewrite Output_LCName_Output; Piauto.
   + constructor.
     apply IHlc1.
     apply IHlc2.
   + rewrite Output_LCName_Output; auto.
-    rewrite Output_LCName_Output; auto.
-  + rewrite Output_LCName_Output; auto.
-  + rewrite Output_LCName_Output; auto.
+    rewrite Output_LCName_Output; Piauto.
+  + rewrite Output_LCName_Output; Piauto.
+  + rewrite Output_LCName_Output; Piauto.
   + constructor.
     intros.
     rewrite Exchange_Open; auto.
@@ -194,7 +194,7 @@ lc P -> lc ({y \ x} P).
 Proof.
   intros.
   induction H.
-  + auto.
+  + Piauto.
   + simpl.
     specialize (Subst_Name_Output x y x0) as HA.
     specialize (Subst_Name_Output x y y0) as HB.
@@ -263,9 +263,9 @@ forall (P Q : Process)( x u : nat),
 P === Q -> ({u \ x}P) === ({u \ x}Q).
 Proof.
   intros.
-  induction H; try simpl; auto.
+  induction H; try simpl; Piauto.
   + simpl.
-    rewrite Subst_Bex_Exchange; auto.
+    rewrite Subst_Bex_Exchange; Piauto.
   + constructor.
     apply Subst_Lc_Lc.
     auto.
@@ -283,14 +283,14 @@ forall P Q : Process,
 (P === Q) -> lc(P)  -> lc(Q).
 Proof.
   intros.
-  induction H; inversions H0; auto.
+  induction H; inversions H0; Piauto.
   + apply ProcessAt_Process.
     do 2 constructor.
     apply Process_ProcessAt in H0.
     inversions H0.
     inversions H3.
     apply Lca_Bex; auto.
-  + inversions H2; auto.
+  + inversions H2; Piauto.
   + constructor. simpl.
     constructor.
     apply Open_Lc_Lc; auto.
