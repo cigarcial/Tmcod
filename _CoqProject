@@ -1,1 +1,14 @@
 -Q . Tmcod
+Defs_Tactics.v
+Defs_Proposition.v
+Defs_Process.v
+Defs_Typing.v
+
+Facts_FVars.v
+Facts_Names.v
+Props_Propositions.v
+
+Facts_Process.v
+Facts_MOpen.v
+Props_Process.v
+Props_Typing.v
