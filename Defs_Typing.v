@@ -1,7 +1,10 @@
-(*
-  Verificación Formal - Unam 2020-2
+(**
   Ciro Iván García López
-  Proyecto 1. Session Type Systems Verification
+  Tesis de Maestría
+  Session Type Systems Verification
+  Unam - 2021
+  
+  This file contains the tactis and Hint Db for the proofs.
 *)
 From Coq Require Import Lists.List.
 Import ListNotations.
@@ -10,32 +13,31 @@ From Tmcod Require Import  Defs_Proposition.
 From Tmcod Require Import  Defs_Process.
 
 
-(*
-Las siguientes definiciones son necesarias para poder hablar de inferencia, se encuentran sueltas a lo largo del parrafo 'Typing inference'. 
-
-Definición de Asignación.
+(**
 *)
 Inductive Assignment : Type := assig ( x : Name )( A : Proposition ) : Assignment.
 Notation " x : A " := (assig x A )(at level 60).
+#[global]
+Hint Constructors Assignment : Piull.
 
 
-(*
-Nuevamente, por la LNR no todo es necesario distinguir aquellas asignaciones que si tienen sentido.
+(**
 *)
 Inductive Assig : Assignment -> Prop :=
   is_assig :  forall (x : Name)(A:Proposition), lc_name x -> Assig ( x : A).
+#[global]
+Hint Constructors Assig : Piull.
 
 
-(*
-Definición de una colección de asignaciones.
+(**
 *)
 Inductive Collect : list Assignment -> Prop := is_collect :forall L : list Assignment,
   (forall H : Assignment, (In H L) -> Assig H ) -> Collect L.
+#[global]
+Hint Constructors Collect : Piull.
 
 
-
-(*
-Figura 1, reglas de inferencia.
+(**
 *)
 Reserved Notation "D ';;;'  F '!-' P ':::' G" (at level 60).
 Inductive Inference : Process -> list Assignment -> list Assignment -> list Assignment -> Prop := 
@@ -178,4 +180,9 @@ Inductive Inference : Process -> list Assignment -> list Assignment -> list Assi
 
 
 where "D ';;;'  F '!-' P ':::' G" := (Inference P D F G).
-Hint Constructors Inference : core.
+#[global]
+Hint Constructors Inference : Piull.
+
+
+
+

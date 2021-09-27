@@ -1,7 +1,10 @@
-(*
-  Verificación Formal - Unam 2020-2
+(**
   Ciro Iván García López
-  Proyecto 1. Session Type Systems Verification
+  Tesis de Maestría
+  Session Type Systems Verification
+  Unam - 2021
+
+  This file contains the basic facts concerning names.
 *)
 Require Import Coq.Program.Equality.
 
@@ -12,20 +15,19 @@ From Coq Require Import Lia.
 From Coq Require Import Sets.Constructive_sets.
 
 From Tmcod Require Import Defs_Tactics.
-From Tmcod Require Import Defs_Process.
 From Tmcod Require Import Defs_Proposition.
+From Tmcod Require Import Defs_Process.
 From Tmcod Require Import Defs_Typing.
-
 From Tmcod Require Import Facts_Names.
-From Tmcod Require Import Facts_Process.
 From Tmcod Require Import Facts_FVars.
-
+From Tmcod Require Import Facts_Process.
 From Tmcod Require Import Facts_MOpen.
 From Tmcod Require Import Props_Process.
 From Tmcod Require Import Facts_WSubst.
 
 
-
+(**
+*)
 Lemma Fuse_No_Reduces :
 forall (x y : Name)(Q : Process), 
 ~([x ←→  y] --> Q ).
@@ -35,8 +37,12 @@ Proof.
   inversions H.
   inversions H1.
 Qed.
+#[global]
+Hint Resolve Fuse_No_Reduces : Piull.
 
 
+(**
+*)
 Lemma Rep_Input_No_Reduces :
 forall (x: Name)(y : nat)(P Q : Process),
 ~((x !· Close y P) --> Q).
@@ -46,8 +52,12 @@ Proof.
   inversions H.
   inversions H1.
 Qed.
+#[global]
+Hint Resolve Rep_Input_No_Reduces : Piull.
 
 
+(**
+*)
 Lemma Chan_Close_No_Reduces :
 forall (x : Name)(P Q : Process),
 ~((x ()·P) --> Q).
@@ -57,8 +67,12 @@ Proof.
   inversions H.
   inversions H1.
 Qed.
+#[global]
+Hint Resolve Chan_Close_No_Reduces : Piull.
 
 
+(**
+*)
 Lemma Zero_No_Reduces :
 forall (x : Name)(Q : Process), 
 ~((x ·θ) --> Q).
@@ -68,10 +82,12 @@ Proof.
   inversions H.
   inversions H1.
 Qed.
+#[global]
+Hint Resolve Zero_No_Reduces : Piull.
 
 
-
-
+(**
+*)
 Lemma Chan_Input_No_Reduces :
 forall (x : Name)(y : nat)(P Q : Process),
 ~( (x · Close y P) --> Q ).
@@ -81,8 +97,12 @@ Proof.
   inversions H.
   inversions H1.
 Qed.
+#[global]
+Hint Resolve Chan_Input_No_Reduces : Piull.
 
 
+(**
+*)
 Lemma Parallel_Res_No_Reduces :
 forall (x : Name)(y : nat)(P Q Q0 : Process),
 ~( (ν Close y (x « FName y »· (P ↓ Q))) --> Q0 ).
@@ -95,8 +115,12 @@ Proof.
   inversions H4.
   inversions H1.
 Qed.
+#[global]
+Hint Resolve Parallel_Res_No_Reduces : Piull.
 
 
+(**
+*)
 Lemma Output_No_Reduces :
 forall (u x: nat)(P Q : Process),
 ~( (ν Close x (FName u « FName x »· P)) --> Q ).
@@ -109,8 +133,12 @@ Proof.
   inversions H4.
   inversions H1.
 Qed.
+#[global]
+Hint Resolve Output_No_Reduces : Piull.
 
 
+(**
+*)
 Lemma Extl2 :
 forall (P Q P0_2 P0_1 : Process)(x0 u x : nat)(x1 : Name),
 lc ((x1 !· P0_1) ↓ P0_2) ->
@@ -125,12 +153,16 @@ Proof.
   inversions H6.
   inversions H8.
   simpl in H2.
-  EasyDec x2 x0 e n; try rewrite n in H2; try discriminate.
+  DecidSimple x2 x0; try rewrite n in H2; try discriminate.
   apply beq_nat_true in e.
   rewrite e; auto.
 Qed.
+#[global]
+Hint Resolve Extl2 : Piull.
 
 
+(**
+*)
 Lemma Close_Same_Inv_Names :
 forall ( x y : Name)(i x0 : nat),
 lca_name i x -> lca_name i y ->
@@ -139,11 +171,11 @@ Proof.
   intros.
   destruct x.
   + simpl in H1.
-    EasyDec x x0 e n.
+    DecidSimple x x0.
     - rewrite e in H1.
       destruct y.
       * simpl in H1.
-        EasyDec x1 x0 e0 n.
+        DecidSimple x1 x0.
         apply beq_nat_true in e.
         apply beq_nat_true in e0.
         rewrite e.
@@ -158,7 +190,7 @@ Proof.
     - rewrite n in H1.
       destruct y.
       * simpl in H1.
-        EasyDec x1 x0 e n0.
+        DecidSimple x1 x0.
         rewrite e in H1.
         inversions H1.
         rewrite n0 in H1.
@@ -168,7 +200,7 @@ Proof.
   + simpl in H1.
     destruct y.
     - simpl in H1.
-      EasyDec x x0 e n.
+      DecidSimple x x0.
       * rewrite e in H1.
         inversions H1.
         inversions H.
@@ -179,8 +211,12 @@ Proof.
       inversion H1.
       auto.
 Qed.
+#[global]
+Hint Resolve Close_Same_Inv_Names : Piull.
 
 
+(**
+*)
 Lemma Close_Same_Inv :
 forall ( P Q : Process )( x i : nat ),
 lca i P -> lca i Q ->
@@ -190,8 +226,8 @@ Proof.
   + simpl in H1.
     inversions H1.
     try inversions H; try inversions H0.
-    apply Close_Same_Inv_Names in H3; auto.
-    apply Close_Same_Inv_Names in H4; auto.
+    apply Close_Same_Inv_Names in H3; Piauto.
+    apply Close_Same_Inv_Names in H4; Piauto.
     subst; auto.
   + simpl in H1.
     inversions H1.
@@ -241,31 +277,24 @@ Proof.
     specialize (IHP _ _ (S i) H8 H10 H4).
     subst; auto.
 Qed.
+#[global]
+Hint Resolve Close_Same_Inv : Piull.
 
 
-Hypothesis Close_Susbst_Beh : forall(P P0: Process)(x y z: nat), P = Close x P0 -> x <> y.
-
-
-(*
-Teorema 2.1 del artículo.
+(**
 *)
 Theorem SoundnessX : 
 forall (P : Process)(D F G : list Assignment),
   ( D ;;; F !- P ::: G ) -> forall (Q : Process), (P === Q) -> ( D ;;; F !- Q ::: G ).
 Proof.
-  intros P D F G H Q HA.
-  dependent induction H; try inversions HA.
-  + admit.
-  + admit.
-  + admit.
-  + admit.
-  + admit.
-  + admit.
+  intros. 
+  dependent induction H.
 Admitted.
-  
+#[global]
+Hint Resolve SoundnessX : Piull.
 
-(*
-Teorema 2.1 del artículo.
+
+(**
 *)
 Theorem Soundness : 
 forall (P : Process)(D F G : list Assignment),
@@ -336,10 +365,10 @@ Proof.
         ** inversion H15.
            admit.
            inversions H21; inversions H23.
-           
-        ** 
-      * admit. (* facil *)
-      * admit. (* facil *)
+           admit.
+        ** admit.
+      * Piauto.
+      * Piauto.
     - inversions H10.
       specialize (beq_nat_refl u) as Hx.
       apply eq_sym in Hx.

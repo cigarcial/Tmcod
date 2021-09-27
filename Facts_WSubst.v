@@ -1,7 +1,10 @@
-(*
-  Verificación Formal - Unam 2020-2
+(**
   Ciro Iván García López
-  Proyecto 1. Session Type Systems Verification
+  Tesis de Maestría
+  Session Type Systems Verification
+  Unam - 2021
+  
+  This file contains the tactis and Hint Db for the proofs.
 *)
 Require Import Coq.Program.Equality.
 
@@ -14,14 +17,13 @@ From Coq Require Import Sets.Constructive_sets.
 From Tmcod Require Import Defs_Tactics.
 From Tmcod Require Import Defs_Process.
 From Tmcod Require Import Defs_Typing.
-
-
 From Tmcod Require Import Facts_Names.
 From Tmcod Require Import Facts_FVars.
 From Tmcod Require Import Facts_Process.
 From Tmcod Require Import Props_Process.
 
-(*
+
+(**
 *)
 Lemma Well_Subst_Chan_Output :
 forall (P : Process)(x0 y : Name)( u x : nat),
@@ -34,12 +36,15 @@ Proof.
   intros.
   apply H0.
   simpl.
-  right.
-  auto.
+  OrSearch.
   inversions H; auto.
 Qed.
+#[global]
+Hint Resolve Well_Subst_Chan_Output : Piull.
 
 
+(**
+*)
 Lemma Well_Subst_Chan_Close :
 forall (P : Process)(x0 : Name)( u x : nat),
 Well_Subst (x0 ()·P) u x -> Well_Subst P u x.
@@ -50,11 +55,15 @@ Proof.
   inversions H.
   apply H1.
   simpl.
-  right.
-  auto.
+  OrSearch.
   inversions H; auto.
 Qed.
+#[global]
+Hint Resolve Well_Subst_Chan_Close : Piull.
 
+
+(**
+*)
 Lemma Well_Subst_Chan_Res :
 forall ( P : Process )( u x : nat),
 Well_Subst (ν P) u x -> Well_Subst P u x.
@@ -64,14 +73,21 @@ Proof.
   intros.
   inversions H.
   apply H1.
-  simpl.
-  auto.
+  Piauto.
   inversions H; auto.
 Qed.
+#[global]
+Hint Resolve Well_Subst_Chan_Res : Piull.
 
+Ltac Aux_Ltac_1 H H1 :=
+  inversions H;
+  apply In_FVars_Name_Subst in H1;
+  destruct H1;
+  (rewrite H1;
+  simpl;
+  OrSearch) + (contradiction).
 
-
-(*
+(**
 *)
 Lemma Lc_WSubst_Subst_WSubst :
 forall (P : Process)( u x : nat),
@@ -91,29 +107,13 @@ Proof.
     apply Union_inv in H1.
     apply H3.
     destruct H1.
-    - inversions H.
-      left.
-      apply In_FVars_Name_Subst in H1.
-      destruct H1.
-      rewrite H1.
-      simpl.
-      constructor.
-      contradiction.
-    - inversions H2.
-      apply In_FVars_Name_Subst in H1.
-      destruct H1.
-      rewrite H1.
-      right.
-      simpl.
-      constructor.
-      contradiction.
+    - Aux_Ltac_1 H H1.
+    - Aux_Ltac_1 H2 H1.
   + inversions H0.
     apply No_FVars_Parallel in H3.
     destruct H3 as [HA HB].
     simpl in H1.
-    inversions H1.
-    apply IHlc1; try constructor; auto.
-    apply IHlc2; try constructor; auto.
+    inversions H1; Piauto.
   + simpl in H1.
     inversions H0.
     apply H4.
@@ -122,50 +122,21 @@ Proof.
     destruct H1.
     - apply Union_inv in H1.
       destruct H1.
-      * inversions H.
-        apply In_FVars_Name_Subst in H1.
-        destruct H1.
-        rewrite H1.
-        left. left.
-        simpl.
-        constructor.
-        contradiction.
-      * inversions H2.
-        apply In_FVars_Name_Subst in H1.
-        destruct H1.
-        rewrite H1.
-        left. right.
-        simpl.
-        constructor.
-        contradiction.
+      * Aux_Ltac_1 H H1.
+      * Aux_Ltac_1 H2 H1.
     - apply Well_Subst_Chan_Output in H0.
       specialize (IHlc H0 H1).
       contradiction.
   + inversions H0.
     apply H2.
-    simpl.
-    simpl in H1.
-    inversions H.
-    apply In_FVars_Name_Subst in H1.
-    destruct H1.
-    rewrite H1.
-    simpl.
-    constructor.
-    contradiction.
+    simpl in *.
+    Aux_Ltac_1 H H1.
   + inversions H0.
     apply H3.
-    simpl.
-    simpl in H1.
+    simpl in *.
     apply Union_inv in H1.
     destruct H1.
-    - inversions H.
-      apply In_FVars_Name_Subst in H1.
-      destruct H1.
-      rewrite H1.
-      simpl.
-      left.
-      constructor.
-      contradiction.
+    - Aux_Ltac_1 H H1.
     - apply Well_Subst_Chan_Close in H0.
       specialize (IHlc H0 H1).
       contradiction.
@@ -174,42 +145,29 @@ Proof.
     apply (After_Subst_No_FVar P u x); auto.
   + inversions H0.
     apply H4.
-    simpl.
-    simpl in H1.
+    simpl in *.
     apply Union_inv in H1.
     destruct H1.
-    - inversions H.
-      apply In_FVars_Name_Subst in H1.
-      destruct H1.
-      rewrite H1.
-      simpl.
-      left.
-      constructor.
-      contradiction.
+    - Aux_Ltac_1 H H1.
     - apply (After_Subst_No_FVar P u x) in H1; auto.
       contradiction.
   + inversions H0.
     apply H4.
-    simpl.
-    simpl in H1.
+    simpl in *.
     apply Union_inv in H1.
     destruct H1.
-    - inversions H.
-      apply In_FVars_Name_Subst in H1.
-      destruct H1.
-      rewrite H1.
-      simpl.
-      left.
-      constructor.
-      contradiction.
+    - Aux_Ltac_1 H H1.
     - apply (After_Subst_No_FVar P u x) in H1; auto.
       contradiction.
   + inversions H0.
     auto.
 Qed.
+#[global]
+Hint Resolve Lc_WSubst_Subst_WSubst : Piull.
 
 
-
+(**
+*)
 Lemma Well_Subst_Reduction_Susbt :
 forall ( P Q : Process)(x u : nat),
 Well_Subst P x u -> lc P ->
@@ -217,89 +175,57 @@ Well_Subst P x u -> lc P ->
 Proof.
   intros.
   assert (HA := H1).
-  dependent induction H1.
-  + simpl.
-    destruct (bool_dec (x0 =? x) true).
+  dependent induction H1; simpl; Piauto.
+  + DecidSimple x0 x; Piauto.
+    - DecidSimple y x; Piauto.
+      * apply beq_nat_true in e0.
+        rewrite e0.
+        rewrite Subst_Open_Eq_Exchange.
+        Piauto.
+      * rewrite n.
+        rewrite <- Subst_Open_NEq_Exchange.
+        Piauto.
+        apply beq_nat_false in n.
+        auto.
+    - DecidSimple y x; Piauto.
+      * rewrite n.
+        apply beq_nat_true in e.
+        rewrite e.
+        rewrite Subst_Open_Eq_Exchange.
+        Piauto.
+      * rewrite n. rewrite n0.
+        rewrite <- Subst_Open_NEq_Exchange.
+        Piauto.
+        apply beq_nat_false in n0.
+        auto.
+  + destruct (bool_dec (x0 =? x) true).
     - destruct (bool_dec (y =? x) true).
       * rewrite e. rewrite e0.
         apply beq_nat_true in e.
         apply beq_nat_true in e0.
         rewrite e0.
         rewrite Subst_Open_Eq_Exchange.
-        constructor.
-        apply Subst_Lc_Lc; auto.
-        apply Subst_Body_Body; auto.
-      * rewrite e. 
+        Piauto.
+      * rewrite e.
         apply not_true_iff_false in n. rewrite n.
         rewrite <- Subst_Open_NEq_Exchange.
-        constructor.
-        apply Subst_Lc_Lc; auto.
-        apply Subst_Body_Body; auto.
-        apply beq_nat_false in n.
-        auto.
+        Piauto.
+        apply beq_nat_false in n; auto.
     - destruct (bool_dec (y =? x) true).
       * rewrite e.
         apply not_true_iff_false in n. rewrite n.
         apply beq_nat_true in e.
         rewrite e.
         rewrite Subst_Open_Eq_Exchange.
-        constructor.
-        apply Subst_Lc_Lc; auto.
-        apply Subst_Body_Body; auto.
+        constructor; Piauto.
       * apply not_true_iff_false in n. rewrite n.
         apply not_true_iff_false in n0. rewrite n0.
         rewrite <- Subst_Open_NEq_Exchange.
-        constructor.
-        apply Subst_Lc_Lc; auto.
-        apply Subst_Body_Body; auto.
+        Piauto.
         apply beq_nat_false in n0.
         auto.
-  + simpl.
-    destruct (bool_dec (x0 =? x) true).
-    - destruct (bool_dec (y =? x) true).
-      * rewrite e. rewrite e0.
-        apply beq_nat_true in e.
-        apply beq_nat_true in e0.
-        rewrite e0.
-        rewrite Subst_Open_Eq_Exchange.
-        constructor.
-        apply Subst_Lc_Lc; auto.
-        apply Subst_Body_Body; auto.
-      * rewrite e. 
-        apply not_true_iff_false in n. rewrite n.
-        rewrite <- Subst_Open_NEq_Exchange.
-        constructor.
-        apply Subst_Lc_Lc; auto.
-        apply Subst_Body_Body; auto.
-        apply beq_nat_false in n.
-        auto.
-    - destruct (bool_dec (y =? x) true).
-      * rewrite e.
-        apply not_true_iff_false in n. rewrite n.
-        apply beq_nat_true in e.
-        rewrite e.
-        rewrite Subst_Open_Eq_Exchange.
-        constructor.
-        apply Subst_Lc_Lc; auto.
-        apply Subst_Body_Body; auto.
-      * apply not_true_iff_false in n. rewrite n.
-        apply not_true_iff_false in n0. rewrite n0.
-        rewrite <- Subst_Open_NEq_Exchange.
-        constructor.
-        apply Subst_Lc_Lc; auto.
-        apply Subst_Body_Body; auto.
-        apply beq_nat_false in n0.
-        auto.
-  + simpl.
-    destruct (bool_dec (x0 =? x) true).
-    - rewrite e.
-      constructor.
-      apply Subst_Lc_Lc; auto.
-    - apply not_true_iff_false in n; rewrite n.
-      constructor.
-      apply Subst_Lc_Lc; auto.
-  + simpl.
-    destruct (bool_dec (x0 =? x) true).
+  + DecidSimple x0 x; Piauto.
+  + destruct (bool_dec (x0 =? x) true).
     - destruct (bool_dec (y =? x) true).
       * rewrite e. rewrite e0.
         apply beq_nat_true in e.
@@ -307,9 +233,8 @@ Proof.
         rewrite e. rewrite e0.
         rewrite <- (Subst_By_Equal ({u \ x} ({x \ x} P)) u).
         rewrite (Subst_By_Equal P _ ).
-        constructor.
-        apply Subst_Lc_Lc; auto.
-      * rewrite e. 
+        Piauto.
+      * rewrite e.
         apply not_true_iff_false in n; rewrite n.
         apply beq_nat_true in e.
         rewrite e.
@@ -317,8 +242,7 @@ Proof.
         rewrite Double_Subst_AlreadySubst_Eq; auto.
         inversions H.
         rewrite (Double_Subst_Expan_NFVar P x y u); auto.
-        constructor.
-        apply Subst_Lc_Lc; auto.
+        constructor; Piauto.
         inversions H0.
         unfold not in *.
         intros.
@@ -330,57 +254,54 @@ Proof.
         apply beq_nat_true in e.
         rewrite e.
         rewrite Double_Subst_By_Same_Name.
-        constructor; auto.
-        apply Subst_Lc_Lc; auto.
+        Piauto.
       * apply not_true_iff_false in n. rewrite n.
         apply not_true_iff_false in n0. rewrite n0.
         inversions H.
         apply beq_nat_false in n.
         apply beq_nat_false in n0.
         rewrite Double_Subst_All_Dif; auto.
-        constructor.
-        apply Subst_Lc_Lc; auto.
+        constructor; Piauto.
         unfold not.
         intros.
         apply H2.
-        right.
         rewrite H4.
         simpl.
-        left; constructor.
-  + simpl.
-    constructor.
-    apply Subst_Lc_Lc; auto.
-    apply Subst_Lc_Lc; auto.
-    apply IHReduction; auto.
+        OrSearch.
+  + constructor; Piauto.
+    apply IHReduction; Piauto.
     inversions H.
     constructor; auto.
     unfold not in *.
     intros.
     apply H4.
-    right.
-    auto.
+    OrSearch.
     inversions H0; auto.
-  + simpl.
-    destruct (bool_dec (x =? x0) true).
+  + destruct (bool_dec (x =? x0) true).
     - apply beq_nat_true in e.
       rewrite e.
       unfold Close.
       do 2 rewrite Subst_Close_By_Equal_Name.
-      constructor; auto.
+      Piauto.
     - destruct (bool_dec (u =? x0) true).
-      * admit. (* imposible by construction - pi calculus *)
+      * (* Impossible by construction - pi calculus *)
+        inversions H.
+        simpl in H3.
+        specialize (Close_Subst_Beh P x0 x u) as Hx.
+        exfalso.
+        apply beq_nat_true in e.
+        apply Hx; Piauto.
       * apply not_true_iff_false in n.
         apply not_true_iff_false in n0.
         apply beq_nat_false in n.
         apply beq_nat_false in n0.
         unfold Close.
-        rewrite Subst_Close_Dif_Name; auto.
-        rewrite Subst_Close_Dif_Name; auto.
-        constructor; auto.
-        apply Subst_Lc_Lc; auto.
+        rewrite Subst_Close_Dif_Name; Piauto.
+        rewrite Subst_Close_Dif_Name; Piauto.
+        constructor; Piauto.
         apply IHReduction; auto.
         inversions H.
-        constructor; auto.
+        constructor; Piauto.
         unfold not.
         intros.
         apply H3.
@@ -388,49 +309,49 @@ Proof.
         apply FVars_Close_Beq; auto.
   + assert (HX : Well_Subst P' x u).
     inversions H.
-    constructor; auto.
+    constructor; Piauto.
     specialize (Cong_FVars P' P H2) as HT.
-    rewrite HT; auto.
+    rewrite HT; eauto with *.
     apply (Cong_Subst_Cong _ _ x u) in H2.
     apply (Cong_Subst_Cong _ _ x u) in H3.
-    apply (Red_reduction_struct _ _ ({u \ x} P') ({u \ x} Q')); auto.
-    apply Subst_Lc_Lc; auto.
-Admitted.
+    apply (Red_reduction_struct _ _ ({u \ x} P') ({u \ x} Q')); Piauto.
+Qed.
+#[global]
+Hint Resolve Well_Subst_Reduction_Susbt : Piull.
 
 
-
-(*
+(**
 *)
 Lemma Double_WSubst_Equality_Names :
 forall (x : Name)(x0 u : nat),
 ~ x0 ∈ FVars_Name x -> 
 Subst_Name x0 u (Subst_Name u x0 x) = x.
 Proof.
-  destruct x; intros; simpl; auto.
+  destruct x; intros; simpl; Piauto.
   simpl in H.
   assert( HA : x <> x0).
     unfold not in *.
     intros.
     apply H.
     rewrite H0; constructor.
+  simpl.
   DecidSimple x u.
-  + specialize (beq_nat_refl x0) as Hx.
-    apply eq_sym in Hx.
-    simpl.
-    rewrite Hx.
+  + simpl.
+    DecidSimple x0 x0.
     apply beq_nat_true in e.
-    rewrite e; auto.
-  + apply beq_nat_false_inv in HA.
+    Piauto.
+  + rewrite n.
     simpl.
-    rewrite n.
-    simpl.
+    apply beq_nat_false_inv in HA.
     rewrite HA.
     auto.
 Qed.
+#[global]
+Hint Resolve Double_WSubst_Equality_Names : Piull.
 
 
-
-
+(**
+*)
 Lemma Double_WSubst_Equality :
 forall (P : Process)( x u : nat),
 Well_Subst P u x -> ({u \ x} ({x \ u} P)) = P.
@@ -451,15 +372,19 @@ Proof.
   + apply No_Union_No_Each in HA;
     destruct HA as [HA HB]; auto.
 Qed.
+#[global]
+Hint Resolve Double_WSubst_Equality : Piull.
 
 
+(**
+*)
 Lemma Well_Subst_Red_Well_Subst :
 forall (P Q : Process)(u x : nat),
 Well_Subst P u x -> P --> Q -> 
 Well_Subst Q u x.
 Proof.
   intros.
-  dependent induction H0; try inversions H; try constructor; auto.
+  dependent induction H0; try inversions H; try constructor; Piauto.
   + unfold not.
     intros.
     simpl in H4.
@@ -551,7 +476,13 @@ Proof.
     simpl in H3.
     simpl in H4.
     DecidSimple x x0.
-    - admit. (* Impossible by construction - pi calculus *)
+    - (* Impossible by construction - pi calculus *)
+      inversions H.
+      simpl in H5.
+      specialize (Close_Subst_Beh P x0 u x) as Hx.
+      exfalso.
+      apply beq_nat_true in e.
+      apply Hx; Piauto.
     - apply beq_nat_false in n.
       specialize (FVars_Beq_Close Q x x0 _ n H4) as Hx.
       specialize (FVars_Close_NotIn P x x0 0 n H2) as Ht.
@@ -568,4 +499,7 @@ Proof.
     apply IHReduction in Hx.
     inversions Hx.
     contradiction.
-Admitted.
+Qed.
+#[global]
+Hint Resolve Well_Subst_Red_Well_Subst : Piull.
+

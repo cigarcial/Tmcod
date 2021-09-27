@@ -436,3 +436,14 @@ Inductive Reduction : Process -> Process -> Prop :=
 where "R '-->' S" := (Reduction R S).
 #[global]
 Hint Constructors Reduction: Piull.
+
+
+(**
+*)
+Axiom Close_Subst_Beh : forall(P : Process)(x y z: nat), Well_Subst (Close x P) y z -> x <> z.
+
+
+
+
+
+

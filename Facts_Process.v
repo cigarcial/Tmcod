@@ -1,8 +1,10 @@
-(*
+(**
   Ciro Iván García López
-  Tesis de Maestría - Master Thesis
+  Tesis de Maestría
   Session Type Systems Verification
   Unam - 2021
+  
+  This file contains the definitions for the processes.
 *)
 
 From Coq Require Import Bool.Bool.
@@ -16,20 +18,7 @@ From Tmcod Require Import Defs_Tactics.
 From Tmcod Require Import Facts_Names.
 
 
-
-
-(*
-------------------------------------------------------------------------------
-------------------------------------------------------------------------------
-------------------------------------------------------------------------------
-Resultados generales sobre procesos
-------------------------------------------------------------------------------
-------------------------------------------------------------------------------
-------------------------------------------------------------------------------
-*)
-
-
-(*
+(**
 *)
 Lemma Body_Parallel_Body_Each :
 forall ( P Q : Process),
@@ -43,128 +32,91 @@ Proof.
     simpl in H0;
     inversions H0; auto.
 Qed.
+#[global]
+Hint Resolve Body_Parallel_Body_Each : Piull.
 
 
-(*
+(**
 *)
 Lemma Body_Process_Equivalence_Res :
 forall (P : Process),
 Body P <-> lc (ν P).
 Proof.
-  split.
-  + intros.
-    constructor. inversion H. auto.
-  + intros.
-    inversion H. constructor. auto.
+  split;
+  intros; try inversions H; Piauto.
 Qed.
+#[global]
+Hint Resolve Body_Process_Equivalence_Res : Piull.
 
 
-(*
+(**
 *)
 Lemma Exchange_Open :
 forall ( P : Process)(x y k i : nat),
 i <> k -> 
 {i ~> y} ( {k ~> x} P ) = {k ~> x} ( {i ~> y} P ).
 Proof.
-  induction P; intros.
-  + auto.
-  + simpl.
-    destruct x.
-    - destruct y.
-      * auto.
-      * rewrite (Eq_Open_Name i y0 k x0 i0); auto.
-    - destruct y.
-      * rewrite (Eq_Open_Name i y0 k x0 i0); auto.
-      * rewrite (Eq_Open_Name i y0 k x0 i0); auto.
-        rewrite (Eq_Open_Name i y0 k x0 i1); auto.
-  + simpl. 
-    rewrite IHP1; auto.
-    rewrite IHP2; auto.
-  + simpl.
-    rewrite IHP; auto.
-     destruct x.
-      - destruct y.
-        * auto.
-        * rewrite (Eq_Open_Name i y0 k x0 i0); auto.
-      - destruct y.
-        * rewrite (Eq_Open_Name i y0 k x0 i0); auto.
-        * rewrite (Eq_Open_Name i y0 k x0 i0); auto.
-          rewrite (Eq_Open_Name i y0 k x0 i1); auto.
-  + simpl.
-    destruct x.
-    - auto.
-    - rewrite (Eq_Open_Name i y k x0 i0); auto.
-  + simpl.
-    rewrite IHP; auto.
-    destruct x.
-    - auto.
-    - rewrite (Eq_Open_Name i y k x0 i0); auto.
-  + simpl.
-    apply f_equal.
-    rewrite IHP; auto.
-  + simpl.
-    rewrite IHP; auto.
-    destruct x.
-    - auto.
-    - rewrite (Eq_Open_Name i y k x0 i0); auto.
-  + simpl.
-    rewrite IHP; auto.
-    destruct x.
-    - auto.
-    - rewrite (Eq_Open_Name i y k x0 i0); auto.
+  induction P; intros; simpl; Piauto.
+  + destruct x;
+     destruct y;
+        try rewrite (Eq_Open_Name i y0 k x0 _); 
+        try rewrite (Eq_Open_Name i y0 k x0 i1);
+        Piauto.
+  + rewrite IHP1; Piauto.
+    rewrite IHP2; Piauto.
+  + rewrite IHP; auto.
+    destruct x;
+     destruct y;
+        try rewrite (Eq_Open_Name i y0 k x0 _); 
+        try rewrite (Eq_Open_Name i y0 k x0 i1); Piauto.
+  + destruct x;
+      try rewrite (Eq_Open_Name i y k x0 i0); Piauto.
+  + rewrite IHP; auto.
+    destruct x;
+      try rewrite (Eq_Open_Name i y k x0 i0); Piauto.
+  + rewrite IHP; auto.
+  + rewrite IHP; auto.
+    destruct x;
+      try rewrite (Eq_Open_Name i y k x0 i0); Piauto.
+  + rewrite IHP; auto.
+    destruct x;
+      try rewrite (Eq_Open_Name i y k x0 i0); Piauto.
 Qed.
+#[global]
+Hint Resolve Exchange_Open : Piull.
 
 
-(*
+(**
 *)
 Lemma Subst_Open_Exchange :
 forall ( P : Process )( x y z w k: nat ),
 FName w = (Subst_Name x y (FName z)) -> 
 {y \ x} ({k ~> z} P) = {k ~> w} ({y \ x} P).
 Proof.
-  intro.
-  induction P; intros.
-  + auto.
-  + simpl.
-    rewrite (Subst_Name_Open_Name_Ex _ _ _ _  w _ ); auto.
-    rewrite (Subst_Name_Open_Name_Ex y x0 y0 z w k ); auto.
-  + simpl.
-    rewrite (IHP1 _ _ _ w _); auto.
-    rewrite (IHP2 _ _ _ w _); auto.
-  + simpl.
-    rewrite (Subst_Name_Open_Name_Ex _ _ _ _ w _ ); auto.
-    rewrite (Subst_Name_Open_Name_Ex _ _ _ _ w _ ); auto.
-    rewrite (IHP _ _ _ w _); auto.
-  + simpl.
-    rewrite (Subst_Name_Open_Name_Ex _ _ _ _ w _ ); auto.
-  + simpl.
-    rewrite (Subst_Name_Open_Name_Ex _ _ _ _ w _ ); auto.
-    rewrite (IHP _ _ _ w _); auto.
-  + simpl.
-    rewrite (IHP x y z w (S k)); auto.
-  + simpl.
-    rewrite (Subst_Name_Open_Name_Ex x x0 y z w k ); auto.
-    rewrite (IHP x0 y z w (S k)); auto.
-  + simpl.
-    rewrite (Subst_Name_Open_Name_Ex x x0 y z w k ); auto.
-    rewrite (IHP x0 y z w (S k)); auto.
+  induction P; intros; simpl;
+    repeat rewrite (Subst_Name_Open_Name_Ex _ _ _ _  w _ );
+    try rewrite (IHP _ _ _ w _);
+    try rewrite (IHP1 _ _ _ w _);
+    try rewrite (IHP2 _ _ _ w _);
+    Piauto.
 Qed.
+#[global]
+Hint Resolve Subst_Open_Exchange : Piull.
 
 
-(*
+(**
 *)
 Lemma Subst_By_Equal :
 forall ( P : Process )( x : nat ),
 { x \ x } P = P.
 Proof.
-  induction P; intros; simpl; repeat rewrite Subst_Name_By_Equal; try apply f_equal; auto.
-  + rewrite IHP1.
-    rewrite IHP2.
-    auto.
+  InductionProcess P Subst_Name_By_Equal.
 Qed.
+#[global]
+Hint Resolve Subst_By_Equal : Piull.
 
 
-(*
+(**
 *)
 Lemma Equal_Process_Equal_Open : 
 forall ( x : nat )( P Q: Process ),
@@ -174,44 +126,30 @@ Proof.
   rewrite <- H.
   auto.
 Qed.
+#[global]
+Hint Resolve Equal_Process_Equal_Open : Piull.
 
 
-(*
-------------------------------------------------------------------------------
-------------------------------------------------------------------------------
-------------------------------------------------------------------------------
-Resultados generales relacionadas con las operaciones sobre procesos a nivel k
-------------------------------------------------------------------------------
-------------------------------------------------------------------------------
-------------------------------------------------------------------------------
-*)
-
-
-(*
+(**
 *)
 Lemma Process_Lca_Open_S :
 forall ( P : Process )(i: nat),
 (forall (x : nat), lca i ({i ~> x} P)) -> lca (S i) P.
 Proof.
   intro.
-  induction P.
-  + intros.
-    constructor.
-  + intros.
-    constructor;
+  induction P; intros; Piauto.
+  + constructor;
       apply (Lca_Name_Open _ _);
       intros;
       specialize (H x0);
       inversions H; auto.
-  + intros.
-    constructor;
+  + constructor;
       apply (IHP1 _) || apply (IHP2 _);
       intros;
       specialize (H x);
       inversions H;
       auto.
-  + intros.
-    constructor;
+  + constructor;
       try apply (Lca_Name_Open _ _);
       try intros;
       try specialize (H x0);
@@ -221,14 +159,12 @@ Proof.
       specialize (H x0).
       inversions H.
       auto.
-  + intros.
-    constructor.
+  + constructor.
       try apply (Lca_Name_Open _ _);
       try intros;
       try specialize (H x0);
       try inversions H; auto.
-  + intros.
-    constructor.
+  + constructor.
       try apply (Lca_Name_Open _ _);
       try intros;
       try specialize (H x0);
@@ -268,10 +204,11 @@ Proof.
     inversions H.
     auto.
 Qed.
+#[global]
+Hint Resolve Process_Lca_Open_S : Piull.
 
 
-
-(*
+(**
 *)
 Lemma Lca_Process_Rd :
 forall ( P : Process )( k x: nat ),
@@ -302,9 +239,11 @@ Proof.
     - apply Lca_Name_Rd; auto.
     - apply IHP; auto.
 Qed.
+#[global]
+Hint Resolve Lca_Process_Rd : Piull.
 
 
-(*
+(**
 *)
 Lemma Subst_Lca_Process :
 forall ( P : Process )( k : nat ),
@@ -317,9 +256,11 @@ Proof.
     try apply Subst_Lca_Name;
     auto.
 Qed.
+#[global]
+Hint Resolve Subst_Lca_Process : Piull.
 
 
-(*
+(**
 *)
 Lemma Lca_Name_Open_Close_Subst :
 forall ( x : Name )( x0 y k : nat),
@@ -327,29 +268,15 @@ lca_name k x ->
 Open_Name k y (Close_Name k x0 x) = Subst_Name x0 y x.
 Proof.
   intros.
-  inversions H.
-  + simpl.
-    destruct (bool_dec (x1 =? x0) true).
-    - rewrite e.
-      simpl.
-      destruct (bool_dec (k =? k) true).
-      * rewrite e0; auto.
-      * apply not_true_iff_false in n.
-        apply beq_nat_false in n.
-        lia.
-    - apply not_true_iff_false in n.
-      rewrite n.
-      auto.
-  + simpl.
-    destruct (bool_dec (k =? i) true).
-    - apply beq_nat_true in e.
-      lia.
-    - apply not_true_iff_false in n.
-      rewrite n; auto.
+  inversions H; simpl.
+  + DecidSimple x1 x0.
+  + DecidSimple k i.
 Qed.
+#[global]
+Hint Resolve Lca_Name_Open_Close_Subst : Piull.
 
 
-(*
+(**
 *)
 Lemma Lca_Open_Close_Subst :
 forall ( P : Process )( x y k : nat ), 
@@ -372,11 +299,12 @@ Proof.
   + repeat rewrite Lca_Name_Open_Close_Subst; auto.
     rewrite IHP; auto.
 Qed.
+#[global]
+Hint Resolve Lca_Open_Close_Subst : Piull.
 
 
-
-
-
+(**
+*)
 Lemma Lca_Bex :
 forall (P : Process)(i j k : nat),
 i < j -> j < k -> 
@@ -391,48 +319,28 @@ Proof.
     try apply Lca_Name_Bex; 
     try apply IHP; try lia; auto.
 Qed.
+#[global]
+Hint Resolve Lca_Bex : Piull.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-(*
+(**
 *)
 Lemma Subst_Bex_Exchange_Names :
 forall (N : Name)(x u i j : nat),
 i <> j -> Subst_Name x u (Bex_Name i j N) =  Bex_Name i j (Subst_Name x u N) .
 Proof.
   intros.
-  destruct N.
-  + simpl.
-    DecidSimple x0 x.
-  + simpl.
-    DecidSimple i0 i.
+  destruct N; simpl.
+  + DecidSimple x0 x.
+  + DecidSimple i0 i.
     rewrite n.
     DecidSimple i0 j.
 Qed.
+#[global]
+Hint Resolve Subst_Bex_Exchange_Names : Piull.
 
 
-(*
+(**
 *)
 Lemma Subst_Bex_Exchange :
 forall ( P : Process)(u x i j : nat),
@@ -440,9 +348,11 @@ i <> j -> {u \ x} ({i <~> j} P) =  {i <~> j} ( {u \ x} P).
 Proof.
   InductionProcess P Subst_Bex_Exchange_Names.
 Qed.
+#[global]
+Hint Resolve Subst_Bex_Exchange : Piull.
 
 
-(*
+(**
 *)
 Lemma Subst_Open_NEq_Exchange :
 forall (Q : Process)(x y u : nat),
@@ -455,26 +365,28 @@ Proof.
   simpl.
   DecidSimple y x.
 Qed.
+#[global]
+Hint Resolve Subst_Open_NEq_Exchange : Piull.
 
 
-(*
+(**
 *)
 Lemma Subst_Open_Eq_Exchange_Names :
 forall (N : Name)(x u i : nat),
 Subst_Name x u (Open_Name i x N) = Open_Name i u (Subst_Name x u N).
 Proof.
   intros.
-  destruct N.
-  + simpl.
-    DecidSimple x0 x.
-  + simpl.
-    DecidSimple i i0.
+  destruct N; simpl.
+  + DecidSimple x0 x.
+  + DecidSimple i i0.
     simpl.
     DecidSimple x x.
 Qed.
+#[global]
+Hint Resolve Subst_Open_Eq_Exchange_Names : Piull.
 
 
-(*
+(**
 *)
 Lemma Subst_Open_Eq_Exchange :
 forall ( Q : Process)(u x i: nat),
@@ -482,8 +394,11 @@ forall ( Q : Process)(u x i: nat),
 Proof.
   InductionProcess Q Subst_Open_Eq_Exchange_Names.
 Qed.
+#[global]
+Hint Resolve Subst_Open_Eq_Exchange : Piull.
 
-(*
+
+(**
 *)
 Lemma Equality_Subst_Equality :
 forall (P Q : Process)(x u : nat),
@@ -493,8 +408,12 @@ Proof.
   rewrite H.
   auto.
 Qed.
+#[global]
+Hint Resolve Equality_Subst_Equality : Piull.
 
 
+(**
+*)
 Lemma Subst_Close_By_Equal_Name_Names :
 forall (u y i : nat)(x : Name),
 Subst_Name y u (Close_Name i y x) = Close_Name i y x.
@@ -509,9 +428,11 @@ Proof.
    apply beq_nat_false in n.
    lia.
 Qed.
+#[global]
+Hint Resolve Subst_Close_By_Equal_Name_Names : Piull.
 
 
-(*
+(**
 *)
 Lemma Subst_Close_By_Equal_Name :
 forall (P : Process)(u x i: nat),
@@ -519,9 +440,12 @@ forall (P : Process)(u x i: nat),
 Proof.
   InductionProcess P Subst_Close_By_Equal_Name_Names.
 Qed.
+#[global]
+Hint Resolve Subst_Close_By_Equal_Name : Piull.
 
 
-
+(**
+*)
 Lemma Subst_Close_Dif_Name_Names :
 forall (x0 u i z : nat)(x : Name),
 x0 <> z -> u <> z -> 
@@ -546,10 +470,7 @@ Proof.
     - apply not_true_iff_false in n.
       rewrite n. rewrite e.
       simpl. rewrite e.
-      destruct (bool_dec (u =? z) true).
-      apply beq_nat_true in e0; contradiction.
-      apply not_true_iff_false in n0.
-      rewrite n0; auto.
+      DecidSimple u z.
     - apply not_true_iff_false in n.
       apply not_true_iff_false in n0.
       rewrite n. rewrite n0.
@@ -557,8 +478,12 @@ Proof.
       rewrite n. rewrite n0.
       auto.
 Qed.
+#[global]
+Hint Resolve Subst_Close_Dif_Name_Names : Piull.
 
 
+(**
+*)
 Lemma Subst_Close_Dif_Name :
 forall (P : Process)(u x i z: nat),
 x <> z -> u <> z -> 
@@ -566,8 +491,12 @@ x <> z -> u <> z ->
 Proof.
   InductionProcess P Subst_Close_Dif_Name_Names.
 Qed.
+#[global]
+Hint Resolve Subst_Close_Dif_Name : Piull.
 
 
+(**
+*)
 Lemma Double_Subst_AlreadySubst_Eq_Names :
 forall (x0 u y0 : nat)(x : Name),
 x0 <> y0 ->
@@ -576,17 +505,16 @@ Proof.
   intros.
   destruct x; auto.
   simpl.
-  destruct (bool_dec (x =? x0) true).
-  + rewrite e.
-    simpl.
-    specialize (beq_nat_false_inv y0 x0) as HX.
-    rewrite HX; auto.
-  + apply not_true_iff_false in n; rewrite n.
-    simpl. rewrite n.
+  DecidSimple x x0; simpl.
+  + DecidSimple y0 x0.
+  + repeat (rewrite n; simpl).
     auto.
 Qed.
+#[global]
+Hint Resolve Double_Subst_AlreadySubst_Eq_Names : Piull.
 
-(*
+
+(**
 *)
 Lemma Double_Subst_AlreadySubst_Eq :
 forall (P : Process)( u x y : nat),
@@ -595,9 +523,12 @@ x <> y ->
 Proof.
   InductionProcess P Double_Subst_AlreadySubst_Eq_Names.
 Qed.
+#[global]
+Hint Resolve Double_Subst_AlreadySubst_Eq : Piull.
 
 
-
+(**
+*)
 Lemma Double_Subst_Expan_NFVar_Names :
 forall (x : Name)(x0 y0 u : nat),
 ~ u ∈ FVars_Name x -> 
@@ -605,29 +536,24 @@ Subst_Name x0 y0 x = Subst_Name u y0 (Subst_Name x0 u x).
 Proof.
   destruct x; intros; auto.
   simpl.
-  assert (HX : x <> u). 
+  assert (HX : x <> u).
   simpl in H.
   unfold not.
   intros.
   apply H.
   rewrite H0.
   constructor.
-  destruct (bool_dec (x =? x0) true).
-  + rewrite e.
-    simpl.
-    specialize (beq_nat_refl u) as HT.
-    apply eq_sym in HT.
-    rewrite HT.
-    auto.
-  + apply not_true_iff_false in n.
-    rewrite n.
-    simpl.
-    specialize (beq_nat_false_inv x u HX) as Ht.
-    rewrite Ht.
-    auto.
+  DecidSimple x x0; simpl.
+  + DecidSimple u u.
+  + rewrite n; simpl.
+    DecidSimple x u.
 Qed.
+#[global]
+Hint Resolve Double_Subst_Expan_NFVar_Names : Piull.
 
 
+(**
+*)
 Lemma Double_Subst_Expan_NFVar :
 forall (P : Process)(x y u : nat),
 ~ u ∈ FVars P -> 
@@ -644,10 +570,12 @@ Proof.
     try UnionSearch H;
     auto.
 Qed.
+#[global]
+Hint Resolve Double_Subst_Expan_NFVar : Piull.
 
 
-
-
+(**
+*)
 Lemma Double_Subst_By_Same_Name_Names :
 forall (x : Name)(x0 u x1 : nat),
 Subst_Name x0 u (Subst_Name x1 x0 x) = Subst_Name x1 u (Subst_Name x0 u x).
@@ -655,48 +583,41 @@ Proof.
   destruct x; auto.
   intros.
   simpl.
-  destruct (bool_dec (x =? x1) true).
-  + rewrite e.
-    destruct (bool_dec (x =? x0) true).
-    - rewrite e0.
-      simpl.
-      specialize (beq_nat_refl x0) as HX.
-      apply eq_sym in HX.
-      rewrite HX.
-      DecidSimple u x1.
-    - apply not_true_iff_false in n.
-      rewrite n.
-      simpl.
-      specialize (beq_nat_refl x0) as HX.
-      apply eq_sym in HX.
-      rewrite HX.
-      rewrite e; auto.
-  + apply not_true_iff_false in n.
-    rewrite n.
-    destruct (bool_dec (x =? x0) true).
-    - rewrite e.
-      simpl.
-      rewrite e.
-      DecidSimple u x1.
-    - apply not_true_iff_false in n0.
-      rewrite n0.
-      simpl.
-      rewrite n.
-      rewrite n0.
+  DecidSimple x x1; simpl.
+  + DecidSimple x x0; simpl.
+    - DecidSimple x0 x0; simpl.
+      DecidSimple u x1; simpl.
+    - DecidSimple x0 x0; simpl.
+      rewrite n; simpl.
+      DecidSimple x x1; simpl.
+  + DecidSimple x x0; simpl.
+    - DecidSimple x0 x0; simpl.
+      rewrite n; simpl.
+      rewrite e; simpl.
+      DecidSimple u x1; simpl.
+    - DecidSimple x0 x0; simpl.
+      rewrite n0; simpl.
+      rewrite n; simpl.
+      rewrite n0; simpl.
       auto.
 Qed.
+#[global]
+Hint Resolve Double_Subst_By_Same_Name_Names : Piull.
 
 
-
+(**
+*)
 Lemma Double_Subst_By_Same_Name :
 forall (P : Process)(u x x0 : nat),
 ({u \ x} ({x \ x0} P)) = ({u \ x0} ({u \ x} P)).
 Proof.
   InductionProcess P Double_Subst_By_Same_Name_Names.
 Qed.
+#[global]
+Hint Resolve Double_Subst_By_Same_Name : Piull.
 
 
-(*
+(**
 *)
 Lemma Double_Subst_All_Dif_Names :
 forall (x : Name)(x0 u x1 y0 : nat),
@@ -725,40 +646,32 @@ Proof.
       rewrite e; rewrite n.
       simpl.
       rewrite e.
-      specialize (beq_nat_false_inv u x1 H1) as Hx.
-      rewrite Hx.
-      auto.
+      DecidSimple u x1.
     - apply not_true_iff_false in n.
       apply not_true_iff_false in n0.
-      rewrite n; rewrite n0.
-      simpl.
-      rewrite n; rewrite n0.
+      repeat (rewrite n; rewrite n0; simpl).
       auto.
 Qed.
+#[global]
+Hint Resolve Double_Subst_All_Dif_Names : Piull.
 
 
+(**
+*)
 Lemma Double_Subst_All_Dif :
 forall (P : Process)(u x y x0 : nat),
 x0 <> x -> y <> x -> u <> x0 ->
 ({u \ x} ({y \ x0} P)) = ({y \ x0} ({u \ x} P)).
 Proof.
-  induction P; intros; simpl; auto.
-  + rewrite (Double_Subst_All_Dif_Names x _ _ _ _); auto.
-    rewrite (Double_Subst_All_Dif_Names y _ _ _ _); auto.
-  + rewrite IHP1; auto.
-    rewrite IHP2; auto.
-  + rewrite (Double_Subst_All_Dif_Names x _ _ _ _); auto.
-    rewrite (Double_Subst_All_Dif_Names y _ _ _ _); auto.
-    rewrite IHP; auto.
-  + rewrite (Double_Subst_All_Dif_Names x _ _ _ _); auto.
-  + rewrite (Double_Subst_All_Dif_Names x _ _ _ _); auto.
-    rewrite IHP; auto.
-  + rewrite IHP; auto.
-  + rewrite (Double_Subst_All_Dif_Names x _ _ _ _); auto.
-    rewrite IHP; auto.
-  + rewrite (Double_Subst_All_Dif_Names x _ _ _ _); auto.
-    rewrite IHP; auto.
+  induction P; intros; simpl;
+    try rewrite (Double_Subst_All_Dif_Names x _ _ _ _);
+    try rewrite (Double_Subst_All_Dif_Names y _ _ _ _);
+    try rewrite IHP1;
+    try rewrite IHP2;
+    try rewrite IHP; Piauto.
 Qed.
+#[global]
+Hint Resolve Double_Subst_All_Dif : Piull.
 
 
 

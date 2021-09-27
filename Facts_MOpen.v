@@ -1,13 +1,14 @@
-(*
+(**
   Ciro Iván García López
-  Tesis de Maestría - Master Thesis
+  Tesis de Maestría
   Session Type Systems Verification
   Unam - 2021
+  
+  This file contains the definitions for the processes.
 *)
 From Coq Require Import Lists.List.
 Import ListNotations.
 From Coq Require Import Lia.
-
 
 From Tmcod Require Import Defs_Process.
 From Tmcod Require Import Defs_Tactics.
@@ -15,7 +16,8 @@ From Tmcod Require Import Facts_Names.
 From Tmcod Require Import Facts_Process.
 
 
-
+(**
+*)
 Lemma List_Sk_char :
 forall (k : nat)(L : list nat),
 (length L) = S k -> 
@@ -25,37 +27,48 @@ Proof.
   destruct L.
   + simpl in H.
     lia.
-  + exists n. 
+  + exists n.
     exists L.
     auto.
 Qed.
+#[global]
+Hint Resolve List_Sk_char : Piull.
 
 
+(**
+*)
+Ltac ListEasyInduction k L H HL IHk:=
+  induction k; intros;
+  try rewrite length_zero_iff_nil in H;
+    try rewrite H;
+   try specialize (List_Sk_char k L H) as HL;
+    try destruct HL as [x0 [ L0 [HL HT]]];
+    try rewrite HL;
+    try simpl;
+    try rewrite IHk; Piauto.
 
+
+(**
+*)
 Lemma MOpen_Name_FName :
 forall (k x : nat)( L : list nat), 
 (length L) = k -> 
 MOpen_Name_Rec k L (FName x) = FName x.
 Proof.
-  induction k; intros.
-  + rewrite length_zero_iff_nil in H.
-    rewrite H.
-    auto.
-  + specialize (List_Sk_char k L H) as HL.
-    destruct HL as [x0 [ L0 [HL HT]]].
-    rewrite HL.
-    simpl.
-    rewrite IHk; auto.
+  ListEasyInduction k L H HL IHk.
 Qed.
+#[global]
+Hint Resolve MOpen_Name_FName : Piull.
 
 
-(*
+(**
 *)
 Lemma MOpen_Name_BName_Gt :
 forall (k i : nat)(L : list nat),
 (length L) = k -> k <= i -> 
 MOpen_Name_Rec k L (BName i) = (BName i).
 Proof.
+  intro.
   induction k; intros.
   + rewrite length_zero_iff_nil in H.
     rewrite H.
@@ -67,10 +80,11 @@ Proof.
     rewrite IHk; try lia.
     rewrite Open_Name_BName_Gt; auto.
 Qed.
+#[global]
+Hint Resolve MOpen_Name_BName_Gt : Piull.
 
 
-
-(*
+(**
 *)
 Lemma MOpen_Name_Result : 
 forall (k : nat)(L : list nat)(x : Name),
@@ -107,9 +121,11 @@ Proof.
         exists x0.
         auto.
 Qed.
+#[global]
+Hint Resolve MOpen_Name_Result : Piull.
 
 
-(*
+(**
 *)
 Lemma MOpen_Name_Rec_lc :
 forall (k : nat)(L : list nat)(x : Name),
@@ -122,9 +138,11 @@ Proof.
   rewrite HA.
   constructor.
 Qed.
+#[global]
+Hint Resolve MOpen_Name_Rec_lc : Piull.
 
 
-(*
+(**
 *)
 Lemma M2Open_MOpen :
 forall (k x : nat)(L : list nat)(P : Process),
@@ -140,192 +158,131 @@ Proof.
     specialize (List_Sk_char k L H) as HL.
     destruct HL as [x0 [ L0 [HL HT]]].
     rewrite HL.
-    simpl. 
+    simpl.
     rewrite <- IHk; auto.
     rewrite Exchange_Open; auto.
 Qed.
+#[global]
+Hint Resolve M2Open_MOpen : Piull.
 
 
-(*
+(**
 *)
 Lemma MOpen_Pzero : 
 forall (k : nat)(L : list nat),
 (length L) = k -> MOpen_Rec k L (θ) = θ.
 Proof.
-  induction k; intros.
-  + rewrite length_zero_iff_nil in H.
-    rewrite H.
-    auto.
-  + specialize (List_Sk_char k L H) as HL.
-    destruct HL as [x [ L0 [HL HT]]].
-    rewrite HL.
-    simpl.
-    rewrite IHk; auto.
+  ListEasyInduction k L H HL IHk.
 Qed.
+#[global]
+Hint Resolve MOpen_Pzero : Piull.
 
 
-(*
+(**
 *)
 Lemma MOpen_Fuse :
 forall (k : nat)(L : list nat)(x y : Name),
 (length L) = k -> 
 MOpen_Rec k L ([x ←→ y]) = [(MOpen_Name_Rec k L x) ←→ (MOpen_Name_Rec k L y)].
 Proof.
-  induction k; intros.
-  + rewrite length_zero_iff_nil in H.
-    rewrite H.
-    simpl.
-    auto.
-  + specialize (List_Sk_char k L H) as HL.
-    destruct HL as [x0 [ L0 [HL HT]]].
-    rewrite HL.
-    simpl.
-    rewrite IHk; auto.
+  ListEasyInduction k L H HL IHk.
 Qed.
+#[global]
+Hint Resolve MOpen_Fuse : Piull.
 
 
-
-(*
+(**
 *)
 Lemma MOpen_Parallel : 
 forall (k : nat)(L : list nat)( P Q : Process),
 (length L) = k ->
 MOpen_Rec k L (P ↓ Q) = (MOpen_Rec k L P) ↓ (MOpen_Rec k L Q).
 Proof.
-  induction k.
-  + intros.
-    rewrite length_zero_iff_nil in H.
-    rewrite H.
-    auto.
-  + intros.
-    specialize (List_Sk_char k L H) as HL.
-    destruct HL as [x [ L0 [HL HT]]].
-    rewrite HL.
-    simpl. 
-    rewrite IHk; auto.
+  ListEasyInduction k L H HL IHk.
 Qed.
+#[global]
+Hint Resolve MOpen_Parallel : Piull.
 
 
-(*
+(**
 *)
 Lemma MOpen_Chan_output :
 forall (k : nat)(L : list nat)( x y : Name)(P : Process),
 (length L) = k -> 
 MOpen_Rec k L (x « y »· P) = (MOpen_Name_Rec k L x) « (MOpen_Name_Rec k L y) »· (MOpen_Rec k L P).
 Proof.
-   induction k; intros.
-  + rewrite length_zero_iff_nil in H.
-    rewrite H.
-    auto.
-  + intros.
-    specialize (List_Sk_char k L H) as HL.
-    destruct HL as [x0 [ L0 [HL HT]]].
-    rewrite HL.
-    simpl. 
-    rewrite IHk; auto.
+  ListEasyInduction k L H HL IHk.
 Qed. 
+#[global]
+Hint Resolve MOpen_Chan_output : Piull.
 
 
-(*
+(**
 *)
 Lemma MOpen_Chan_zero :
 forall (k : nat)(L : list nat)(x : Name),
 (length L) = k -> 
 MOpen_Rec k L (x ·θ) = (MOpen_Name_Rec k L x) ·θ.
 Proof.
-  induction k; intros.
-  + rewrite length_zero_iff_nil in H.
-    rewrite H.
-    auto.
-  + specialize (List_Sk_char k L H) as HL.
-    destruct HL as [x0 [ L0 [HL HT]]].
-    rewrite HL.
-    simpl.
-    rewrite IHk; auto.
+  ListEasyInduction k L H HL IHk.
 Qed.
+#[global]
+Hint Resolve MOpen_Chan_zero : Piull.
 
 
-
-(*
+(**
 *)
 Lemma MOpen_Chan_close :
 forall (k : nat)(L : list nat)(x : Name)(P : Process),
 (length L) = k -> 
 MOpen_Rec k L (x ()·P) = (MOpen_Name_Rec k L x) ()·(MOpen_Rec k L P).
 Proof.
-  induction k; intros.
-  + rewrite length_zero_iff_nil in H.
-    rewrite H.
-    auto.
-  + specialize (List_Sk_char k L H) as HL.
-    destruct HL as [x0 [ L0 [HL HT]]].
-    rewrite HL.
-    simpl.
-    rewrite IHk; auto.
+  ListEasyInduction k L H HL IHk.
 Qed.
+#[global]
+Hint Resolve MOpen_Chan_close : Piull.
 
 
-(*
+(**
 *)
 Lemma MOpen_Chan_res :
 forall (k : nat)(L : list nat)(P : Process), 
 (length L) = k -> 
 MOpen_Rec k L (ν P) = (ν M2Open_Rec k L P).
 Proof.
-  induction k.
-  + intros.
-    simpl.
-    rewrite length_zero_iff_nil in H.
-    rewrite H.
-    auto.
-  + intros.
-    specialize (List_Sk_char k L H) as HL.
-    destruct HL as [x [ L0 [HL HT]]].
-    rewrite HL.
-    simpl.
-    rewrite IHk; auto.
+  ListEasyInduction k L H HL IHk.
 Qed.
+#[global]
+Hint Resolve MOpen_Chan_res : Piull.
 
-(*
+
+(**
 *)
 Lemma MOpen_Chan_input : 
 forall (k : nat)(L : list nat)(x : Name)(P : Process),
 (length L) = k -> 
 MOpen_Rec k L (x · P) = (MOpen_Name_Rec k L x) · (M2Open_Rec k L P).
 Proof.
-  induction k; intros.
-  + rewrite length_zero_iff_nil in H.
-    rewrite H.
-    auto.
-  + specialize (List_Sk_char k L H) as HL.
-    destruct HL as [x0 [ L0 [HL HT]]].
-    rewrite HL.
-    simpl.
-    rewrite IHk; auto.
+  ListEasyInduction k L H HL IHk.
 Qed.
+#[global]
+Hint Resolve MOpen_Chan_input : Piull.
 
 
-(*
+(**
 *)
 Lemma MOpen_Chan_replicate : 
 forall (k : nat)(L : list nat)(x : Name)(P : Process),
 (length L) = k -> 
 MOpen_Rec k L (x !· P) = (MOpen_Name_Rec k L x) !· (M2Open_Rec k L P).
 Proof.
-  induction k; intros.
-  + rewrite length_zero_iff_nil in H.
-    rewrite H.
-    auto.
-  + specialize (List_Sk_char k L H) as HL.
-    destruct HL as [x0 [ L0 [HL HT]]].
-    rewrite HL.
-    simpl.
-    rewrite IHk; auto.
+  ListEasyInduction k L H HL IHk.
 Qed.
+#[global]
+Hint Resolve MOpen_Chan_replicate : Piull.
 
 
-
-(*
+(**
 *)
 Theorem Lca_Lc_Process_MOpen : 
 forall (P : Process)(k : nat)(L : list nat),
@@ -370,36 +327,24 @@ Proof.
     apply IHP; auto.
     rewrite app_length; simpl; lia.
 Qed.
+#[global]
+Hint Resolve Lca_Lc_Process_MOpen : Piull.
 
 
-
-
-
-
-(*
-*)
-
-(*
+(**
 *)
 Lemma MOpen_Chan_zero_FName_NoMOpenName :
 forall (k x : nat)( L : list nat), 
 (length L) = k -> 
 MOpen_Rec k L (FName x ·θ) = FName x ·θ.
 Proof.
-  induction k; intros.
-  + rewrite length_zero_iff_nil in H.
-    rewrite H.
-    auto.
-  + specialize (List_Sk_char k L H) as HL.
-    destruct HL as [x0 [ L0 [HL HT]]].
-    rewrite HL.
-    simpl.
-    rewrite IHk; auto.
+  ListEasyInduction k L H HL IHk.
 Qed.
+#[global]
+Hint Resolve MOpen_Chan_zero_FName_NoMOpenName : Piull.
 
 
-(* (*
-*)
+(*
 Lemma MOpen_Chan_zero_BName_Eq_NoMOpenName :
 forall (k i : nat)(L : list nat),
 (length L) = k -> k <= i -> 

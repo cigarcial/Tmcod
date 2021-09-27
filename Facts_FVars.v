@@ -726,10 +726,10 @@ Proof.
     destruct H.
     - apply IHP1 in H.
       destruct H; auto.
-      right; left; auto.
+      OrSearch.
     - apply IHP2 in H.
       destruct H; auto.
-      right; right; auto.
+      OrSearch.
   + simpl in H.
     apply Union_inv in H.
     destruct H.
@@ -818,7 +818,7 @@ Proof.
       constructor.
     - apply IHP in H.
       destruct H; auto.
-      right; right; auto.
+      OrSearch.
 Qed.
 #[global]
 Hint Resolve FVars_Subst : Piull.

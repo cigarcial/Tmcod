@@ -120,16 +120,12 @@ Ltac FVars_Beq_Close_Lt H x x1 :=
 
 
 
-
-
-
 (**
 *)
 Ltac InductionProcess P Name_Lemma := 
   induction P;
     intros; simpl;
-    try rewrite Name_Lemma;
-    try rewrite Name_Lemma;
+    repeat rewrite Name_Lemma;
     repeat match goal with 
       | IHP  : _ |- _  =>  rewrite IHP; auto
       | IHP1 : _ |- _ => try rewrite IHP1; auto
