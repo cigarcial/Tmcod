@@ -58,13 +58,13 @@ Inductive Inference : Process -> list Assignment -> list Assignment -> list Assi
 
 
   | repl : forall ( D F G : list Assignment ) ( u x : nat)( A : Proposition)(P : Process ),
-    Collect D -> Collect F -> Collect G -> lc P -> Well_Subst P u x -> 
+    Collect D -> Collect F -> Collect G -> lc P -> (~ x ∈ FVars P ) ->
     ( D ;;; ( (cons ((FName u):A) nil) ++ F) !- P ::: G ) -> 
     ( D ;;; ( (cons ((FName x):!A) nil) ++ F) !- ({x \ u }P) ::: G)
 
 
   | wnotr : forall ( D F G : list Assignment ) ( u x : nat)( A : Proposition)(P : Process ),
-    Collect D -> Collect G -> Collect F -> lc P -> Well_Subst P u x ->
+    Collect D -> Collect G -> Collect F -> lc P -> (~ x ∈ FVars P ) ->
     ( D ;;; ( (cons ((FName u):A) nil) ++ F) !- P ::: G ) -> 
     ( D ;;; F !- ({x \ u }P) ::: ( ( cons ((FName x): (? (A ^⊥) )) nil ) ++ G) )
 
@@ -152,14 +152,14 @@ Inductive Inference : Process -> list Assignment -> list Assignment -> list Assi
     Collect D -> Collect F -> Collect G -> 
     lc P -> lc Q ->
     (forall ( x : nat ), ( D ;;; nil !- P ::: ( cons ((FName x):A) nil ) ) )-> 
-    (forall ( u : nat ), ( D ;;; (cons ((FName u):A) nil ++ F) !- Q ::: G ) )-> 
+    (forall ( u : nat ), ( (cons ((FName u):A) nil ++ D) ;;; F !- Q ::: G ) )-> 
     forall ( x u : nat ), ( D ;;; F !- (ν Close u ( ((FName u) !· Close x P) ↓ Q)) ::: G )
 
 
   | cutwnot : forall ( D F G : list Assignment )( x u : nat )( P Q : Process )( A : Proposition ),
     Collect D -> Collect F -> Collect G -> lc P -> lc Q ->
     ( D ;;; ( cons ((FName x):(A^⊥)) nil ) !- P ::: nil ) -> 
-    ( D ;;; (cons ((FName u):A) nil ++ F) !- Q ::: G ) -> 
+    ( (cons ((FName u):A) nil ++ D) ;;; F !- Q ::: G ) -> 
     ( D ;;; F !- (ν Close u ( ((FName u) !· Close x P) ↓ Q)) ::: G )  
 
 

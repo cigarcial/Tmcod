@@ -167,6 +167,7 @@ Lemma Subst_Body_Body :
 forall (P : Process),
 Body P -> forall (x y : nat), Body ({y \ x} P).
 Proof.
+  
   Piauto.
 Qed.
 #[global]
@@ -199,7 +200,6 @@ P === Q -> ({u \ x}P) === ({u \ x}Q).
 Proof.
   intros.
   induction H; try simpl; Piauto.
-  rewrite Subst_Bex_Exchange; Piauto.
 Qed.
 #[global]
 Hint Resolve Cong_Subst_Cong : Piull.
@@ -213,18 +213,14 @@ forall P Q : Process,
 Proof.
   intros.
   induction H; inversions H0; Piauto.
-  + apply ProcessAt_Process.
-    do 2 constructor.
-    apply Process_ProcessAt in H0.
-    inversions H0.
-    inversions H3.
-    apply Lca_Bex; auto.
-  + inversions H2; Piauto.
-  + constructor. simpl.
-    constructor.
-    apply Open_Lc_Lc; auto.
+  + inversions H2.
+    constructor; Piauto.
+  + constructor.
+    intros.
+    simpl.
     inversions H4.
-    apply H2; auto.
+    constructor;
+    Piauto.
 Qed.
 #[global]
 Hint Resolve Congruence_WD : Piull.
@@ -238,6 +234,7 @@ forall P Q : Process,
 Proof.
   intros.
   induction H; try constructor; eauto with Piull.
+  
 Qed.
 #[global]
 Hint Resolve ProcessReduction_WD : Piull.

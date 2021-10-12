@@ -368,33 +368,52 @@ end.
 Hint Resolve M2Open_Rec : Piull.
 
 
+
+
+
+
+
+
+Inductive IsClosing : Process -> nat -> Prop :=
+  | IsClosing_Base : forall ( P : Process)(x: nat),
+    (forall (u v : nat)(Q : Process), Q = ({u \ v} Close x P) -> u <> x )-> (IsClosing P x).
+
+
 (**
   Definition 2.4 - Structural congruence
 *)
 Reserved Notation "R '===' S" (at level 60).
 Inductive Congruence : Process -> Process -> Prop :=
-(*    | Con_parallel_zero : forall (P : Process),
-        (P↓θ) === P
-    
-    | Con_res_zero : 
-        ( ν θ)  === (θ) 
-        
-    | Con_conmt_fuses : forall (n m : Name),
-        [n ←→ m] === ([m ←→ n])   
-*)
-      
+
     | Con_conmt_parallel : forall (P Q : Process),
         (P↓Q) === (Q↓P)
+
+    | Con_asoc_parallel : forall (P Q R : Process),
+        ((P↓Q)↓R) === (P↓(Q↓R))
+
+    | Con_abs_restriction : forall (P Q : Process),
+        lc P -> (P↓(ν Q)) === ν (P↓Q)
+
+(*
+    | Con_Res : forall (P : Process),
+        lc P -> (ν P) === P
+
+    | Con_Parallel : forall (P Q R : Process),
+        P === Q -> (P↓R) === (Q↓R)
+
+    | Con_conmt_fuses : forall (n m : Name),
+        [n ←→ m] === ([m ←→ n])
+
+    | Con_parallel_zero : forall (P : Process),
+        (P↓θ) === P
+      
+    | Con_res_zero : 
+        ( ν θ)  === (θ) 
       
     | Con_res_ex : forall (P : Process),
         (ν (ν P)) === (ν (ν ( { 0 <~> 1 }P ) ))
       
-    | Con_asoc_parallel : forall (P Q R : Process),
-        ((P↓Q)↓R) === (P↓(Q↓R))
-      
-    | Con_abs_restriction : forall (P Q : Process),
-        lc P -> (P↓(ν Q)) === ν (P↓Q)
-        
+*)
 where "R '===' S" := (Congruence R S).
 #[global]
 Hint Constructors Congruence : Piull.
@@ -405,6 +424,13 @@ Hint Constructors Congruence : Piull.
 *)
 Reserved Notation "R '-->' S" (at level 60).
 Inductive Reduction : Process -> Process -> Prop :=
+  | Red_parallel_fuse_lf : forall ( x y : nat) ( P : Process),
+    lc P -> 
+    ( P ↓ ([(FName x) ←→ (FName y)]) --> (Subst x y P) )
+
+  | Red_parallel_fuse_rg : forall ( x y : nat) ( P : Process),
+    lc P -> 
+    ( P ↓ ([(FName x) ←→ (FName y)]) --> (Subst y x P) )
 
   | Red_output_input : forall ( x y : nat ) ( P Q : Process ),
     lc P -> Body Q ->
@@ -418,16 +444,8 @@ Inductive Reduction : Process -> Process -> Prop :=
      lc Q -> 
      ( ( ( (FName x) ·θ ) ↓ ( (FName x) ()· Q ) ) -->  Q )
 
-  | Red_parallel_fuse : forall ( x y : nat) ( P : Process),
-    lc P -> 
-    ( P ↓ ([(FName x) ←→ (FName y)]) --> (Subst x y P) )
-
-  | Red_reduction_parallel : forall ( P Q R : Process), 
-    lc P -> lc R ->
-    ((Q --> R) -> ((P ↓ Q ) --> (P ↓ R)))
-
   | Red_reduction_chanres : forall (P Q : Process)( x : nat),
-    lc P -> 
+    lc P -> (IsClosing P x) ->
     ( P --> Q ) -> ( ν (Close x P) --> ν (Close x Q) )
 
    | Red_reduction_struct : forall ( P Q P' Q' : Process ),
@@ -443,7 +461,78 @@ Hint Constructors Reduction: Piull.
 Axiom Close_Subst_Beh : forall(P : Process)(x y z: nat), Well_Subst (Close x P) y z -> x <> z.
 
 
+(**
+*)
+Inductive OrphanBinder : Process -> Prop :=
+  | OrphanBinderInd : forall ( P : Process),
+    ( lc P ) -> (OrphanBinder ( ν P )).
+#[global]
+Hint Constructors OrphanBinder : Piull.
+
+
+
+(**
+*)
+Inductive SS : (Process -> Process -> Prop) -> Process -> Process -> nat -> nat -> nat -> Prop :=
+  | SSInd : forall (Pr : Process -> Process -> Prop)( P Q : Process)(x u v : nat),
+    ( Pr ({u \ v} P) ({u \ v} Q) ) -> x <> u -> SS Pr P Q x u v.
+#[global]
+Hint Constructors SS : Piull.
+
+
+
+(**
+*)
+Axiom Lola : 
+forall (Pr : Process -> Process -> Prop)(P Q : Process)(x u v : nat), 
+  ( Pr ({u \ v} P) ({u \ v} Q) ) -> x <> u.
+
+Definition CVarsE := Ensemble nat.
+
+(* 
+Fixpoint CloseVars ( T : Process ) {struct T} : CVarsE := 
+match T with
+  | Pzero => Empty_set nat
+  | Fuse x y => Empty_set nat
+  | Parallel P Q => (CloseVars P) ∪ (CloseVars Q)
+  | Chan_output x y P => (CloseVars P)
+  | Chan_zero x => Empty_set nat
+  | Chan_close x P => (CloseVars P)
+  | Chan_res P => CloseVars P
+  | Chan_input x P => (CloseVars P)
+  | Chan_replicate x P => (CloseVars P)
+end.
+#[global]
+Hint Resolve FVars : Piull.
 
 
 
 
+Inductive 
+
+
+Fixpoint IsClosing (u : nat)( T : Process ) {struct T} : Prop :=
+  
+
+
+
+
+
+Compute CloseVars (Close 0 ([(FName 0) ←→ (FName 0)])).
+
+
+
+
+(**
+  Free names for a given term.
+*)
+Definition FVars_Name ( N : Name ) : FVarsE :=
+match N with
+  | FName x => 
+  | BName i => Empty_set nat
+end.
+#[global]
+Hint Resolve FVars_Name : Piull.
+
+
+  | Close_Rec i z P => (Singleton nat z) ∪ (CloseVars P) *)

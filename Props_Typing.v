@@ -25,6 +25,17 @@ From Tmcod Require Import Facts_MOpen.
 From Tmcod Require Import Props_Process.
 From Tmcod Require Import Facts_WSubst.
 
+Theorem SoundnessX : 
+forall (P : Process)(D F G : list Assignment),
+  ( D ;;; F !- P ::: G ) -> forall (Q : Process), (P === Q) -> ( D ;;; F !- Q ::: G ).
+Proof.
+  intros.
+  induction H0.
+  + admit.
+  + admit.
+  + admit.
+Admitted.
+
 
 (**
 *)
@@ -39,7 +50,6 @@ Proof.
 Qed.
 #[global]
 Hint Resolve Fuse_No_Reduces : Piull.
-
 
 (**
 *)
@@ -111,8 +121,8 @@ Proof.
   intros.
   inversions H.
   destruct P0; try discriminate.
-  inversions H2.
-  inversions H4.
+  inversions H3.
+  inversions H5.
   inversions H1.
 Qed.
 #[global]
@@ -129,8 +139,8 @@ Proof.
   intros.
   inversions H.
   destruct P0; try discriminate.
-  inversions H2.
-  inversions H4.
+  inversions H3.
+  inversions H5.
   inversions H1.
 Qed.
 #[global]
@@ -283,19 +293,6 @@ Hint Resolve Close_Same_Inv : Piull.
 
 (**
 *)
-Theorem SoundnessX : 
-forall (P : Process)(D F G : list Assignment),
-  ( D ;;; F !- P ::: G ) -> forall (Q : Process), (P === Q) -> ( D ;;; F !- Q ::: G ).
-Proof.
-  intros. 
-  dependent induction H.
-Admitted.
-#[global]
-Hint Resolve SoundnessX : Piull.
-
-
-(**
-*)
 Theorem Soundness : 
 forall (P : Process)(D F G : list Assignment),
   ( D ;;; F !- P ::: G ) -> forall (Q : Process), (P --> Q) -> ( D ;;; F !- Q ::: G ).
@@ -305,38 +302,21 @@ Proof.
   + apply Fuse_No_Reduces in H2; contradiction.
   + apply Fuse_No_Reduces in H2; contradiction.
   + apply Rep_Input_No_Reduces in H3; contradiction.
-  + assert (H6 := H5).
-    inversions H3.
-    specialize (Lc_WSubst_Subst_WSubst P u x H2 H3) as Hp.
-    specialize (Well_Subst_Red_Well_Subst ({x \ u} P) Q x u Hp H6) as Hx.
-    inversions Hx; auto.
-    apply (Well_Subst_Reduction_Susbt ({x \ u} P) Q x u)  in H5; auto.
-    rewrite <- Double_Subst_Expan_NFVar in H5; auto.
+  + assert (Ht := H5).
+    apply (Well_Subst_Reduction_Susbt ({x \ u} P) Q x u) in H5; Piauto.
+    rewrite <- (Double_Subst_Expan_NFVar P u u x) in H5; Piauto.
     rewrite Subst_By_Equal in H5.
     rewrite <- (Subst_By_Equal Q x).
-    rewrite (Double_Subst_Expan_NFVar Q x x u); auto.
-    constructor; auto.
+    rewrite (Double_Subst_Expan_NFVar Q x x u); Piauto.
+    constructor; Piauto.
     apply (ProcessReduction_WD P _ ); auto.
-    apply Lc_WSubst_Subst_WSubst; auto.
-    apply (ProcessReduction_WD ({x \ u} P) _ ); auto.
-    apply Subst_Lc_Lc; auto.
-    apply Subst_Lc_Lc; auto.
-  + assert (H6 := H5).
-    inversions H3.
-    specialize (Lc_WSubst_Subst_WSubst P u x H2 H3) as Hp.
-    specialize (Well_Subst_Red_Well_Subst ({x \ u} P) Q x u Hp H6) as Hx.
-    inversions Hx; auto.
-    apply (Well_Subst_Reduction_Susbt ({x \ u} P) Q x u)  in H5; auto.
-    rewrite <- Double_Subst_Expan_NFVar in H5; auto.
-    rewrite Subst_By_Equal in H5.
-    rewrite <- (Subst_By_Equal Q x).
-    rewrite (Double_Subst_Expan_NFVar Q x x u); auto.
-    constructor; auto.
-    apply (ProcessReduction_WD P _ ); auto.
-    apply Lc_WSubst_Subst_WSubst; auto.
-    apply (ProcessReduction_WD ({x \ u} P) _ ); auto.
-    apply Subst_Lc_Lc; auto.
-    apply Subst_Lc_Lc; auto.
+    apply (FVars_Reduction P _ _ ); Piauto.
+    apply (FVars_Reduction ({x \ u} P)  _ _ ); Piauto.
+    apply After_Subst_No_FVar.
+    admit.
+    apply After_Subst_No_FVar.
+    admit.
+  + admit.
   + apply Rep_Input_No_Reduces in H3; contradiction.
   + apply Chan_Input_No_Reduces in H5; contradiction.
   + apply Parallel_Res_No_Reduces in H9; contradiction.
@@ -356,19 +336,14 @@ Proof.
       specialize (Extl2 _ _ _ _ _ _ _ x1 H10 H9) as Ht.
       assert ( Hx : x0 = u ). admit.
       subst.
-      apply Close_Same_Inv in H9.
-      rewrite H9 in H11.
-      inversion H11.
+      apply Close_Same_Inv in H9; Piauto.
+      inversions H9.
+      inversions H12.
       * admit.
       * admit.
-      * dependent induction H13.
-        ** inversion H15.
-           admit.
-           inversions H21; inversions H23.
-           admit.
+      * inversions H14.
+        ** admit. (* cicla *)
         ** admit.
-      * Piauto.
-      * Piauto.
     - inversions H10.
       specialize (beq_nat_refl u) as Hx.
       apply eq_sym in Hx.
@@ -377,6 +352,8 @@ Proof.
       inversions H16.
 Admitted.
 
+
+(*
 
 Lemma Close_Inv_Names :
 forall (x x1 : Name)(i x0 y0 : nat),

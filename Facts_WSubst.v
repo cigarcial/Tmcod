@@ -170,12 +170,75 @@ Hint Resolve Lc_WSubst_Subst_WSubst : Piull.
 *)
 Lemma Well_Subst_Reduction_Susbt :
 forall ( P Q : Process)(x u : nat),
-Well_Subst P x u -> lc P ->
+lc P -> (~ u ∈ FVars P) ->
 ( P --> Q ) ->  ( ({u \ x}P) --> ({u \ x} Q)).
 Proof.
   intros.
-  assert (HA := H1).
   dependent induction H1; simpl; Piauto.
+  + DecidSimple x0 x; Piauto.
+    - DecidSimple y x; Piauto.
+      * rewrite <- (Subst_By_Equal ({u \ x} ({y \ x0} P)) u).
+        apply beq_nat_true in e0.
+        rewrite e0.
+        apply beq_nat_true in e.
+        rewrite e.
+        rewrite (Subst_By_Equal P x).
+        Piauto.
+      * rewrite n.
+        apply beq_nat_true in e.
+        apply beq_nat_false in n.
+        rewrite e.
+        rewrite Double_Subst_AlreadySubst_Eq; auto.
+        apply No_FVars_Parallel in H0.
+        destruct H0.
+        rewrite (Double_Subst_Expan_NFVar P x y u); auto.
+        constructor; Piauto.
+    - DecidSimple y x; Piauto.
+      * rewrite n.
+        apply beq_nat_true in e.
+        rewrite e.
+        rewrite Double_Subst_By_Same_Name.
+        Piauto.
+      * rewrite n.
+        rewrite n0.
+        apply beq_nat_false in n.
+        apply beq_nat_false in n0.
+        rewrite Double_Subst_All_Dif; auto.
+        constructor; Piauto.
+        (* se puede derivar *)
+        admit.
+  + DecidSimple x0 x; Piauto.
+    - DecidSimple y x; Piauto.
+      * rewrite <- (Subst_By_Equal ({u \ x} ({x0 \ y} P)) u).
+        apply beq_nat_true in e0.
+        rewrite e0.
+        apply beq_nat_true in e.
+        rewrite e.
+        rewrite (Subst_By_Equal P x).
+        Piauto.
+      * rewrite n.
+        apply beq_nat_true in e.
+        rewrite e.
+        rewrite Double_Subst_By_Same_Name.
+        Piauto.
+    - DecidSimple y x; Piauto.
+      * rewrite n.
+        apply beq_nat_true in e.
+        apply beq_nat_false in n.
+        rewrite e.
+        rewrite Double_Subst_AlreadySubst_Eq; auto.
+        apply No_FVars_Parallel in H0.
+        destruct H0.
+        rewrite (Double_Subst_Expan_NFVar P x x0 u); auto.
+        constructor; Piauto.
+      * rewrite n.
+        rewrite n0.
+        apply beq_nat_false in n.
+        apply beq_nat_false in n0.
+        rewrite Double_Subst_All_Dif; auto.
+        constructor; Piauto.
+        (* se puede derivar *)
+        admit.
   + DecidSimple x0 x; Piauto.
     - DecidSimple y x; Piauto.
       * apply beq_nat_true in e0.
@@ -198,124 +261,66 @@ Proof.
         Piauto.
         apply beq_nat_false in n0.
         auto.
-  + destruct (bool_dec (x0 =? x) true).
-    - destruct (bool_dec (y =? x) true).
-      * rewrite e. rewrite e0.
-        apply beq_nat_true in e.
-        apply beq_nat_true in e0.
+  + DecidSimple x0 x; Piauto.
+    - DecidSimple y x; Piauto.
+      * apply beq_nat_true in e0.
         rewrite e0.
         rewrite Subst_Open_Eq_Exchange.
         Piauto.
-      * rewrite e.
-        apply not_true_iff_false in n. rewrite n.
-        rewrite <- Subst_Open_NEq_Exchange.
+      * rewrite n.
+        apply beq_nat_false in n.
+        rewrite <- Subst_Open_NEq_Exchange; auto.
         Piauto.
-        apply beq_nat_false in n; auto.
-    - destruct (bool_dec (y =? x) true).
-      * rewrite e.
-        apply not_true_iff_false in n. rewrite n.
+    - DecidSimple y x; Piauto.
+      * rewrite n.
         apply beq_nat_true in e.
         rewrite e.
         rewrite Subst_Open_Eq_Exchange.
-        constructor; Piauto.
-      * apply not_true_iff_false in n. rewrite n.
-        apply not_true_iff_false in n0. rewrite n0.
-        rewrite <- Subst_Open_NEq_Exchange.
         Piauto.
+      * rewrite n0.
+        rewrite n.
         apply beq_nat_false in n0.
-        auto.
+        rewrite <- Subst_Open_NEq_Exchange;
+        Piauto.
   + DecidSimple x0 x; Piauto.
-  + destruct (bool_dec (x0 =? x) true).
-    - destruct (bool_dec (y =? x) true).
-      * rewrite e. rewrite e0.
-        apply beq_nat_true in e.
-        apply beq_nat_true in e0.
-        rewrite e. rewrite e0.
-        rewrite <- (Subst_By_Equal ({u \ x} ({x \ x} P)) u).
-        rewrite (Subst_By_Equal P _ ).
-        Piauto.
-      * rewrite e.
-        apply not_true_iff_false in n; rewrite n.
-        apply beq_nat_true in e.
-        rewrite e.
-        apply beq_nat_false in n.
-        rewrite Double_Subst_AlreadySubst_Eq; auto.
-        inversions H.
-        rewrite (Double_Subst_Expan_NFVar P x y u); auto.
-        constructor; Piauto.
-        inversions H0.
-        unfold not in *.
-        intros.
-        apply H2.
-        constructor; auto.
-    - destruct (bool_dec (y =? x) true).
-      * rewrite e.
-        apply not_true_iff_false in n; rewrite n.
-        apply beq_nat_true in e.
-        rewrite e.
-        rewrite Double_Subst_By_Same_Name.
-        Piauto.
-      * apply not_true_iff_false in n. rewrite n.
-        apply not_true_iff_false in n0. rewrite n0.
-        inversions H.
-        apply beq_nat_false in n.
-        apply beq_nat_false in n0.
-        rewrite Double_Subst_All_Dif; auto.
-        constructor; Piauto.
-        unfold not.
-        intros.
-        apply H2.
-        rewrite H4.
-        simpl.
-        OrSearch.
-  + constructor; Piauto.
-    apply IHReduction; Piauto.
-    inversions H.
-    constructor; auto.
-    unfold not in *.
-    intros.
-    apply H4.
-    OrSearch.
-    inversions H0; auto.
-  + destruct (bool_dec (x =? x0) true).
+  + DecidSimple x0 x; Piauto.
     - apply beq_nat_true in e.
       rewrite e.
       unfold Close.
       do 2 rewrite Subst_Close_By_Equal_Name.
+      constructor; auto.
+      constructor.
+      intros.
+      inversions H2.
+      specialize (H5 u0 v ({u0 \ v} Close x P)) as H5.
       Piauto.
-    - destruct (bool_dec (u =? x0) true).
+    - DecidSimple u x0; Piauto.
       * (* Impossible by construction - pi calculus *)
-        inversions H.
-        simpl in H3.
-        specialize (Close_Subst_Beh P x0 x u) as Hx.
-        exfalso.
-        apply beq_nat_true in e.
-        apply Hx; Piauto.
-      * apply not_true_iff_false in n.
-        apply not_true_iff_false in n0.
-        apply beq_nat_false in n.
+        admit.
+      * apply beq_nat_false in n.
         apply beq_nat_false in n0.
         unfold Close.
         rewrite Subst_Close_Dif_Name; Piauto.
         rewrite Subst_Close_Dif_Name; Piauto.
         constructor; Piauto.
-        apply IHReduction; auto.
-        inversions H.
-        constructor; Piauto.
-        unfold not.
+        constructor.
         intros.
-        apply H3.
-        simpl.
+        inversions H2.
+        specialize (H5 u0 v ({u0 \ v} Close x0 P)) as H5.
+        Piauto.
+        apply IHReduction; auto.
+        unfold not in *.
+        intros.
+        apply H0.
         apply FVars_Close_Beq; auto.
-  + assert (HX : Well_Subst P' x u).
-    inversions H.
-    constructor; Piauto.
-    specialize (Cong_FVars P' P H2) as HT.
-    rewrite HT; eauto with *.
+  + specialize (Cong_FVars P' P H2) as HT.
     apply (Cong_Subst_Cong _ _ x u) in H2.
     apply (Cong_Subst_Cong _ _ x u) in H3.
-    apply (Red_reduction_struct _ _ ({u \ x} P') ({u \ x} Q')); Piauto.
-Qed.
+    apply (Red_reduction_struct _ _ ({u \ x} P') ({u \ x} Q'));
+    Piauto.
+    apply IHReduction; Piauto.
+    rewrite HT; eauto with *.
+Admitted.
 #[global]
 Hint Resolve Well_Subst_Reduction_Susbt : Piull.
 
@@ -375,7 +380,7 @@ Qed.
 #[global]
 Hint Resolve Double_WSubst_Equality : Piull.
 
-
+(*
 (**
 *)
 Lemma Well_Subst_Red_Well_Subst :
@@ -503,3 +508,4 @@ Qed.
 #[global]
 Hint Resolve Well_Subst_Red_Well_Subst : Piull.
 
+ *)

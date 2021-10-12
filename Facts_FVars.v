@@ -159,8 +159,10 @@ Proof.
   try unfold Included;
   try intros;
   repeat (apply Union_inv in H; destruct H); 
+  try inversions H0;
+  try rewrite IHCongruence in H1 || rewrite <- IHCongruence in H1;
   try OrSearch.
-Qed.
+Admitted.
 #[global]
 Hint Resolve Cong_FVars : Piull.
 
@@ -216,8 +218,9 @@ Require Import Coq.Program.Equality.
 Lemma After_Subst_No_FVar :
 forall (P : Process)(u x : nat),
 u <> x -> 
-u ∈ FVars ({x \ u} P) -> False.
+~ u ∈ FVars ({x \ u} P).
 Proof.
+  unfold not.
   intro.
   dependent induction P; 
   intros; try simpl in H0;
@@ -822,6 +825,30 @@ Proof.
 Qed.
 #[global]
 Hint Resolve FVars_Subst : Piull.
+
+
+
+Lemma FVars_Reduction :
+forall (P Q: Process)(x : nat),
+(~ x ∈ FVars P) -> P --> Q -> 
+(~ x ∈ FVars Q).
+Proof.
+  intros.
+  induction H0.
+  + admit.
+  + admit.
+  + admit.
+  + admit.
+  + admit.
+  + admit.
+  + admit.
+Admitted.
+
+(* Search FVars. *)
+
+
+
+
 
 
 
