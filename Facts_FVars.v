@@ -216,8 +216,9 @@ Require Import Coq.Program.Equality.
 Lemma After_Subst_No_FVar :
 forall (P : Process)(u x : nat),
 u <> x -> 
-u ∈ FVars ({x \ u} P) -> False.
+~ (u ∈ FVars ({x \ u} P)).
 Proof.
+  unfold not.
   intro.
   dependent induction P; 
   intros; try simpl in H0;
@@ -822,6 +823,90 @@ Proof.
 Qed.
 #[global]
 Hint Resolve FVars_Subst : Piull.
+
+
+(**
+*)
+Lemma Close_FVars_Beq:
+forall (P : Process) (u x i : nat), 
+u <> x -> u ∈ FVars (Close_Rec i x P) -> u ∈ FVars P.
+Proof.
+  intro.
+  induction P; intros; Piauto.
+  + simpl in H0.
+    destruct H0.
+    - destruct x; try contradiction.
+      simpl in H0.
+      DecidSimple x x0.
+      * rewrite e in H0.
+        simpl in H0.
+        contradiction.
+      * rewrite n in H0.
+        simpl in H0.
+        inversions H0.
+        OrSearch.
+    - destruct y; try contradiction.
+      simpl in H0.
+      DecidSimple x2 x0.
+      * rewrite e in H0.
+        simpl in H0.
+        contradiction.
+      * rewrite n in H0.
+        simpl in H0.
+        inversions H0.
+        OrSearch.
+  + simpl in H0. simpl.
+    inversions H0.
+    - left.
+      apply (IHP1 u x i); Piauto.
+    - right.
+      apply (IHP2 u x i); Piauto.
+  + simpl in H0.
+    destruct H0.
+    - destruct H0.
+      * destruct x; try contradiction.
+        simpl in H0.
+        DecidSimple x x0.
+        ** rewrite e in H0.
+           simpl in H0.
+           contradiction.
+        ** rewrite n in H0.
+           simpl in H0.
+           inversions H0.
+           OrSearch.
+      * destruct y; try contradiction.
+        simpl in H0.
+        DecidSimple x2 x0.
+        ** rewrite e in H0.
+           simpl in H0.
+           contradiction.
+        ** rewrite n in H0.
+           simpl in H0.
+           inversions H0.
+           OrSearch.
+    - simpl. right.
+      apply (IHP x1 x0 i); Piauto.
+  + simpl in H0.
+    destruct x; try contradiction.
+    simpl in H0.
+    DecidSimple x x0.
+    - rewrite e in H0.
+      simpl in H0.
+      contradiction.
+    - rewrite n in H0.
+      simpl in H0.
+      inversions H0.
+      OrSearch.
+  + admit.
+  + simpl in H0.
+    simpl.
+    apply (IHP u x (S i)); Piauto.
+Admitted.
+#[global]
+Hint Resolve Close_FVars_Beq : Piull.
+
+
+
 
 
 

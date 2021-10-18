@@ -369,25 +369,43 @@ Hint Resolve M2Open_Rec : Piull.
 
 
 (**
+*)
+Inductive IsClosing : Process -> nat -> Prop :=
+  | IsClosing_Base : forall ( P : Process)(x: nat),
+    (forall (u v : nat)(Q : Process), Q = ({u \ v} Close x P) -> u <> x /\ x <> v ) -> (IsClosing P x).
+#[global]
+Hint Constructors IsClosing : Piull.
+
+
+(**
+*)
+Inductive IsClosingInj : Process -> nat -> Prop :=
+  | IsClosingInj_Base : forall ( P : Process)(x: nat),
+    (forall (u : nat)(Q : Process), Q = (Close x P) -> u = x ) -> (IsClosingInj P x).
+#[global]
+Hint Constructors IsClosingInj : Piull.
+
+
+(**
   Definition 2.4 - Structural congruence
 *)
 Reserved Notation "R '===' S" (at level 60).
 Inductive Congruence : Process -> Process -> Prop :=
 (*    | Con_parallel_zero : forall (P : Process),
         (P↓θ) === P
-    
+      
     | Con_res_zero : 
         ( ν θ)  === (θ) 
         
     | Con_conmt_fuses : forall (n m : Name),
-        [n ←→ m] === ([m ←→ n])   
-*)
-      
-    | Con_conmt_parallel : forall (P Q : Process),
-        (P↓Q) === (Q↓P)
-      
+        [n ←→ m] === ([m ←→ n])
+        
     | Con_res_ex : forall (P : Process),
         (ν (ν P)) === (ν (ν ( { 0 <~> 1 }P ) ))
+        
+    | Con_conmt_parallel : forall (P Q : Process),
+        (P↓Q) === (Q↓P)
+*)
       
     | Con_asoc_parallel : forall (P Q R : Process),
         ((P↓Q)↓R) === (P↓(Q↓R))
@@ -406,41 +424,86 @@ Hint Constructors Congruence : Piull.
 Reserved Notation "R '-->' S" (at level 60).
 Inductive Reduction : Process -> Process -> Prop :=
 
+  | Red_parallel_fuse_dr1 : forall ( x y : nat) ( P : Process),
+    lc P -> x <> y -> IsClosing P x -> IsClosingInj P x -> x ∈ FVars P -> 
+    ( ν Close x (P ↓ ([(FName x) ←→ (FName y)])) -->
+    (Subst x y P) )
+
+
+  | Red_parallel_fuse_dr2 : forall ( x y : nat) ( P : Process),
+    lc P -> x <> y -> IsClosing P x -> IsClosingInj P x -> x ∈ FVars P -> 
+    ( ν Close x (P ↓ ([(FName y) ←→ (FName x)])) -->
+    (Subst x y P) )
+
+
+  | Red_parallel_fuse_iz1 : forall ( x y : nat) ( P : Process),
+    lc P -> x <> y -> IsClosing P x -> IsClosingInj P x -> x ∈ FVars P -> 
+    ( ν Close x (([(FName y) ←→ (FName x)]) ↓ P ) -->
+    (Subst x y P) )
+
+
+  | Red_parallel_fuse_iz2 : forall ( x y : nat) ( P : Process),
+    lc P -> x <> y -> IsClosing P x -> IsClosingInj P x -> x ∈ FVars P -> 
+    ( ν Close x (([(FName x) ←→ (FName y)]) ↓ P ) -->
+    (Subst x y P) )
+
+
+  | Red_chzero_chclose_lt : forall ( Q : Process) (x : nat),
+     lc Q -> ~ x ∈ FVars Q -> IsClosing Q x -> IsClosingInj Q x ->
+     ( ν Close x ( ( (FName x) ·θ ) ↓ ( (FName x) ()· Q ) ) -->  Q )
+
+
+  | Red_chzero_chclose_dr : forall ( Q : Process) (x : nat),
+     lc Q -> ~ x ∈ FVars Q -> IsClosing Q x -> IsClosingInj Q x ->
+     ( ν Close x ( ( (FName x) ()· Q ) ↓ ( (FName x) ·θ ) ) -->  Q )
+
+
+  | Red_parallel_replicate_lf : forall (y u : nat) (P Q : Process),
+    Body P -> lc Q -> ~ u ∈ FVars P -> ~ y ∈ FVars P -> u <> y -> IsClosing P u ->  
+    IsClosing P y -> IsClosingInj P u -> IsClosingInj P y ->
+      ( ν Close u ( ν Close y  ( ((FName u) !· P) ↓ ((FName u) « (FName y) »· Q)) )
+      --> ν Close u ( ν Close y ( ((FName u) !· P) ↓ Q ↓ ({0 ~> y} P) )) )
+
+
+  | Red_parallel_replicate_rg : forall (y u : nat) (P Q : Process),
+    Body P -> lc Q -> ~ u ∈ FVars P -> ~ y ∈ FVars P -> u <> y -> IsClosing P u -> 
+    IsClosing P y -> IsClosingInj P u -> IsClosingInj P y ->
+      ( ν Close u ( ν Close y  (  ((FName u) !· P) ↓ ((FName u) « (FName y) »· Q)) )
+      --> ν Close u ( ν Close y ( ((FName u) !· P) ↓ ({0 ~> y} P) ↓ Q )) )
+
+
+
+(*
+
   | Red_output_input : forall ( x y : nat ) ( P Q : Process ),
     lc P -> Body Q ->
     ( ( ( (FName x) « (FName y) »· P)  ↓ ( (FName x) · Q) ) --> (P ↓ ( {0 ~> y} Q )) )
+
 
   | Red_parallel_replicate : forall (x y : nat) (P Q : Process),
     lc P -> Body Q ->
       (( ( (FName x) « (FName y) »· P) ↓ ( (FName x) !· Q )  ) --> ( P ↓ ({0 ~> y} Q) ↓ ( (FName x) !· Q) ))
 
-  | Red_chzero_chclose : forall ( Q : Process) (x : nat),
-     lc Q -> 
-     ( ( ( (FName x) ·θ ) ↓ ( (FName x) ()· Q ) ) -->  Q )
-
-  | Red_parallel_fuse : forall ( x y : nat) ( P : Process),
-    lc P -> 
-    ( P ↓ ([(FName x) ←→ (FName y)]) --> (Subst x y P) )
 
   | Red_reduction_parallel : forall ( P Q R : Process), 
     lc P -> lc R ->
     ((Q --> R) -> ((P ↓ Q ) --> (P ↓ R)))
 
+
   | Red_reduction_chanres : forall (P Q : Process)( x : nat),
     lc P -> 
     ( P --> Q ) -> ( ν (Close x P) --> ν (Close x Q) )
 
+
    | Red_reduction_struct : forall ( P Q P' Q' : Process ),
     lc P' -> ( P' === P ) -> ( Q' === Q ) ->
     (P' --> Q') -> (P --> Q) 
+
+
+*)
 where "R '-->' S" := (Reduction R S).
 #[global]
 Hint Constructors Reduction: Piull.
-
-
-(**
-*)
-Axiom Close_Subst_Beh : forall(P : Process)(x y z: nat), Well_Subst (Close x P) y z -> x <> z.
 
 
 

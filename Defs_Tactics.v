@@ -116,10 +116,6 @@ Ltac FVars_Beq_Close_Lt H x x1 :=
 
 
 
-
-
-
-
 (**
 *)
 Ltac InductionProcess P Name_Lemma := 

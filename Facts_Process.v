@@ -674,6 +674,59 @@ Qed.
 Hint Resolve Double_Subst_All_Dif : Piull.
 
 
+(**
+*)
+Lemma Close_Permutation_Names :
+forall (x : Name)(i j u v : nat),
+u <> v ->
+Close_Name i u (Close_Name j v x) = Close_Name j v (Close_Name i u x).
+Proof.
+  intros.
+  destruct x; simpl; Piauto.
+  DecidSimple x v.
+  + DecidSimple x u.
+    - apply beq_nat_true in e.
+      apply beq_nat_true in e0.
+      lia.
+    - rewrite n.
+      simpl.
+      rewrite e.
+      Piauto.
+  + DecidSimple x u.
+    - rewrite n.
+      simpl.
+      rewrite e.
+      Piauto.
+    - rewrite n; rewrite n0.
+      simpl.
+      rewrite n; rewrite n0.
+      Piauto.
+Qed.
+#[global]
+Hint Resolve Close_Permutation_Names : Piull.
+
+
+(**
+*)
+Lemma Close_Permutation :
+forall (P : Process)(i j u v : nat),
+u <> v ->
+Close_Rec i u (Close_Rec j v P) = Close_Rec j v (Close_Rec i u P).
+Proof.
+  intro.
+  induction P; intros; simpl;
+    try rewrite Close_Permutation_Names;
+    try rewrite (Close_Permutation_Names y _ _ _ _);
+    try rewrite IHP1;
+    try rewrite IHP2;
+    try rewrite IHP; 
+    Piauto.
+Qed.
+#[global]
+Hint Resolve Close_Permutation : Piull.
+
+
+
 
 
 

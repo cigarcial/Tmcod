@@ -199,7 +199,6 @@ P === Q -> ({u \ x}P) === ({u \ x}Q).
 Proof.
   intros.
   induction H; try simpl; Piauto.
-  rewrite Subst_Bex_Exchange; Piauto.
 Qed.
 #[global]
 Hint Resolve Cong_Subst_Cong : Piull.
@@ -213,12 +212,6 @@ forall P Q : Process,
 Proof.
   intros.
   induction H; inversions H0; Piauto.
-  + apply ProcessAt_Process.
-    do 2 constructor.
-    apply Process_ProcessAt in H0.
-    inversions H0.
-    inversions H3.
-    apply Lca_Bex; auto.
   + inversions H2; Piauto.
   + constructor. simpl.
     constructor.
@@ -237,8 +230,8 @@ forall P Q : Process,
 (P --> Q) -> lc(P)  -> lc(Q).
 Proof.
   intros.
-  induction H; try constructor; eauto with Piull.
-Qed.
+  induction H; try constructor; intros; eauto with Piull.
+Admitted.
 #[global]
 Hint Resolve ProcessReduction_WD : Piull.
 
