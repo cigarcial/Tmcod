@@ -906,9 +906,379 @@ Admitted.
 Hint Resolve Close_FVars_Beq : Piull.
 
 
+(**
+*)
+Lemma FVars_Subst_In :
+forall ( P : Process )( x y x0 : nat ),
+x0 ∈ FVars P -> x ∈ FVars ({y \ x0} P) -> (x = y \/ (x ∈ FVars (P) /\ x <> x0)).
+Proof.
+  intros.
+  DecidSimple x y.
+  DecidSimple x x0.
+  apply beq_nat_false in n.
+  + apply beq_nat_true in e.
+    rewrite e in *.
+    apply After_Subst_No_FVar in H0; Piauto.
+  + apply FVars_Subst in H0.
+    destruct H0; Piauto.
+    apply beq_nat_false in n0.
+    right; constructor; Piauto.
+Qed.
+#[global]
+Hint Resolve FVars_Subst_In : Piull.
+
+
+(**
+*)
+Lemma FVars_Res_Neg :
+forall ( P : Process )( x : nat ),
+~ x ∈ FVars (ν P) <-> ~ x ∈ FVars P.
+Proof.
+  constructor; Piauto.
+Qed.
+#[global]
+Hint Resolve FVars_Res_Neg : Piull.
+
+
+(**
+*)
+Lemma FVars_Res :
+forall ( P : Process )( x : nat ),
+x ∈ FVars (ν P) <-> x ∈ FVars P.
+Proof.
+  constructor; Piauto.
+Qed.
+#[global]
+Hint Resolve FVars_Res : Piull.
+
+
+(**
+*)
+Lemma NFVar_Close_Names :
+forall (z : Name)(x i : nat ),
+x ∈ FVars_Name (Close_Name i x z) -> False.
+Proof.
+  intros.
+  destruct z; simpl in H; try contradiction.
+  DecidSimple x0 x.
+  + rewrite e in H.
+    simpl in H.
+    contradiction.
+  + rewrite n in H.
+    simpl in H.
+    apply Singleton_inv in H.
+    apply beq_nat_false in n.
+    contradiction.
+Qed.
+#[global]
+Hint Resolve NFVar_Close_Names : Piull.
+
+
+(**
+*)
+Lemma NFVar_Close_Cases :
+forall (P : Process )( x u : nat),
+~ x ∈ FVars (Close u P) -> x = u \/ ( x <> u /\ ~ x ∈ FVars P).
+Proof.
+  intros.
+  DecidSimple x u.
+  apply beq_nat_false in n.
+  right.
+  constructor; Piauto.
+  unfold not.
+  intros.
+  Piauto.
+  specialize (FVars_Close_Beq  P x u 0 n H0) as Hx.
+  Piauto.
+Qed.
+#[global]
+Hint Resolve NFVar_Close_Cases : Piull.
+
+
+(** FVars_Close_NotIn
+*)
+Lemma FVars_Reduction_Neg :
+forall ( P Q : Process )( x : nat),
+~ x ∈ FVars P -> P --> Q -> ~ x ∈ FVars Q.
+Proof.
+  intros.
+  induction H0.
+  + apply -> FVars_Res_Neg in H.
+    specialize (NFVar_Close_Cases _ x x0 H) as Ht.
+    destruct Ht; try rewrite H3; Piauto.
+    destruct H3.
+(*    apply No_FVars_Parallel in H4.
+    destruct H4 as [HA HB].
+    unfold not.
+    intros.
+    apply FVars_Subst in H4.
+    destruct H4; try contradiction.
+    rewrite H4 in HB.
+    simpl in HB.
+    apply No_Union_No_Each in HB.
+    destruct HB.
+    apply H6.
+    constructor.
+  + apply -> FVars_Res_Neg in H.
+    specialize (NFVar_Close_Cases _ x x0 H) as Ht.
+    destruct Ht; try rewrite H3; Piauto.
+    destruct H3.
+    apply No_FVars_Parallel in H4.
+    destruct H4 as [HA HB].
+    unfold not.
+    intros.
+    apply FVars_Subst in H4.
+    destruct H4; try contradiction.
+    rewrite H4 in HB.
+    simpl in HB.
+    apply No_Union_No_Each in HB.
+    destruct HB.
+    apply H5.
+    constructor.
+  + apply -> FVars_Res_Neg in H.
+    specialize (NFVar_Close_Cases _ x x0 H) as Ht.
+    destruct Ht; try rewrite H3; Piauto.
+    destruct H3.
+    apply No_FVars_Parallel in H4.
+    destruct H4 as [HA HB].
+    unfold not.
+    intros.
+    apply FVars_Subst in H4.
+    destruct H4; try contradiction.
+    rewrite H4 in HA.
+    simpl in HA.
+    apply No_Union_No_Each in HA.
+    destruct HA.
+    apply H5.
+    constructor.
+  + apply -> FVars_Res_Neg in H.
+    specialize (NFVar_Close_Cases _ x x0 H) as Ht.
+    destruct Ht; try rewrite H3; Piauto.
+    destruct H3.
+    apply No_FVars_Parallel in H4.
+    destruct H4 as [HA HB].
+    unfold not.
+    intros.
+    apply FVars_Subst in H4.
+    destruct H4; try contradiction.
+    rewrite H4 in HA.
+    simpl in HA.
+    apply No_Union_No_Each in HA.
+    destruct HA.
+    apply H6.
+    constructor.
+  + apply -> FVars_Res_Neg in H.
+    specialize (NFVar_Close_Cases _ x x0 H) as Ht.
+    destruct Ht; try rewrite H3; Piauto.
+    destruct H3.
+    apply No_FVars_Parallel in H4.
+    destruct H4 as [HA HB].
+    unfold not in *.
+    intros.
+    apply HB.
+    simpl.
+    OrSearch.
+  + apply -> FVars_Res_Neg in H.
+    specialize (NFVar_Close_Cases _ x x0 H) as Ht.
+    destruct Ht; try rewrite H3; Piauto.
+    destruct H3.
+    apply No_FVars_Parallel in H4.
+    destruct H4 as [HA HB].
+    unfold not in *.
+    intros.
+    apply HA.
+    simpl.
+    OrSearch.
+  + apply -> FVars_Res_Neg in H.
+    apply FVars_Res_Neg.
+    specialize (NFVar_Close_Cases _ x u H) as Ht.
+    destruct Ht.
+    - rewrite H7 in *.
+      apply NFVar_Close.
+    - destruct H7.
+      apply -> FVars_Res_Neg in H8.
+      specialize (NFVar_Close_Cases _ x y H8) as Ht.
+      destruct Ht.
+      * rewrite H9.
+        unfold Close.
+        rewrite Close_Res_Rew.
+        apply FVars_Res_Neg.
+        rewrite Close_Permutation; Piauto.
+      * destruct H9.
+        apply No_FVars_Parallel in H10.
+        destruct H10 as [HA HB].
+        unfold not.
+        intros.
+        apply Close_FVars_Beq in H10; Piauto.
+        apply -> FVars_Res in H10.
+        apply Close_FVars_Beq in H10; Piauto.
+        simpl in H10.
+        destruct H10.
+        simpl in HB.
+        apply No_Union_No_Each in HB.
+        destruct HB.
+        ++ destruct H10; try contradiction.
+        ++ apply FVars_Open_Beq in H10; Piauto.
+           simpl in HA.
+           apply No_Union_No_Each in HA.
+           destruct HA; contradiction.
+  + apply -> FVars_Res_Neg in H.
+    apply FVars_Res_Neg.
+    specialize (NFVar_Close_Cases _ x u H) as Ht.
+    destruct Ht.
+    - rewrite H7 in *.
+      apply NFVar_Close.
+    - destruct H7.
+      apply -> FVars_Res_Neg in H8.
+      specialize (NFVar_Close_Cases _ x y H8) as Ht.
+      destruct Ht.
+      * rewrite H9.
+        unfold Close.
+        rewrite Close_Res_Rew.
+        apply FVars_Res_Neg.
+        rewrite Close_Permutation; Piauto.
+      * destruct H9.
+        apply No_FVars_Parallel in H10.
+        destruct H10 as [HA HB].
+        unfold not.
+        intros.
+        apply Close_FVars_Beq in H10; Piauto.
+        apply -> FVars_Res in H10.
+        apply Close_FVars_Beq in H10; Piauto.
+        simpl in H10.
+        destruct H10.
+        ++ destruct H10; try contradiction.
+           apply FVars_Open_Beq in H10; Piauto.
+           simpl in HA.
+           apply No_Union_No_Each in HA.
+           destruct HA; contradiction.
+        ++ simpl in HB.
+           apply No_Union_No_Each in HB.
+           destruct HB.
+           contradiction.*)
+Admitted.
+#[global]
+Hint Resolve FVars_Reduction_Neg : Piull.
+
+
+(**
+*)
+Lemma NFVar_Close :
+forall ( P : Process )( i x : nat ),
+~ x ∈ FVars (Close_Rec i x P).
+Proof.
+  unfold not.
+  induction P; simpl; intros; try inversions H; ePiauto.
+  inversions H0; ePiauto.
+Qed.
+#[global]
+Hint Resolve NFVar_Close : Piull.
+
+
+(**
+*)
+Lemma In_FVars_Res : 
+forall ( P : Process )( x u  : nat ),
+x ∈ FVars (ν Close u P) -> x ∈ FVars P /\ x <> u.
+Proof.
+  intros.
+  DecidSimple x u.
+  + apply beq_nat_true in e.
+    subst.
+    apply NFVar_Close in H.
+    contradiction.
+  + apply beq_nat_false in n.
+    specialize (Close_FVars_Beq P x u 0 n H) as Hx.
+    Piauto.
+Qed.
+#[global]
+Hint Resolve In_FVars_Res : Piull.
+
+
+(** FVars_Close_NotIn
+*)
+Lemma FVars_Reduction_Inv :
+forall ( P Q : Process )( x : nat),
+x ∈ FVars Q -> P --> Q -> x ∈ FVars P.
+Proof.
+  intros.
+  induction H0.
+  + specialize ( FVars_Subst_In _ _ _ _ H4 H) as Hx.
+    destruct Hx.
+    - DecidSimple y x0.
+      simpl.
+      rewrite n.
+      rewrite H5.
+      do 2 right. 
+      constructor.
+    - destruct H5.
+      apply FVars_Res.
+      apply FVars_Close_Beq; Piauto.
+      OrSearch.
+  + admit.
+  + admit.
+  + admit.
+  + DecidSimple x x0.
+    apply beq_nat_true in e.
+    rewrite e in H.
+    contradiction.
+    apply beq_nat_false in  n.
+    apply FVars_Res.
+    apply FVars_Close_Beq; Piauto.
+    OrSearch.
+  + admit.
+  + apply -> FVars_Res in H.
+    DecidSimple x u.
+    apply beq_nat_true in e.
+    rewrite e in *.
+    apply NFVar_Close in H.
+    contradiction.
+    apply beq_nat_false in n.
+    apply FVars_Close_Beq; Piauto.
+    apply FVars_Beq_Close in H; Piauto.
+    apply -> FVars_Res in H.
+    DecidSimple x y.
+    apply beq_nat_true in e.
+    rewrite e in H.
+    apply NFVar_Close in H.
+    contradiction.
+    apply beq_nat_false in n0.
+    apply FVars_Close_Beq; Piauto.
+    apply FVars_Beq_Close in H; Piauto.
+    destruct H.
+    - destruct H.
+      * destruct H.
+        simpl in H.
+        apply Singleton_inv in H.
+        rewrite H.
+        OrSearch.
+        OrSearch.
+      * OrSearch.
+    - apply FVars_Open_Beq in H; Piauto.
+      OrSearch.
+  + admit.
+Admitted.
+#[global]
+Hint Resolve FVars_Reduction_Inv : Piull.
 
 
 
 
 
 
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  

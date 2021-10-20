@@ -15,3 +15,5 @@ coqc Facts_MOpen.v -Q . Tmcod
 
 coqc Props_Process.v -Q . Tmcod
 coqc Facts_WSubst.v -Q . Tmcod
+
+coqc Facts_Typing.v -Q . Tmcod

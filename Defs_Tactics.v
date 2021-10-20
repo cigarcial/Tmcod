@@ -59,6 +59,12 @@ Ltac DecidSimple x y :=
 Ltac Piauto := auto with Piull.
 
 
+
+(**
+*)
+Ltac ePiauto := eauto with Piull.
+
+
 (**
   Searching a proof where the goal contains multiple or operators.
   Keep in mind that this tactics is exponential.

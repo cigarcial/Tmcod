@@ -726,11 +726,100 @@ Qed.
 Hint Resolve Close_Permutation : Piull.
 
 
+(**
+*)
+Lemma IsClosingInj_inv :
+forall (P : Process)(x y : nat),
+IsClosingInj P x -> y = x.
+Proof.
+  intros.
+  inversions H.
+  ePiauto.
+Qed.
+#[global]
+Hint Resolve IsClosingInj_inv : Piull.
 
 
+(**
+*)
+Lemma Subst_Res :
+forall ( P : Process )( u v : nat),
+{u \ v} ( ν P ) = ν ( {u \ v}  P ).
+Proof.
+  Piauto.
+Qed.
+#[global]
+Hint Resolve Subst_Res : Piull.
 
 
+(**
+*)
+Lemma Subst_Parallel :
+forall ( P Q : Process )( u x : nat),
+{u \ x} (P ↓ Q ) = ({u \ x} P ) ↓ ({u \ x}Q ).
+Proof.
+  Piauto.
+Qed.
+#[global]
+Hint Resolve Subst_Parallel : Piull.
 
+
+(**
+*)
+Lemma IsClosing_Process :
+forall ( P Q : Process )( x0 : nat ),
+IsClosing P x0 -> IsClosing Q x0.
+Proof.
+  constructor.
+  intros.
+  inversions H.
+  specialize (H1 u v ({u \ v} Close x0 P)).
+  Piauto.
+Qed.
+#[global]
+Hint Resolve IsClosing_Process : Piull.
+
+
+(**
+*)
+Lemma IsClosingInj_Process :
+forall ( P Q : Process )( x0 : nat ),
+IsClosingInj P x0 -> IsClosingInj Q x0.
+Proof.
+  constructor.
+  intros.
+  inversions H.
+  specialize (H1 u (Close x0 P)).
+  Piauto.
+Qed.
+#[global]
+Hint Resolve IsClosingInj_Process : Piull.
+
+
+(**
+*)
+Lemma IsClosing_inv :
+forall ( P : Process )( x0 u v : nat ),
+(IsClosing P x0) -> u <> x0 /\ x0 <> v.
+Proof.
+  intros.
+  inversions H.
+  eauto with Piull.
+Qed.
+#[global]
+Hint Resolve IsClosing_inv : Piull.
+
+
+(** FVars_Close_NotIn
+*)
+Lemma Close_Res_Rew :
+forall (P : Process)(u i: nat),
+Close_Rec i u (ν P) = (ν (Close_Rec (S i) u P)).
+Proof.
+  Piauto.
+Qed.
+#[global]
+Hint Resolve Close_Res_Rew : Piull.
 
 
 

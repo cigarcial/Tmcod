@@ -167,76 +167,6 @@ Qed.
 Hint Resolve Lc_WSubst_Subst_WSubst : Piull.
 
 
-(**
-*)
-Lemma Subst_Res :
-forall ( P : Process )( u v : nat),
-{u \ v} ( ν P ) = ν ( {u \ v}  P ).
-Proof.
-  Piauto.
-Qed.
-#[global]
-Hint Resolve Subst_Res : Piull.
-
-
-(**
-*)
-Lemma Subst_Parallel :
-forall ( P Q : Process )( u x : nat),
-{u \ x} (P ↓ Q ) = ({u \ x} P ) ↓ ({u \ x}Q ).
-Proof.
-  Piauto.
-Qed.
-#[global]
-Hint Resolve Subst_Parallel : Piull.
-
-
-(**
-*)
-Lemma IsClosing_Process :
-forall ( P Q : Process )( x0 : nat ),
-IsClosing P x0 -> IsClosing Q x0.
-Proof.
-  constructor.
-  intros.
-  inversions H.
-  specialize (H1 u v ({u \ v} Close x0 P)).
-  Piauto.
-Qed.
-#[global]
-Hint Resolve IsClosing_Process : Piull.
-
-
-(**
-*)
-Lemma IsClosingInj_Process :
-forall ( P Q : Process )( x0 : nat ),
-IsClosingInj P x0 -> IsClosingInj Q x0.
-Proof.
-  constructor.
-  intros.
-  inversions H.
-  specialize (H1 u (Close x0 P)).
-  Piauto.
-Qed.
-#[global]
-Hint Resolve IsClosingInj_Process : Piull.
-
-
-(**
-*)
-Lemma IsClosing_Intro :
-forall ( P : Process )( x0 u v : nat ),
-(IsClosing P x0) -> u <> x0 /\ x0 <> v.
-Proof.
-  intros.
-  inversions H.
-  eauto with Piull.
-Qed.
-#[global]
-Hint Resolve IsClosing_Intro : Piull.
-
-
 (** FVars_Subst
 *)
 Lemma Beq_NFVars_Subst :
@@ -268,6 +198,17 @@ Admitted.
 Hint Resolve Beq_FVars_Subst : Piull.
 
 
+(**
+*)
+Lemma In_FVars_Subst : 
+forall ( P : Process )( x0 x u : nat ),
+x0 ∈ FVars P -> u ∈ FVars ({u \ x} P).
+Proof.
+Admitted.
+#[global]
+Hint Resolve In_FVars_Subst : Piull.
+
+
 (** Subst_Close_Dif_Name
 *)
 Lemma Subst_Reduction_NBeq :
@@ -277,7 +218,7 @@ lc P -> u <> x ->
 Proof.
   intros.
   induction H1.
-  + specialize (IsClosing_Intro P x0 u x H3) as Hx.
+  + specialize (IsClosing_inv P x0 u x H3) as Hx.
     destruct Hx.
     rewrite Subst_Res.
     unfold Close.
@@ -295,7 +236,7 @@ Proof.
       apply beq_nat_false in n0.
       rewrite Double_Subst_All_Dif; Piauto.
       constructor; eauto with Piull.
-  + specialize (IsClosing_Intro P x0 u x H3) as Hx.
+  + specialize (IsClosing_inv P x0 u x H3) as Hx.
     destruct Hx.
     rewrite Subst_Res.
     unfold Close.
@@ -313,7 +254,7 @@ Proof.
       apply beq_nat_false in n0.
       rewrite Double_Subst_All_Dif; Piauto.
       constructor; eauto with Piull.
-  + specialize (IsClosing_Intro P x0 u x H3) as Hx.
+  + specialize (IsClosing_inv P x0 u x H3) as Hx.
     destruct Hx.
     rewrite Subst_Res.
     unfold Close.
@@ -331,7 +272,7 @@ Proof.
       apply beq_nat_false in n0.
       rewrite Double_Subst_All_Dif; Piauto.
       constructor; eauto with Piull.
-  + specialize (IsClosing_Intro P x0 u x H3) as Hx.
+  + specialize (IsClosing_inv P x0 u x H3) as Hx.
     destruct Hx.
     rewrite Subst_Res.
     unfold Close.
@@ -349,7 +290,7 @@ Proof.
       apply beq_nat_false in n0.
       rewrite Double_Subst_All_Dif; Piauto.
       constructor; eauto with Piull.
-  + specialize (IsClosing_Intro Q x0 u x H3) as Hx.
+  + specialize (IsClosing_inv Q x0 u x H3) as Hx.
     destruct Hx.
     rewrite Subst_Res.
     unfold Close.
@@ -361,9 +302,9 @@ Proof.
     rewrite n.
     constructor; eauto with Piull.
   + admit.
-  + specialize (IsClosing_Intro P u0 u x H6) as Hx.
+  + specialize (IsClosing_inv P u0 u x H6) as Hx.
     destruct Hx.
-    specialize (IsClosing_Intro P y u x H7) as Hx.
+    specialize (IsClosing_inv P y u x H7) as Hx.
     destruct Hx.
     do 2 rewrite Subst_Res.
     unfold Close.
@@ -385,6 +326,8 @@ Proof.
 Admitted.
 #[global]
 Hint Resolve Subst_Reduction_NBeq : Piull.
+
+
 
 
 
