@@ -7,10 +7,12 @@
   This file contains the tactis and Hint Db for the proofs.
 *)
 From Coq Require Import Lists.List.
+From Coq Require Import Ensembles.
 Import ListNotations.
 
 From Tmcod Require Import  Defs_Proposition.
 From Tmcod Require Import  Defs_Process.
+From Tmcod Require Import  Defs_Tactics.
 
 
 (**
@@ -30,9 +32,16 @@ Hint Constructors Assig : Piull.
 
 
 (**
+  The following definitions are required to work with Ensembles or the representation for sets given by Coq.
 *)
-Inductive Collect : list Assignment -> Prop := is_collect :forall L : list Assignment,
-  (forall H : Assignment, (In H L) -> Assig H ) -> Collect L.
+Definition Context := Ensemble Assignment.
+
+
+(**
+*)
+Inductive Collect : Context -> Prop := is_collect :
+  forall L : Context,
+  (forall H : Assignment, (H ∈ L) -> Assig H ) -> Collect L.
 #[global]
 Hint Constructors Collect : Piull.
 
@@ -66,27 +75,35 @@ Hint Constructors Disjoint_Contexts : Piull.
 
 (**
 *)
+Inductive Is_Fresh : nat -> list Assignment -> Prop := is_fresh :
+forall (u : nat)(D: list Assignment),
+  ( forall(A : Proposition),  ~ In ((FName u):A) D )  -> (Is_Fresh u D).
+#[global]
+Hint Constructors Disjoint_Contexts : Piull.
+
+
+(**
+*)
 Reserved Notation "D ';;;'  F '!-' P ':::' G" (at level 60).
 Inductive Inference : Process -> list Assignment -> list Assignment -> list Assignment -> Prop := 
   | idr : forall (D : list Assignment) (x y : Name) ( A : Proposition),
     Collect D -> lc_name x -> lc_name y ->
-    Well_Collected D ([x←→y]) -> Well_Collected (cons (x:A) nil) ([x←→y]) ->
-    Well_Collected (cons (y:A) nil) ([x←→y]) -> 
+    Well_Collected (D ++ (cons (y:A) nil) ++ (cons (x:A) nil)) ([x←→y]) ->
     Disjoint_Contexts D (cons (x:A) nil) (cons (y:A) nil) ->
     ( D ;;; (cons (x:A) nil) !- ([x←→y]) ::: (cons (y:A) nil)  )
 
 
   | idl : forall (D : list Assignment)(x y : Name)(A : Proposition),
     Collect D -> lc_name x -> lc_name y ->
-    Well_Collected D ([x←→y]) -> Well_Collected ((cons (x:A) nil) ++ (cons (y:(A^⊥)) nil)) ([x←→y]) ->
+    Well_Collected (D ++ ((cons (x:A) nil) ++ (cons (y:(A^⊥)) nil)) ) ([x←→y]) ->
     Disjoint_Contexts D ((cons (x:A) nil) ++ (cons (y:(A^⊥)) nil)) nil ->
     ( D ;;; ((cons (x:A) nil) ++ (cons (y:(A^⊥)) nil)) !-  ([x←→y]) ::: nil  )
 
 
   | repr : forall ( D : list Assignment ) ( x : Name)( y : nat )( A : Proposition )( P : Process ), 
     Collect D -> lc_name x -> lc P ->
-    Well_Collected D P -> Well_Collected (cons ((FName y):A) nil) P ->
-    Well_Collected D (x !· (Close y P)) -> Well_Collected (cons (x:!A) nil) (x !· (Close y P)) ->
+    Well_Collected (D ++ (cons ((FName y):A) nil) )  P ->
+    Well_Collected (D ++ (cons (x:!A) nil) ) (x !· (Close y P)) ->
     Disjoint_Contexts D nil (cons ((FName y):A) nil) ->
     Disjoint_Contexts D nil (cons (x:!A) nil) ->
     ( D ;;; nil !- P ::: [ ((FName y):A) ] ) ->
@@ -95,10 +112,8 @@ Inductive Inference : Process -> list Assignment -> list Assignment -> list Assi
 
   | repl : forall ( D F G : list Assignment ) ( u x : nat)( A : Proposition)(P : Process ),
     Collect D -> Collect F -> Collect G -> lc P -> u <> x -> ~( x ∈ (FVars P) ) ->
-    Well_Collected ((cons ((FName u):A) nil) ++ D) P ->
-    Well_Collected F P -> Well_Collected G P ->
-    Well_Collected ((cons ((FName x):!A) nil) ++ F) ({x \ u }P) ->
-    Well_Collected D ({x \ u }P) -> Well_Collected G ({x \ u }P) ->
+    Well_Collected ( ((cons ((FName u):A) nil) ++ D) ++ F ++ G ) P ->
+    Well_Collected ( ((cons ((FName x):!A) nil) ++ F) ++ D ++ G ) ({x \ u }P) ->
     Disjoint_Contexts ((cons ((FName u):A) nil) ++ D) F G ->
     Disjoint_Contexts D ((cons ((FName x):!A) nil) ++ F) G ->
     ( ((cons ((FName u):A) nil) ++ D) ;;; F !- P ::: G ) ->
@@ -117,17 +132,19 @@ Inductive Inference : Process -> list Assignment -> list Assignment -> list Assi
     ( D ;;; (cons (x:? A) nil) !- ( x !· (Close y P)) ::: nil)
 
 
-  | limpr : forall ( D F G: list Assignment )( x : Name )( y : nat )( A B : Proposition )( P : Process ),
-    Collect D -> Collect F -> Collect G -> lc_name x -> lc P -> 
-    ( D ;;; ( (cons ((FName y):A) nil) ++ F) !- P ::: ( (cons (x:B) nil) ++ G ) ) -> 
-    ( D ;;; F !- (x · (Close y P)) ::: ((cons (x:(A−∘B) ) nil) ++ G ) )
+  | limpr : forall ( D F G: list Assignment )( x y : nat )( A B : Proposition )( P : Process ),
+    Collect D -> Collect F -> Collect G -> x <> y -> 
+    lc P -> 
+    ( D ;;; ( (cons ((FName y):A) nil) ++ F) !- P ::: ( (cons (FName x:B) nil) ++ G ) ) -> 
+    ( D ;;; F !- ((FName x) · (Close y P)) ::: ((cons (FName x:(A−∘B) ) nil) ++ G ) )
 
 
-  | limpl : forall ( D F G F' G': list Assignment )( x : Name )( y : nat )( A B : Proposition )( P Q: Process ),
-    Collect D -> Collect F -> Collect G -> Collect F' -> Collect G' -> lc_name x -> lc P  -> lc Q -> 
+  | limpl : forall ( D F G F' G': list Assignment )( x y : nat )( A B : Proposition )( P Q: Process ),
+    Collect D -> Collect F -> Collect G -> Collect F' -> Collect G' -> 
+    lc P  -> lc Q -> 
     ( D ;;; F !- P ::: ( (cons ((FName y):A) nil) ++ G ) ) ->
-    ( D ;;; ((cons (x:B) nil) ++ F') !- Q ::: G' ) ->
-    ( D ;;; ((cons (x:(A−∘B) ) nil) ++ (F ++ F')) !- (ν (Close y (x « (FName y) »· (P↓Q)))) ::: ( G ++ G') )
+    ( D ;;; ((cons (FName x:B) nil) ++ F') !- Q ::: G' ) ->
+    ( D ;;; ((cons (FName x:(A−∘B) ) nil) ++ (F ++ F')) !- (ν (Close y ((FName x) « (FName y) »· (P↓Q)))) ::: ( G ++ G') )
 
 
   | rampr : forall ( D F G: list Assignment )( x : Name)( y : nat )( A B : Proposition )( P : Process ),
@@ -206,7 +223,7 @@ Inductive Inference : Process -> list Assignment -> list Assignment -> list Assi
     ( D ;;; F !- (ν Close u ( ((FName u) !· Close x P) ↓ Q)) ::: G )  
 
 
-  | cutr : forall ( D F G F' G' : list Assignment )( P Q : Process )( A : Proposition )( x : nat ),
+  | cutr : forall ( D F G F' F' G' : list Assignment )( P Q : Process )( A : Proposition )( x : nat ),
     Collect D -> Collect F -> Collect G -> Collect F' -> Collect G' -> 
     lc P -> lc Q ->
     ( D ;;; F !- P ::: ( cons ((FName x):A) nil ++ G ) ) ->

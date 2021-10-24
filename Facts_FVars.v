@@ -1195,6 +1195,38 @@ Qed.
 Hint Resolve In_FVars_Res : Piull.
 
 
+(**
+*)
+Lemma Close_Parallel_NFVar :
+forall ( P Q : Process )( y : nat ),
+~ y ∈ FVars P -> P ↓ Close y Q = Close y (P↓Q).
+Proof.
+  intros.
+  unfold Close.
+  simpl.
+  rewrite (Close_NoFVar_Eq P y 0); Piauto.
+Qed.
+#[global]
+Hint Resolve Close_Parallel_NFVar : Piull.
+
+
+(**
+*)
+Lemma Rep_Input_NFVar :
+forall ( P : Process )( u y : nat), 
+y <> u -> ~ y ∈ FVars P -> ~ y ∈ FVars (FName u !· P).
+Proof.
+  unfold not.
+  intros.
+  destruct H1; Piauto.
+  apply Singleton_inv in H1.
+  lia.
+Qed.
+#[global]
+Hint Resolve Rep_Input_NFVar : Piull.
+
+
+
 (** FVars_Close_NotIn
 *)
 Lemma FVars_Reduction_Inv :
@@ -1233,36 +1265,39 @@ Proof.
     rewrite e in *.
     apply NFVar_Close in H.
     contradiction.
+
     apply beq_nat_false in n.
-    apply FVars_Close_Beq; Piauto.
-    apply FVars_Beq_Close in H; Piauto.
-    apply -> FVars_Res in H.
-    DecidSimple x y.
-    apply beq_nat_true in e.
-    rewrite e in H.
-    apply NFVar_Close in H.
-    contradiction.
-    apply beq_nat_false in n0.
     apply FVars_Close_Beq; Piauto.
     apply FVars_Beq_Close in H; Piauto.
     destruct H.
     - destruct H.
-      * destruct H.
-        simpl in H.
+      * simpl in H.
         apply Singleton_inv in H.
-        rewrite H.
-        OrSearch.
-        OrSearch.
+        lia.
       * OrSearch.
-    - apply FVars_Open_Beq in H; Piauto.
-      OrSearch.
+    - apply -> FVars_Res in H.
+      DecidSimple x y.
+      apply beq_nat_true in e.
+      rewrite e in H.
+      apply NFVar_Close in H.
+      contradiction.
+      
+      apply beq_nat_false in n0.
+      inversions H0.
+      rewrite (Cong_FVars
+        ((FName u !· P) ↓ (ν Close y (FName u « FName y »· Q)) ) 
+        (ν ((FName u !· P) ↓ Close y (FName u « FName y »· Q)) ) ); Piauto.
+      rewrite Close_Parallel_NFVar; Piauto.
+      apply FVars_Close_Beq; Piauto.
+      apply FVars_Beq_Close in H; Piauto.
+      destruct H.
+      * OrSearch.
+      * apply FVars_Open_Beq in H; Piauto.
+        OrSearch.
   + admit.
 Admitted.
 #[global]
 Hint Resolve FVars_Reduction_Inv : Piull.
-
-
-
 
 
 

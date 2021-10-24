@@ -9,8 +9,6 @@
 From Coq Require Import Nat.
 From Coq Require Import Arith.Peano_dec.
 From Coq Require Import Ensembles.
-From Coq Require Import Finite_sets.
-From Coq Require Import Finite_sets_facts.
 
 From Tmcod Require Import Defs_Tactics.
 
@@ -19,12 +17,6 @@ From Tmcod Require Import Defs_Tactics.
   The following definitions are required to work with Ensembles or the representation for sets given by Coq.
 *)
 Definition FVarsE := Ensemble nat.
-
-Notation ø := (Empty_set _).
-Notation " x ∈ A " := ( In _ A x ) (at level 50,no associativity).
-Notation " A ⊆ B " := ( Included _ A B ) (at level 100, no associativity).
-Notation " A ∪ B " := ( Union _ A B ) (at level 80, no associativity).
-Notation " A ∩ B " := ( Intersection _ A B ) (at level 80, no associativity).
 
 
 (**
@@ -458,20 +450,34 @@ Inductive Reduction : Process -> Process -> Prop :=
      ( ν Close x ( ( (FName x) ()· Q ) ↓ ( (FName x) ·θ ) ) -->  Q )
 
 
-  | Red_parallel_replicate_lf : forall (y u : nat) (P Q : Process),
+  | Red_parallel_replicate_rg : forall (y u : nat) (P Q : Process),
     Body P -> lc Q -> ~ u ∈ FVars P -> ~ y ∈ FVars P -> u <> y -> IsClosing P u ->  
     IsClosing P y -> IsClosingInj P u -> IsClosingInj P y ->
-      ( ν Close u ( ν Close y  ( ((FName u) !· P) ↓ ((FName u) « (FName y) »· Q)) )
-      --> ν Close u ( ν Close y ( ((FName u) !· P) ↓ Q ↓ ({0 ~> y} P) )) )
+      ( ν Close u ( ((FName u) !· P) ↓  ν Close y  ( ((FName u) « (FName y) »· Q)) )
+      --> ν Close u ( ((FName u) !· P) ↓  ν Close y  ( Q ↓ ({0 ~> y} P) )) )
 
 
-  | Red_parallel_replicate_rg : forall (y u : nat) (P Q : Process),
+  | Red_parallel_replicate_lf : forall (y u : nat) (P Q : Process),
     Body P -> lc Q -> ~ u ∈ FVars P -> ~ y ∈ FVars P -> u <> y -> IsClosing P u -> 
     IsClosing P y -> IsClosingInj P u -> IsClosingInj P y ->
-      ( ν Close u ( ν Close y  (  ((FName u) !· P) ↓ ((FName u) « (FName y) »· Q)) )
-      --> ν Close u ( ν Close y ( ((FName u) !· P) ↓ ({0 ~> y} P) ↓ Q )) )
+      ( ν Close u ( ((FName u) !· P) ↓  ν Close y  ( ((FName u) « (FName y) »· Q)) )
+      --> ν Close u ( ((FName u) !· P) ↓  ν Close y  ( ({0 ~> y} P) ↓ Q )) )
 
 
+  | Red_output_input_rg : forall ( x y : nat) (P Q R : Process),
+    Body P -> lc Q -> lc R -> ~ y ∈ FVars P -> x <> y -> 
+    IsClosing P x -> IsClosing P y -> 
+    IsClosingInj P x -> IsClosingInj P y ->
+      ( ν Close x (  ((FName x) · P) ↓ ν Close y ( (FName x) « (FName y) »· (Q↓R)) )
+      --> ν Close x ( ν Close y ( Q ↓ ({0 ~> y} P)) ↓ R ) )
+
+
+  | Red_output_input_lf : forall ( x y : nat) (P Q R : Process),
+    Body P -> lc Q -> lc R -> ~ y ∈ FVars P -> x <> y -> 
+    IsClosing P x -> IsClosing P y -> 
+    IsClosingInj P x -> IsClosingInj P y ->
+      ( ν Close x ( ν Close y ( (FName x) « (FName y) »· (Q↓R)) ↓ ((FName x) · P) )
+      --> ν Close x ( R ↓ ν Close y ( Q ↓ ({0 ~> y} P)) ) )
 
 (*
 
@@ -479,20 +485,6 @@ Inductive Reduction : Process -> Process -> Prop :=
     lc P -> Body Q ->
     ( ( ( (FName x) « (FName y) »· P)  ↓ ( (FName x) · Q) ) --> (P ↓ ( {0 ~> y} Q )) )
 
-
-  | Red_parallel_replicate : forall (x y : nat) (P Q : Process),
-    lc P -> Body Q ->
-      (( ( (FName x) « (FName y) »· P) ↓ ( (FName x) !· Q )  ) --> ( P ↓ ({0 ~> y} Q) ↓ ( (FName x) !· Q) ))
-
-
-  | Red_reduction_parallel : forall ( P Q R : Process), 
-    lc P -> lc R ->
-    ((Q --> R) -> ((P ↓ Q ) --> (P ↓ R)))
-
-
-  | Red_reduction_chanres : forall (P Q : Process)( x : nat),
-    lc P -> 
-    ( P --> Q ) -> ( ν (Close x P) --> ν (Close x Q) )
 
 
    | Red_reduction_struct : forall ( P Q P' Q' : Process ),

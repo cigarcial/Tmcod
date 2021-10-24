@@ -310,16 +310,17 @@ Proof.
     unfold Close.
     rewrite Subst_Close_Dif_Name; Piauto.
     rewrite Subst_Close_Dif_Name; Piauto.
+    do 2 rewrite Subst_Parallel.
     do 2 rewrite Subst_Res.
     rewrite Subst_Close_Dif_Name; Piauto.
     rewrite Subst_Close_Dif_Name; Piauto.
-    do 3 rewrite Subst_Parallel.
     do 2 simpl ({u \ x} (FName u0 !· P)).
     simpl ({u \ x} (FName u0 « FName y »· Q)).
     DecidSimple u0 x.
     rewrite n.
     DecidSimple y x.
     rewrite n0.
+    rewrite Subst_Parallel.
     rewrite <- Subst_Open_NEq_Exchange; Piauto.
     constructor; eauto with Piull.
   + admit.

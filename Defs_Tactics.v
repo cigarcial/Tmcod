@@ -10,7 +10,17 @@ From Coq Require Import Bool.Bool.
 From Coq Require Import Arith.PeanoNat.
 From Coq Require Import Arith.EqNat.
 From Coq Require Import Lia.
+
+From Coq Require Import Ensembles.
+From Coq Require Import Finite_sets.
 From Coq Require Import Finite_sets_facts.
+
+
+Notation ø := (Empty_set _).
+Notation " x ∈ A " := ( In _ A x ) (at level 50,no associativity).
+Notation " A ⊆ B " := ( Included _ A B ) (at level 100, no associativity).
+Notation " A ∪ B " := ( Union _ A B ) (at level 80, no associativity).
+Notation " A ∩ B " := ( Intersection _ A B ) (at level 80, no associativity).
 
 (**
   Custom database for the hints.

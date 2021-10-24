@@ -26,6 +26,9 @@ From Tmcod Require Import Facts_MOpen.
 From Tmcod Require Import Props_Process.
 From Tmcod Require Import Facts_WSubst.
 
+From Coq Require Import Lists.List.
+Import ListNotations.
+
 
 (**
 *)
@@ -327,19 +330,159 @@ Proof.
     Piauto.
   + admit.
   + apply In_FVars_Res in H.
-    destruct H.
-    apply In_FVars_Res in H.
-    destruct H.
-    simpl in H.
-    repeat destruct H; try apply Singleton_inv in H; try lia.
+    do 3 destruct H.
     - repeat apply FVars_Close_Beq; Piauto.
       OrSearch.
     - repeat apply FVars_Close_Beq; Piauto.
+      OrSearch.
+    - repeat destruct H.
+      * simpl in H.
+        DecidSimple u y.
+        rewrite n in H.
+        apply Singleton_inv in H.
+        lia.
+      * simpl in H.
+        DecidSimple y y.
+        rewrite e in H.
+        simpl in H.
+        inversions H.
+    - apply In_FVars_Res in H.
+      destruct H.
+      repeat apply FVars_Close_Beq; Piauto.
+      right.
+      repeat apply FVars_Close_Beq; Piauto.
       OrSearch.
   + admit.
 Admitted.
 #[global]
 Hint Resolve FVars_Reduction : Piull.
+
+
+(**
+*)
+Lemma No_Typing_Zero : 
+forall (D F G : list Assignment),
+~( D ;;; F !- θ ::: G ).
+Proof.
+  unfold not.
+  intros.
+  dependent induction H;
+    apply (Equality_Subst_Equality _ _ u x0) in x;
+    rewrite <- (Double_Subst_Expan_NFVar _ u u x0) in x;
+    try rewrite Subst_By_Equal in x;
+    try simpl in x;
+    eauto with Piull;
+    Piauto.
+Qed.
+#[global]
+Hint Resolve No_Typing_Zero : Piull.
+
+
+(**
+*)
+Lemma No_Typing_Output : 
+forall (D F G : list Assignment)(P : Process)(x y : Name),
+~( D ;;; F !- x « y »· P ::: G ).
+Proof.
+  unfold not.
+  intros.
+  dependent induction H;
+    apply (Equality_Subst_Equality _ _ u x0) in x;
+    rewrite <- (Double_Subst_Expan_NFVar _ u u x0) in x;
+    try rewrite Subst_By_Equal in x;
+    try simpl in x;
+    eauto with Piull;
+    Piauto.
+Qed.
+#[global]
+Hint Resolve No_Typing_Output : Piull.
+
+
+(**
+*)
+Lemma Append_Assigment_Collect :
+forall ( u : nat )( A : Proposition )( L : list Assignment ),
+Collect L ->  Collect ( cons ((FName u):A) nil  ++ L ).
+Proof.
+  intros.
+  constructor.
+  intros.
+  apply in_app_or in H1.
+  destruct H1.
+  inversions H1; Piauto.
+  inversions H2.
+  inversions H.
+  Piauto.
+Qed.
+#[global]
+Hint Resolve Append_Assigment_Collect : Piull.
+
+
+(**
+*)
+Lemma Lc_Equal_Process :
+forall ( P Q : Process ),
+P = Q -> lc P -> lc Q.
+Proof.
+  intros.
+  rewrite <- H.
+  Piauto.
+Qed.
+#[global]
+Hint Resolve Lc_Equal_Process : Piull.
+
+
+(**
+*)
+Lemma Lca_Equal_Process :
+forall ( P Q : Process )( i : nat ),
+P = Q -> lca i P -> lca i Q.
+Proof.
+  intros.
+  rewrite <- H.
+  Piauto.
+Qed.
+#[global]
+Hint Resolve Lca_Equal_Process : Piull.
+
+
+(**
+*)
+Lemma App_Nil_Right :
+forall ( L : list Assignment ),
+L = L ++ nil.
+Proof.
+  intros.
+  rewrite app_nil_r.
+  Piauto.
+Qed.
+#[global]
+Hint Resolve App_Nil_Right : Piull.
+
+
+(**
+*)
+Lemma Nil_Is_Collect :
+Collect nil.
+Proof.
+  constructor.
+  intros.
+  inversions H0.
+Qed.
+#[global]
+Hint Resolve Nil_Is_Collect : Piull.
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
