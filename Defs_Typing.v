@@ -2,7 +2,7 @@
   Ciro Iván García López
   Tesis de Maestría
   Session Type Systems Verification
-  Unam - 2021
+  Unam - 2021 set-reglas
   
   This file contains the tactis and Hint Db for the proofs.
 *)
