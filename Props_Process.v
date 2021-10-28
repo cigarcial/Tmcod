@@ -150,7 +150,7 @@ Hint Resolve Lc_Close_Body : Piull.
 *)
 Lemma Lc_Close_Is_Body :
 forall ( P : Process )(x : nat),
-lc P -> ( forall (y : nat), lc ( (Close_Rec 0 x P) ^ y)).
+lc P -> (forall (y : nat), lc ( (Close_Rec 0 x P) ^ y)).
 Proof.
   intros.
   apply (Lc_Close_Body P x) in H.

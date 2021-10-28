@@ -26,9 +26,6 @@ From Tmcod Require Import Facts_MOpen.
 From Tmcod Require Import Props_Process.
 From Tmcod Require Import Facts_WSubst.
 
-From Coq Require Import Lists.List.
-Import ListNotations.
-
 
 (**
 *)
@@ -275,7 +272,7 @@ Hint Resolve Close_Same_Inv : Piull.
 (**
 *)
 Lemma No_Typing_Parallel : 
-forall (D F G : list Assignment)(P Q : Process),
+forall (D F G : Context)(P Q : Process),
 ~( D ;;; F !- (P↓Q) ::: G ).
 Proof.
   unfold not.
@@ -361,7 +358,7 @@ Hint Resolve FVars_Reduction : Piull.
 (**
 *)
 Lemma No_Typing_Zero : 
-forall (D F G : list Assignment),
+forall (D F G : Context),
 ~( D ;;; F !- θ ::: G ).
 Proof.
   unfold not.
@@ -381,7 +378,7 @@ Hint Resolve No_Typing_Zero : Piull.
 (**
 *)
 Lemma No_Typing_Output : 
-forall (D F G : list Assignment)(P : Process)(x y : Name),
+forall (D F G : Context)(P : Process)(x y : Name),
 ~( D ;;; F !- x « y »· P ::: G ).
 Proof.
   unfold not.
@@ -401,18 +398,18 @@ Hint Resolve No_Typing_Output : Piull.
 (**
 *)
 Lemma Append_Assigment_Collect :
-forall ( u : nat )( A : Proposition )( L : list Assignment ),
-Collect L ->  Collect ( cons ((FName u):A) nil  ++ L ).
+forall ( u : nat )( A : Proposition )( L : Context ),
+Collect L ->  Collect ( Sng (FName u:A) ∪ L ).
 Proof.
   intros.
   constructor.
   intros.
-  apply in_app_or in H1.
   destruct H1.
-  inversions H1; Piauto.
-  inversions H2.
-  inversions H.
-  Piauto.
+  + apply Singleton_inv in H0.
+    rewrite <- H0.
+    Piauto.
+  + inversions H.
+    Piauto.
 Qed.
 #[global]
 Hint Resolve Append_Assigment_Collect : Piull.
@@ -449,12 +446,19 @@ Hint Resolve Lca_Equal_Process : Piull.
 (**
 *)
 Lemma App_Nil_Right :
-forall ( L : list Assignment ),
-L = L ++ nil.
+forall ( L : Context ),
+L = (ø ∪ L).
 Proof.
   intros.
-  rewrite app_nil_r.
-  Piauto.
+  apply Extensionality_Ensembles.
+  constructor.
+  + unfold Included.
+    intros.
+    OrSearch.
+  + unfold Included.
+    intros.
+    destruct H; auto.
+    inversions H.
 Qed.
 #[global]
 Hint Resolve App_Nil_Right : Piull.
@@ -463,7 +467,7 @@ Hint Resolve App_Nil_Right : Piull.
 (**
 *)
 Lemma Nil_Is_Collect :
-Collect nil.
+Collect ø.
 Proof.
   constructor.
   intros.
@@ -473,9 +477,100 @@ Qed.
 Hint Resolve Nil_Is_Collect : Piull.
 
 
+(**
+*)
+Lemma Weakening_Well_Collected :
+forall ( D : Context )( A : Proposition )( P : Process )( u : nat ),
+Well_Collected D P -> Well_Collected (Sng (FName u : A) ∪ D) P.
+Proof.
+  intros.
+  constructor.
+  intros.
+  inversions H.
+  specialize (H1 x A0 H0).
+  OrSearch.
+Qed.
+#[global]
+Hint Resolve Weakening_Well_Collected : Piull.
+
+
+(**
+*)
+Lemma Weakening_Ordinary :
+forall ( D F G : Context )( A : Proposition )( P : Process )( u y: nat ),
+( D ;;; F !- P ::: G ) ->
+( (Sng (FName u : A) ∪ D) ;;; F !- P ::: G ).
+Proof.
+  intros.
+  induction H.
+  + constructor; Piauto.
+    constructor.
+    inversions H1.
+    intros.
+    specialize (H3 x0 A1 H4).
+    destruct H3; try OrSearch.
+    destruct H3; OrSearch.
+Admitted.
+#[global]
+Hint Resolve Weakening_Ordinary : Piull.
 
 
 
+
+(**
+*)
+Lemma No_Typing_Fuse_One_Lf :
+forall ( A : Proposition )( x y : nat  )( D F G : Context ),
+((FName x : A) ∈ D ) -> ~( D ;;; F !- ([FName x ←→ FName  y]) ::: G ).
+Proof.
+  unfold not.
+  intros.
+  dependent induction H0.
+  + admit.
+  + admit.
+  + apply (Equality_Subst_Equality _ _ u x0) in x.
+    rewrite <- Double_Subst_Expan_NFVar in x; Piauto.
+    rewrite Subst_By_Equal in x.
+    simpl in x.
+    DecidSimple x1 x0.
+    - admit.
+    - rewrite n in x.
+      DecidSimple y x0.
+      * rewrite e in x.
+        apply (IHInference x1 u); auto.
+        right; Piauto.
+      * rewrite n0 in x.
+        apply (IHInference x1 y); auto.
+        right; Piauto.
+Admitted.
+
+
+(**
+*)
+Lemma No_Typing_Fuse_One_Rg :
+forall ( A : Proposition )( x y : nat  )( D F G : Context ),
+((FName x : A) ∈ D ) -> ~( D ;;; F !- ([FName y ←→ FName  x]) ::: G ).
+Proof.
+  unfold not.
+  intros.
+  dependent induction H0.
+  + admit.
+  + admit.
+  + apply (Equality_Subst_Equality _ _ u x0) in x.
+    rewrite <- Double_Subst_Expan_NFVar in x; Piauto.
+    rewrite Subst_By_Equal in x.
+    simpl in x.
+    DecidSimple x1 x0.
+    - admit.
+    - rewrite n in x.
+      DecidSimple y x0.
+      * rewrite e in x.
+        apply (IHInference x1 u); auto.
+        right; Piauto.
+      * rewrite n0 in x.
+        apply (IHInference x1 y); auto.
+        right; Piauto.
+Admitted.
 
 
 

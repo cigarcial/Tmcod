@@ -6,9 +6,8 @@
   
   This file contains the tactis and Hint Db for the proofs.
 *)
-From Coq Require Import Lists.List.
 From Coq Require Import Ensembles.
-Import ListNotations.
+
 
 From Tmcod Require Import  Defs_Proposition.
 From Tmcod Require Import  Defs_Process.
@@ -48,174 +47,184 @@ Hint Constructors Collect : Piull.
 
 (**
 *)
-Inductive Well_Collected : list Assignment -> Process -> Prop := is_well_collected : 
-forall (L : list Assignment)(P : Process),
-  (forall (x : nat)(A : Proposition), ( (In ((FName x):A) L) <-> (x ∈ FVars P))) -> (Well_Collected L P).
+Inductive Well_Collected : Context -> Process -> Prop := is_well_collected : 
+forall (L : Context)(P : Process),
+  (forall (x : nat)(A : Proposition), ( (x ∈ FVars P) -> ( (FName x:A) ∈ L ) )) -> (Well_Collected L P).
 #[global]
 Hint Constructors Well_Collected : Piull.
 
 
 (**
 *)
-Inductive Disjoint_Lists : list Assignment -> list Assignment -> Prop := are_disjoint_lists :
-forall (D F : list Assignment),
-  (forall (x : nat)(A : Proposition), ~ ( (In ((FName x):A) D)  /\ (In ((FName x):A) F) ) ) -> (Disjoint_Lists D F).
+Inductive Disjoint_Sets : Context -> Context -> Prop := are_disjoint_lists :
+forall (D F : Context),
+  (forall (x : nat)(A B: Proposition), ~ ( ( (FName x:A) ∈ D )  /\ ( (FName x:A) ∈ F) ) ) -> (Disjoint_Sets D F).
 #[global]
-Hint Constructors Disjoint_Lists : Piull.
+Hint Constructors Disjoint_Sets : Piull.
 
 
 (**
 *)
-Inductive Disjoint_Contexts : list Assignment -> list Assignment -> list Assignment -> Prop := are_disjoint_contexts :
-forall (D F G : list Assignment),
-  ( (Disjoint_Lists D F) /\ (Disjoint_Lists D G) /\ (Disjoint_Lists  F G) ) -> (Disjoint_Contexts D F G).
+Inductive Disjoint_Contexts : Context -> Context -> Context -> Prop := are_disjoint_contexts :
+forall (D F G : Context),
+  ( (Disjoint_Sets D F) /\ (Disjoint_Sets D G) /\ (Disjoint_Sets  F G) ) -> (Disjoint_Contexts D F G).
 #[global]
 Hint Constructors Disjoint_Contexts : Piull.
 
-
-(**
-*)
-Inductive Is_Fresh : nat -> list Assignment -> Prop := is_fresh :
-forall (u : nat)(D: list Assignment),
-  ( forall(A : Proposition),  ~ In ((FName u):A) D )  -> (Is_Fresh u D).
+Definition Sng ( H : Assignment ) : Context := Singleton _ H.
 #[global]
-Hint Constructors Disjoint_Contexts : Piull.
+Hint Resolve Sng : Piull.
+
+
 
 
 (**
 *)
 Reserved Notation "D ';;;'  F '!-' P ':::' G" (at level 60).
-Inductive Inference : Process -> list Assignment -> list Assignment -> list Assignment -> Prop := 
-  | idr : forall (D : list Assignment) (x y : Name) ( A : Proposition),
-    Collect D -> lc_name x -> lc_name y ->
-    Well_Collected (D ++ (cons (y:A) nil) ++ (cons (x:A) nil)) ([x←→y]) ->
-    Disjoint_Contexts D (cons (x:A) nil) (cons (y:A) nil) ->
-    ( D ;;; (cons (x:A) nil) !- ([x←→y]) ::: (cons (y:A) nil)  )
+Inductive Inference : Process -> Context -> Context -> Context -> Prop := 
+  | idr : forall ( D : Context )( x y : nat )( A : Proposition ),
+    Collect D -> x <> y ->
+    Well_Collected (D ∪ Sng (FName y:A) ∪ Sng (FName x:A) ) ([FName x ←→ FName y]) ->
+    Disjoint_Contexts D (Sng (FName y:A)) (Sng (FName x:A)) ->
+    ( D ;;; (Sng (FName x:A)) !- ([FName x←→ FName y]) ::: (Sng (FName y:A))  )
 
 
-  | idl : forall (D : list Assignment)(x y : Name)(A : Proposition),
-    Collect D -> lc_name x -> lc_name y ->
-    Well_Collected (D ++ ((cons (x:A) nil) ++ (cons (y:(A^⊥)) nil)) ) ([x←→y]) ->
-    Disjoint_Contexts D ((cons (x:A) nil) ++ (cons (y:(A^⊥)) nil)) nil ->
-    ( D ;;; ((cons (x:A) nil) ++ (cons (y:(A^⊥)) nil)) !-  ([x←→y]) ::: nil  )
+  | idl : forall ( D : Context )( x y : nat )( A : Proposition ),
+    Collect D -> x <> y -> 
+    Well_Collected (D ∪ Sng (FName x:A) ∪ Sng (FName y:(A^⊥))) ([FName x ←→ FName y]) ->
+    Disjoint_Contexts D (Sng (FName x:A) ∪ Sng (FName y:(A^⊥)) ) ø ->
+    ( D ;;; (Sng (FName x:A) ∪ Sng (FName y:(A^⊥)) ) !-  ([FName x ←→ FName y]) ::: ø  )
 
 
-  | repr : forall ( D : list Assignment ) ( x : Name)( y : nat )( A : Proposition )( P : Process ), 
-    Collect D -> lc_name x -> lc P ->
-    Well_Collected (D ++ (cons ((FName y):A) nil) )  P ->
-    Well_Collected (D ++ (cons (x:!A) nil) ) (x !· (Close y P)) ->
-    Disjoint_Contexts D nil (cons ((FName y):A) nil) ->
-    Disjoint_Contexts D nil (cons (x:!A) nil) ->
-    ( D ;;; nil !- P ::: [ ((FName y):A) ] ) ->
-    ( D ;;; nil !- (x !· (Close y P)) ::: [(x:!A)] )
+  | repr : forall ( D : Context )( x y : nat )( A : Proposition )( P : Process ),
+    Collect D -> lc P -> x <> y ->
+    Well_Collected (D ∪ Sng (FName y:A)) P ->
+    Well_Collected (D ∪ Sng (FName x:!A)) (FName x !· (Close y P)) ->
+    Disjoint_Contexts D ø (Sng (FName y:A)) ->
+    Disjoint_Contexts D ø (Sng (FName x:!A)) ->
+    ( D ;;; ø !- P ::: (Sng (FName y:A)) ) ->
+    ( D ;;; ø !- (FName x !· (Close y P)) ::: (Sng (FName x:!A)) )
 
 
-  | repl : forall ( D F G : list Assignment ) ( u x : nat)( A : Proposition)(P : Process ),
-    Collect D -> Collect F -> Collect G -> lc P -> u <> x -> ~( x ∈ (FVars P) ) ->
-    Well_Collected ( ((cons ((FName u):A) nil) ++ D) ++ F ++ G ) P ->
-    Well_Collected ( ((cons ((FName x):!A) nil) ++ F) ++ D ++ G ) ({x \ u }P) ->
-    Disjoint_Contexts ((cons ((FName u):A) nil) ++ D) F G ->
-    Disjoint_Contexts D ((cons ((FName x):!A) nil) ++ F) G ->
-    ( ((cons ((FName u):A) nil) ++ D) ;;; F !- P ::: G ) ->
-    ( D ;;; ((cons ((FName x):!A) nil) ++ F) !- ({x \ u }P) ::: G)
+  | repl : forall ( D F G : Context )( u x : nat )( A : Proposition )( P : Process ),
+    Collect D -> Collect F -> Collect G -> lc P -> u <> x -> 
+    ~( x ∈ (FVars P) ) -> 
+    Well_Collected ( Sng (FName u:A) ∪ D ∪ F ∪ G ) P ->
+    Well_Collected ( Sng (FName x:!A) ∪ D ∪ F ∪ G ) ({x \ u }P) ->
+    Disjoint_Contexts (Sng (FName u:A) ∪ D) F G ->
+    Disjoint_Contexts D (Sng (FName x:!A) ∪ F) G ->
+    ( (Sng (FName u:A) ∪ D) ;;; F !- P ::: G ) ->
+    ( D ;;; (Sng (FName x:!A) ∪ F) !- ({x \ u }P) ::: G)
 
 
-  | wnotr : forall ( D F G : list Assignment ) ( u x : nat)( A : Proposition)(P : Process ),
-    Collect D -> Collect G -> Collect F -> lc P -> u <> x -> ~( x ∈ (FVars P) ) -> 
-    ( ((cons ((FName u):A) nil) ++ D) ;;; F !- P ::: G ) -> 
-    ( D ;;; F !- ({x \ u }P) ::: ( ( cons ((FName x): (? (A ^⊥) )) nil ) ++ G) )
+  | wnotr : forall ( D F G : Context )( u x : nat )( A : Proposition )( P : Process ),
+    Collect D -> Collect G -> Collect F -> lc P -> u <> x -> 
+    ~( x ∈ (FVars P) ) ->
+    ( ( Sng (FName u:A) ∪ D ) ;;; F !- P ::: G ) -> 
+    ( D ;;; F !- ({x \ u }P) ::: ( Sng (FName x: (? (A ^⊥))) ∪ G) )
 
 
-  | wnotl : forall ( D : list Assignment )( x : Name)( y : nat )( A : Proposition)(P : Process ),
-    Collect D -> lc_name x -> lc P -> 
-    ( D ;;; (cons ((FName y):A) nil) !- P ::: nil ) -> 
-    ( D ;;; (cons (x:? A) nil) !- ( x !· (Close y P)) ::: nil)
+  | wnotl : forall ( D : Context )( x y : nat )( A : Proposition )( P : Process ),
+    Collect D -> lc P -> x <> y -> 
+    ( D ;;; (Sng (FName y:A)) !- P ::: ø ) -> 
+    ( D ;;; (Sng (FName x:? A)) !- ( FName x !· (Close y P)) ::: ø)
 
 
-  | limpr : forall ( D F G: list Assignment )( x y : nat )( A B : Proposition )( P : Process ),
+  | limpr : forall ( D F G: Context )( x y : nat )( A B : Proposition )( P : Process ),
     Collect D -> Collect F -> Collect G -> x <> y -> 
     lc P -> 
-    ( D ;;; ( (cons ((FName y):A) nil) ++ F) !- P ::: ( (cons (FName x:B) nil) ++ G ) ) -> 
-    ( D ;;; F !- ((FName x) · (Close y P)) ::: ((cons (FName x:(A−∘B) ) nil) ++ G ) )
+    ( D ;;; ( Sng (FName y:A) ∪ F) !- P ::: ( Sng (FName x:B) ∪ G ) ) -> 
+    ( D ;;; F !- (FName x · (Close y P)) ::: (Sng (FName x:(A−∘B)) ∪ G ) )
 
 
-  | limpl : forall ( D F G F' G': list Assignment )( x y : nat )( A B : Proposition )( P Q: Process ),
+  | limpl : forall ( D F G F' G': Context )( x y : nat )( A B : Proposition )( P Q: Process ),
     Collect D -> Collect F -> Collect G -> Collect F' -> Collect G' -> 
     lc P  -> lc Q -> 
-    ( D ;;; F !- P ::: ( (cons ((FName y):A) nil) ++ G ) ) ->
-    ( D ;;; ((cons (FName x:B) nil) ++ F') !- Q ::: G' ) ->
-    ( D ;;; ((cons (FName x:(A−∘B) ) nil) ++ (F ++ F')) !- (ν (Close y ((FName x) « (FName y) »· (P↓Q)))) ::: ( G ++ G') )
+    ( D ;;; F !- P ::: ( Sng (FName y:A) ∪ G ) ) ->
+    ( D ;;; (Sng (FName x:B) ∪ F') !- Q ::: G' ) ->
+    ( D ;;; (Sng (FName x:(A−∘B)) ∪ F ∪ F') !- (ν Close y (FName x « FName y »· (P↓Q))) ::: ( G ∪ G') )
 
 
-  | rampr : forall ( D F G: list Assignment )( x : Name)( y : nat )( A B : Proposition )( P : Process ),
-    Collect D -> Collect F -> Collect G -> lc_name x -> lc P -> 
-    ( D ;;; F !- P ::: ( (cons (x:B) (cons ((FName y):A) nil) ) ++ G ) ) -> 
-    ( D ;;; F !- (x · (Close y P)) ::: ((cons (x:(A⅋B) ) nil) ++ G ) )
+  | rampr : forall ( D F G: Context )( x y : nat )( A B : Proposition )( P : Process ),
+    Collect D -> Collect F -> Collect G -> lc P -> 
+    ( D ;;; F !- P ::: ( Sng (FName x:B) ∪ Sng (FName y:A) ∪ G ) ) -> 
+    ( D ;;; F !- (FName x · (Close y P)) ::: ( Sng (FName x:(A⅋B)) ∪ G ) )
 
 
-  | rampl  : forall ( D F G F' G': list Assignment )( x : Name )( y : nat )( A B : Proposition )( P Q: Process ),
-    Collect D -> Collect F -> Collect G -> Collect F' -> Collect G' -> lc_name x -> lc P  -> lc Q -> 
-    ( D ;;; ( (cons ((FName y):A) nil) ++ F ) !- P ::: G ) ->
-    ( D ;;; ((cons (x:B) nil) ++ F') !- Q ::: G' ) ->
-    ( D ;;; ((cons (x:(A⅋B) ) nil) ++ (F ++ F')) !- (ν ( Close y (x « (FName y) »· (P↓Q)) )) ::: ( G ++ G') )
+  | rampl  : forall ( D F G F' G': Context )( x y : nat )( A B : Proposition )( P Q: Process ),
+    Collect D -> Collect F -> Collect G -> Collect F' -> Collect G' -> lc P  -> lc Q -> 
+    ( D ;;; ( Sng (FName y:A) ∪ F ) !- P ::: G ) ->
+    ( D ;;; ( Sng (FName x:B) ∪ F') !- Q ::: G') ->
+    ( D ;;; ( Sng (FName x:(A⅋B)) ∪ F ∪F') !- (ν Close y (FName x « FName y »· (P↓Q)) ) ::: ( G ∪ G') )
 
 
-  | otiml : forall ( D F G: list Assignment )( y x : Name )( y : nat )( A B : Proposition )( P : Process ),
-    Collect D -> Collect F -> Collect G -> lc_name x -> lc P -> 
-    ( D ;;; ( (cons (x:B) (cons ((FName y):A) nil) ) ++ F) !- P ::: G ) -> 
-    ( D ;;; ( (cons (x:(A⊗B) ) nil) ++ F) !- (x · (Close y P)) ::: G )
+
+  | otiml : forall ( D F G: Context )( x y : nat )( y : nat )( A B : Proposition )( P : Process ),
+    Collect D -> Collect F -> Collect G -> lc P -> x <> y -> 
+    ( D ;;; ( Sng (FName x:B) ∪ Sng (FName y:A) ∪ F ) !- P ::: G ) -> 
+    ( D ;;; ( Sng (FName x:(A⊗B)) ∪ F) !- (FName x · Close y P) ::: G )
 
 
-  | otimr  : forall ( D F G F' G': list Assignment )( x : Name )( y : nat )( A B : Proposition )( P Q: Process ),
-    Collect D -> Collect F -> Collect G -> Collect F' -> Collect G' -> lc_name x -> lc P  -> lc Q -> 
-    ( D ;;; F !- P ::: ( (cons ((FName y):A) nil) ++ G) ) ->
-    ( D ;;; F' !- Q ::: ( (cons (x:B) nil) ++ G') ) ->
-    ( D ;;; (F ++ F') !- (ν (Close y (x « (FName y) »· (P↓Q)) )) ::: ( (cons (x:(A⊗B)) nil) ++ G ++ G') )
+  | otimr  : forall ( D F G F' G': Context )( x y : nat )( A B : Proposition )( P Q: Process ),
+    Collect D -> Collect F -> Collect G -> Collect F' -> Collect G' -> lc P  -> lc Q -> x <> y ->
+    ( D ;;; F !- P ::: ( Sng (FName y:A) ∪ G) ) ->
+    ( D ;;; F' !- Q ::: ( Sng (FName x:B) ∪ G') ) ->
+    ( D ;;; (F ∪ F') !- ν Close y ( FName x « FName y »· (P↓Q)) ::: ( Sng (FName x:(A⊗B)) ∪ G ∪ G') )
 
 
-  | perpr : forall ( D F G: list Assignment )( x : Name) (P : Process ),
-    Collect D -> Collect F -> Collect G -> lc_name x -> lc P -> 
+  | perpr : forall ( D F G: Context )( x : nat )( P : Process ),
+    Collect D -> Collect F -> Collect G -> lc P -> 
     ( D ;;; F !- P ::: G ) -> 
-    ( D ;;; F !- (x ()· P) ::: ( (cons (x:⊥) nil) ++ G) )
+    ( D ;;; F !- (FName x ()· P) ::: ( Sng (FName x:⊥) ∪ G ) )
 
 
-  | perpl : forall ( D : list Assignment)( x : Name),
-    Collect D -> lc_name x -> 
-    ( D ;;; (cons (x:⊥) nil ) !- (x ·θ ) ::: nil )
+  | perpl : forall ( D : Context )( x : nat ),
+    Collect D ->
+    ( D ;;; (Sng (FName x:⊥)) !- (FName x ·θ ) ::: ø )
 
 
-  | onel : forall ( D F G : list Assignment)( x : Name)( P : Process),
-    Collect D -> Collect F -> Collect G ->  lc_name x -> lc P -> 
+  | onel : forall ( D F G : Context )( x : nat )( P : Process ),
+    Collect D -> Collect F -> Collect G -> lc P -> 
     ( D ;;; F !- P ::: G ) -> 
-    ( D ;;; (cons (x:¶) nil ++ F) !- (x ()· P ) ::: G )
+    ( D ;;; (Sng (FName x:¶) ∪ F) !- (FName x ()· P ) ::: G )
 
 
-  | oner : forall ( D : list Assignment)( x : Name),
-    Collect D -> lc_name x -> 
-    ( D ;;; nil !- (x ·θ ) ::: (cons (x:¶) nil ) )
+  | oner : forall ( D : Context)( x : nat ),
+    Collect D -> 
+    ( D ;;; ø !- (FName x ·θ ) ::: ( Sng (FName x:¶) ) )
 
 
-  | copyl : forall ( D F G : list Assignment )( x u : nat )( P : Process )( A : Proposition ),
+  | copyl : forall ( D F G : Context )( x u : nat )( P : Process )( A : Proposition ),
     Collect D -> Collect F -> Collect G -> lc P -> x <> u ->
-    ( ( cons ((FName u):A) nil ++ D ) ;;; ( cons ((FName x):A) nil ++ F ) !- P ::: G ) -> 
-    ( ( cons ((FName u):A) nil ++ D ) ;;; F !- (ν (Close x ( (FName u) « (FName x) »· P ))) ::: G )
+    ( ( Sng (FName u:A) ∪ D ) ;;; ( Sng (FName x:A) ∪ F ) !- P ::: G ) -> 
+    ( ( Sng (FName u:A) ∪ D ) ;;; F !- ν Close x ( FName u « FName x »· P ) ::: G )
 
 
-  | copyr : forall ( D F G : list Assignment )( x u : nat )( P : Process )( A : Proposition ),
+  | copyr : forall ( D F G : Context )( x u : nat )( P : Process )( A : Proposition ),
     Collect D -> Collect F -> Collect G -> lc P -> x <> u ->
-    ( ( cons ((FName u):A) nil ++ D ) ;;; F !- P ::: ( cons ((FName x):(A^⊥)) nil ++ G) ) -> 
-    ( ( cons ((FName u):A) nil ++ D ) ;;; F !- (ν (Close x ( (FName u) « (FName x) »· P ))) ::: G )
+    ( ( Sng (FName u:A) ∪ D ) ;;; F !- P ::: ( Sng (FName x:(A^⊥)) ∪ G) ) -> 
+    ( ( Sng (FName u:A) ∪ D ) ;;; F !- ν Close x ( FName u « FName x »· P ) ::: G )
 
 
-  | cutrep : forall ( D F G : list Assignment )( P Q : Process )( A : Proposition )( x u : nat ),
+  | cutrep : forall ( D F G : Context )( P Q : Process )( A : Proposition )( x u : nat ),
     Collect D -> Collect F -> Collect G ->
     lc P -> lc Q -> x <> u ->
-    ( D ;;; nil !- P ::: ( cons ((FName x):A) nil ) ) -> 
-    ( (cons ((FName u):A) nil ++ D) ;;; F !- Q ::: G ) -> 
-    ( D ;;; F !- (ν Close u ( ((FName u) !· Close x P) ↓ Q)) ::: G )
+    ( D ;;; ø !- P ::: ( Sng (FName x:A) ) ) -> 
+    ( (Sng (FName u:A) ∪ D) ;;; F !- Q ::: G )  -> 
+    ( D ;;; F !- ν Close u ((FName u !· Close x P) ↓ Q) ::: G )
 
 
-  | cutwnot : forall ( D F G : list Assignment )( x u : nat )( P Q : Process )( A : Proposition ),
+  | cutr : forall ( D F G F' G' : Context )( P Q : Process )( A : Proposition )( x : nat ),
+    Collect D -> Collect F -> Collect G -> Collect F' -> Collect G' -> 
+    lc P -> lc Q ->
+    ( D ;;; F !- P ::: ( Sng (FName x:A) ∪ G ) ) ->
+    ( D ;;; (Sng (FName x:A) ∪ F') !- Q ::: G' ) ->
+    ( D ;;; (F ∪ F') !- ( ν Close x (P↓Q) ) ::: (G ∪ G') )
+
+    
+
+(*
+  | cutwnot : forall ( D F G : Context )( x u : nat )( P Q : Process )( A : Proposition ),
     Collect D -> Collect F -> Collect G -> 
     lc P -> lc Q ->  x <> u ->
     ( D ;;; ( cons ((FName x):(A^⊥)) nil ) !- P ::: nil ) -> 
@@ -223,25 +232,24 @@ Inductive Inference : Process -> list Assignment -> list Assignment -> list Assi
     ( D ;;; F !- (ν Close u ( ((FName u) !· Close x P) ↓ Q)) ::: G )  
 
 
-  | cutr : forall ( D F G F' F' G' : list Assignment )( P Q : Process )( A : Proposition )( x : nat ),
-    Collect D -> Collect F -> Collect G -> Collect F' -> Collect G' -> 
-    lc P -> lc Q ->
-    ( D ;;; F !- P ::: ( cons ((FName x):A) nil ++ G ) ) ->
-    ( D ;;; (cons ((FName x):A) nil ++ F') !- Q ::: G' ) ->
-    ( D ;;; (F ++ F') !- ( ν Close x (P↓Q) ) ::: (G ++ G') )
 
 
-  | cutl : forall ( D F G F' G' : list Assignment )( P Q : Process )( A : Proposition )( x : nat ),
+  | cutl : forall ( D F G F' G' : Context )( P Q : Process )( A : Proposition )( x : nat ),
     Collect D -> Collect F -> Collect G -> Collect F' -> Collect G' -> 
     lc P -> lc Q ->
     ( D ;;; (cons ((FName x):A) nil ++ F) !- P ::: G ) ->
     ( D ;;; (cons ((FName x):(A^⊥)) nil ++ F') !- Q ::: G' ) ->
     ( D ;;; (F ++ F') !- ( ν Close x (P↓Q) ) ::: (G ++ G') )
 
-
+*)
 where "D ';;;'  F '!-' P ':::' G" := (Inference P D F G).
 #[global]
 Hint Constructors Inference : Piull.
+
+
+
+
+
 
 
 
