@@ -25,7 +25,21 @@ forall ( P : Process ),
 lc P -> lca 0 P.
 Proof.
   intros.
-  induction H; Piauto.
+  induction H.
+  + constructor.
+  + constructor.
+    - Piauto.
+    - Piauto.
+  + constructor.
+    - Piauto.
+    - Piauto.
+  + Piauto.
+  + Piauto.
+  + Piauto.
+  + constructor.
+    Piauto.
+  + Piauto.
+  + Piauto.
 Qed.
 #[global]
 Hint Resolve Process_ProcessAt : Piull.
@@ -38,7 +52,38 @@ forall ( P : Process ),
 lca 0 P -> lc P.
 Proof.
   intros.
-  induction P; try inversions H;
+  induction P.
+  + constructor.
+  + inversions H.
+    constructor.
+    - apply Lca_Zero_Lc_Name.
+      auto.
+    - apply Lca_Zero_Lc_Name.
+      auto.
+  + inversions H.
+    constructor; Piauto.
+  + inversions H.
+    constructor; Piauto.
+  + inversions H.
+    constructor; Piauto.
+  + inversions H. 
+    constructor; Piauto.
+  + try inversions H.
+    constructor.
+    intros.
+    specialize (Lca_Lc_Process_MOpen P 1 [x]) as HB.
+    apply HB.
+    auto.
+    auto.
+  + try inversions H;
+    try constructor;
+    try apply Lca_Zero_Lc_Name;
+    try apply IHP1 || apply IHP2;
+    try intros;
+    try specialize (Lca_Lc_Process_MOpen P 1 [x]) as HB;
+    try specialize (Lca_Lc_Process_MOpen P 1 [x0]) as HB;
+    Piauto.
+  + try inversions H;
     try constructor;
     try apply Lca_Zero_Lc_Name;
     try apply IHP1 || apply IHP2;
@@ -207,7 +252,7 @@ Hint Resolve Cong_Subst_Cong : Piull.
 (**
 *)
 Theorem Congruence_WD :
-forall P Q : Process, 
+forall P Q : Process,
 (P === Q) -> lc(P)  -> lc(Q).
 Proof.
   intros.
@@ -231,6 +276,21 @@ forall P Q : Process,
 Proof.
   intros.
   induction H; try constructor; intros; eauto with Piull.
+  + rewrite Lc_Open_Close_Subst; Piauto.
+    - apply Subst_Lc_Lc.
+      constructor; Piauto.
+      constructor.
+      intros.
+      rewrite Lc_Open_Close_Subst; Piauto.
+      apply Subst_Lc_Lc.
+      constructor; Piauto.
+
+    - constructor; Piauto.
+      constructor.
+      intros.
+      rewrite Lc_Open_Close_Subst; Piauto.
+      apply Subst_Lc_Lc.
+      constructor; Piauto.
 Admitted.
 #[global]
 Hint Resolve ProcessReduction_WD : Piull.

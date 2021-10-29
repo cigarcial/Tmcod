@@ -8,6 +8,8 @@
 *)
 
 Require Import Coq.Program.Equality.
+From Coq Require Import Lists.List.
+Import ListNotations.
 
 From Coq Require Import Bool.Bool.
 From Coq Require Import Arith.PeanoNat.
@@ -278,8 +280,8 @@ Proof.
   unfold not.
   intros.
   dependent induction H;
-    apply (Equality_Subst_Equality _ _ u x0) in x;
-    rewrite <- (Double_Subst_Expan_NFVar _ u u x0) in x;
+    try apply (Equality_Subst_Equality _ _ u x0) in x;
+    try rewrite <- (Double_Subst_Expan_NFVar _ u u x0) in x;
     try rewrite Subst_By_Equal in x;
     try simpl in x;
     eauto with Piull;
@@ -364,8 +366,8 @@ Proof.
   unfold not.
   intros.
   dependent induction H;
-    apply (Equality_Subst_Equality _ _ u x0) in x;
-    rewrite <- (Double_Subst_Expan_NFVar _ u u x0) in x;
+    try apply (Equality_Subst_Equality _ _ u x0) in x;
+    try rewrite <- (Double_Subst_Expan_NFVar _ u u x0) in x;
     try rewrite Subst_By_Equal in x;
     try simpl in x;
     eauto with Piull;
@@ -384,8 +386,8 @@ Proof.
   unfold not.
   intros.
   dependent induction H;
-    apply (Equality_Subst_Equality _ _ u x0) in x;
-    rewrite <- (Double_Subst_Expan_NFVar _ u u x0) in x;
+    try apply (Equality_Subst_Equality _ _ u x0) in x;
+    try rewrite <- (Double_Subst_Expan_NFVar _ u u x0) in x;
     try rewrite Subst_By_Equal in x;
     try simpl in x;
     eauto with Piull;
@@ -399,14 +401,13 @@ Hint Resolve No_Typing_Output : Piull.
 *)
 Lemma Append_Assigment_Collect :
 forall ( u : nat )( A : Proposition )( L : Context ),
-Collect L ->  Collect ( Sng (FName u:A) ∪ L ).
+Collect L ->  Collect ( (Bld u A) ++ L ).
 Proof.
   intros.
   constructor.
   intros.
   destruct H1.
-  + apply Singleton_inv in H0.
-    rewrite <- H0.
+  + rewrite <- H1.
     Piauto.
   + inversions H.
     Piauto.
@@ -447,18 +448,10 @@ Hint Resolve Lca_Equal_Process : Piull.
 *)
 Lemma App_Nil_Right :
 forall ( L : Context ),
-L = (ø ∪ L).
+L = (nil ++ L).
 Proof.
   intros.
-  apply Extensionality_Ensembles.
   constructor.
-  + unfold Included.
-    intros.
-    OrSearch.
-  + unfold Included.
-    intros.
-    destruct H; auto.
-    inversions H.
 Qed.
 #[global]
 Hint Resolve App_Nil_Right : Piull.
@@ -467,7 +460,7 @@ Hint Resolve App_Nil_Right : Piull.
 (**
 *)
 Lemma Nil_Is_Collect :
-Collect ø.
+Collect nil.
 Proof.
   constructor.
   intros.
@@ -481,7 +474,7 @@ Hint Resolve Nil_Is_Collect : Piull.
 *)
 Lemma Weakening_Well_Collected :
 forall ( D : Context )( A : Proposition )( P : Process )( u : nat ),
-Well_Collected D P -> Well_Collected (Sng (FName u : A) ∪ D) P.
+Well_Collected D P -> Well_Collected ( (Bld u A) ++ D) P.
 Proof.
   intros.
   constructor.
@@ -499,7 +492,7 @@ Hint Resolve Weakening_Well_Collected : Piull.
 Lemma Weakening_Ordinary :
 forall ( D F G : Context )( A : Proposition )( P : Process )( u y: nat ),
 ( D ;;; F !- P ::: G ) ->
-( (Sng (FName u : A) ∪ D) ;;; F !- P ::: G ).
+( ((Bld u A) ++ D) ;;; F !- P ::: G ).
 Proof.
   intros.
   induction H.
@@ -521,7 +514,7 @@ Hint Resolve Weakening_Ordinary : Piull.
 *)
 Lemma No_Typing_Fuse_One_Lf :
 forall ( A : Proposition )( x y : nat  )( D F G : Context ),
-((FName x : A) ∈ D ) -> ~( D ;;; F !- ([FName x ←→ FName  y]) ::: G ).
+( List.In (FName x : A) D ) -> ~( D ;;; F !- ([FName x ←→ FName  y]) ::: G ).
 Proof.
   unfold not.
   intros.
@@ -549,7 +542,7 @@ Admitted.
 *)
 Lemma No_Typing_Fuse_One_Rg :
 forall ( A : Proposition )( x y : nat  )( D F G : Context ),
-((FName x : A) ∈ D ) -> ~( D ;;; F !- ([FName y ←→ FName  x]) ::: G ).
+( List.In (FName x : A) D ) -> ~( D ;;; F !- ([FName y ←→ FName  x]) ::: G ).
 Proof.
   unfold not.
   intros.

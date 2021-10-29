@@ -8,6 +8,9 @@
 *)
 
 Require Import Coq.Program.Equality.
+From Coq Require Import Lists.List.
+Import ListNotations.
+
 
 From Coq Require Import Bool.Bool.
 From Coq Require Import Arith.PeanoNat.
@@ -63,15 +66,27 @@ Hint Resolve Well_Collected_Reduction : Piull.
 
 (**
 *)
-Theorem Type_Subst_L :
+Proposition Type_Subst_Lf :
 forall ( P : Process )( x u : nat )( D F G : Context )( A : Proposition ),
-( D ;;; F !- P ::: G ) -> ( D ;;; (Sng (FName x:A) ∪ F) !- {u \ x}P ::: G ).
+List.In (FName u : A) F -> 
+( D ;;; F !- P ::: G ) -> ( D ;;; (Replace u x A F) !- {x \ u}P ::: G ).
 Proof.
 Admitted.
 #[global]
-Hint Resolve Type_Subst_L : Piull.
+Hint Resolve Type_Subst_Lf : Piull.
 
 
+
+(**
+*)
+Proposition Type_Subst_Rg :
+forall ( P : Process )( x u : nat )( D F G : Context )( A : Proposition ),
+List.In (FName u : A) G -> 
+( D ;;; F !- P ::: G ) -> ( D ;;; F !- {x \ u}P ::: (Replace u x A G) ).
+Proof.
+Admitted.
+#[global]
+Hint Resolve Type_Subst_Rg : Piull.
 
 
 
@@ -130,6 +145,7 @@ Proof.
       apply (Close_Same_Inv _ _ u 0) in H9; Piauto.
       rewrite <- H9 in *.
       apply (No_Typing_Fuse_One_Rg A _ _ _ _ _) in H6; OrSearch.
+      
     - apply (IsClosingInj_inv _ _ u) in H19.
       rewrite <- H19 in *.
       assert ( Hx : ν (Close_Name 1 u (if u =? y then BName 0 else FName u)
@@ -145,6 +161,7 @@ Proof.
       apply (cutrep _ _ _ _ _ A x u); Piauto.
       rewrite <- H10 in H6.
       admit.
+      
     - apply (IsClosingInj_inv _ _ u) in H19.
       rewrite <- H19 in *.
       assert ( Hx : ν (Close_Name 1 u (if u =? y then BName 0 else FName u)
@@ -172,9 +189,72 @@ Proof.
         rewrite H22 in *.
         rewrite (App_Nil_Right F).
         rewrite (App_Nil_Right G).
-        admit.
+        apply (cutr (Bld u0 A ++ D) nil nil F G _ _  A y); Piauto.
+        apply Weakening_Ordinary; Piauto.
+        rewrite Lc_Open_Close_Subst; Piauto.
+        assert( Ht : Replace x y A (Bld x A) = Bld y A ++ nil ). Piauto.
+        rewrite <- Ht.
+        apply Type_Subst_Rg; Piauto.
+        OrSearch.
+      * admit.
+  + inversions H8.
+    - assert ( Hx : [if x0 =? x0 then BName 0 else FName x0 ←→ if y =? x0 then BName 0 else FName y] =  Close_Rec 0 x0 ([FName x0 ←→ FName y]) ). Piauto.
+      rewrite Hx in H10.
+      apply (IsClosingInj_inv _ _ x) in H14.
+      rewrite <- H14 in *.
+      apply (Close_Same_Inv _ _ x 0) in H10; Piauto.
+      rewrite <- H10 in *.
+      inversions H7.
+      * admit.
+      * admit. (* caso no aceptado *)
+      
+      * admit. (* revienta *)
+      * admit. (* revienta *)
+    - assert ( Hx : [if y =? x0 then BName 0 else FName y ←→ if x0 =? x0 then BName 0 else FName x0] =  Close_Rec 0 x0 ([FName y ←→ FName x0]) ). Piauto.
+      rewrite Hx in H10.
+      apply (IsClosingInj_inv _ _ x) in H14.
+      rewrite <- H14 in *.
+      apply (Close_Same_Inv _ _ x 0) in H10; Piauto.
+      rewrite <- H10 in *.
+      inversions H7.
+      * contradiction.
+      * contradiction. 
+      * admit. (* revienta *)
+      * admit. (* revienta *)
+    - assert ( Hx : [if y =? x0 then BName 0 else FName y ←→ if x0 =? x0 then BName 0 else FName x0] =  Close_Rec 0 x0 ([FName y ←→ FName x0]) ). Piauto.
+      rewrite Hx in H9.
+      apply (IsClosingInj_inv _ _ x) in H14.
+      rewrite <- H14 in *.
+      apply (Close_Same_Inv _ _ x 0) in H9; Piauto.
+      rewrite <- H9 in *.
+      inversions H6.
+      * admit. (* deducible *)
+      * admit. (* revienta *)
+      * admit. (* revienta *) 
+    - assert ( Hx : [if x0 =? x0 then BName 0 else FName x0 ←→ if y =? x0 then BName 0 else FName y] =  Close_Rec 0 x0 ([FName x0 ←→ FName y]) ). Piauto.
+      rewrite Hx in H9.
+      apply (IsClosingInj_inv _ _ x) in H14.
+      rewrite <- H14 in *.
+      apply (Close_Same_Inv _ _ x 0) in H9; Piauto.
+      rewrite <- H9 in *.
+      inversions H6.
+      * contradiction.
+      * admit. (* revienta *)
+      * admit. (* revienta *)
+    - assert ( Hx : (if x0 =? x0 then BName 0 else FName x0) ·θ = Close_Rec 0 x0 (FName x0 ·θ) ). Piauto.
+      rewrite Hx in H9.
+      apply (IsClosingInj_inv _ _ x) in H15.
+      rewrite <- H15 in *.
+      apply (Close_Same_Inv _ _ x 0) in H9; Piauto.
+      rewrite <- H9 in *.
+      inversions H6.
+      * admit.
+      * admit.
       * 
 Admitted.
+
+
+Search Close_Rec.
 
 
 

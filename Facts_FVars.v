@@ -153,6 +153,49 @@ forall (P Q : Process),
 P === Q -> FVars P = FVars Q.
 Proof.
   intros.
+  induction H.
+  + simpl.
+    apply Extensionality_Ensembles.
+    constructor.
+    - unfold Included.
+      intros.
+      apply Union_inv in H.
+      destruct H.
+      * apply Union_inv in H.
+        destruct H.
+        ++ OrSearch.
+        ++ OrSearch.
+      * OrSearch.
+    - unfold Included.
+      intros.
+      apply Union_inv in H.
+      destruct H.
+      * OrSearch.
+      * apply Union_inv in H.
+        destruct H.
+        ++ OrSearch.
+        ++ OrSearch.
+  + simpl.
+    apply Extensionality_Ensembles.
+    constructor.
+    - unfold Included.
+      intros.
+      apply Union_inv in H0.
+      destruct H0.
+      * OrSearch.
+      * OrSearch.
+    - unfold Included.
+      intros.
+      apply Union_inv in H0.
+      destruct H0.
+      * OrSearch.
+      * OrSearch.
+Qed.
+#[global]
+Hint Resolve Cong_FVars : Piull.
+(**
+Proof.
+  intros.
   induction H; simpl; Piauto;
   try apply Extensionality_Ensembles;
   try constructor;
@@ -163,7 +206,7 @@ Proof.
 Qed.
 #[global]
 Hint Resolve Cong_FVars : Piull.
-
+*)
 
 (**
 *)
@@ -1006,20 +1049,24 @@ Proof.
   + apply -> FVars_Res_Neg in H.
     specialize (NFVar_Close_Cases _ x x0 H) as Ht.
     destruct Ht; try rewrite H3; Piauto.
-    destruct H3.
-(*    apply No_FVars_Parallel in H4.
-    destruct H4 as [HA HB].
+    subst.
+    (* Inocente, pero no tanto *)
+    Piauto.
+
+    destruct H5.
+    apply No_FVars_Parallel in H6.
+    destruct H6 as [HA HB].
     unfold not.
     intros.
-    apply FVars_Subst in H4.
-    destruct H4; try contradiction.
-    rewrite H4 in HB.
+    apply FVars_Subst in H6.
+    destruct H6; try contradiction.
+    rewrite H6 in HB.
     simpl in HB.
     apply No_Union_No_Each in HB.
     destruct HB.
-    apply H6.
+    apply H8.
     constructor.
-  + apply -> FVars_Res_Neg in H.
+(*  + apply -> FVars_Res_Neg in H.
     specialize (NFVar_Close_Cases _ x x0 H) as Ht.
     destruct Ht; try rewrite H3; Piauto.
     destruct H3.
@@ -1211,7 +1258,7 @@ Hint Resolve Close_Parallel_NFVar : Piull.
 
 
 (**
-*)
+*) 
 Lemma Rep_Input_NFVar :
 forall ( P : Process )( u y : nat), 
 y <> u -> ~ y ∈ FVars P -> ~ y ∈ FVars (FName u !· P).
