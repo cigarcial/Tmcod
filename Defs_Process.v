@@ -205,8 +205,7 @@ Hint Constructors lc : Piull.
 *)
 Inductive Body : Process -> Prop := 
   | is_body : forall (P : Process), 
-    ( forall (x : nat), lc ({ 0 ~> x
-     }P) ) -> Body(P).
+    ( forall (x : nat), lc ({ 0 ~> x}P) ) -> Body(P).
 #[global]
 Hint Constructors Body : Piull.
 
@@ -397,6 +396,7 @@ Inductive Congruence : Process -> Process -> Prop :=
         
     | Con_conmt_parallel : forall (P Q : Process),
         (P↓Q) === (Q↓P)
+        ν (P↓Q) === ν (Q↓P)
 *)
       
     | Con_asoc_parallel : forall (P Q R : Process),
@@ -404,7 +404,7 @@ Inductive Congruence : Process -> Process -> Prop :=
       
     | Con_abs_restriction : forall (P Q : Process),
         lc P -> (P↓(ν Q)) === ν (P↓Q)
-        
+      
 where "R '===' S" := (Congruence R S).
 #[global]
 Hint Constructors Congruence : Piull.

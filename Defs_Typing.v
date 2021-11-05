@@ -58,7 +58,7 @@ Hint Constructors Well_Collected : Piull.
 *)
 Inductive Disjoint_Sets : Context -> Context -> Prop := are_disjoint_lists :
 forall (D F : Context),
-  (forall (x : nat)(A B: Proposition), ~ ( ( In (FName x:A) D )  /\ ( In (FName x:A) F) ) ) -> (Disjoint_Sets D F).
+  (forall (x : nat)(A B: Proposition), ~ ( ( In (FName x:A) D )  /\ ( In (FName x:B) F) ) ) -> (Disjoint_Sets D F).
 #[global]
 Hint Constructors Disjoint_Sets : Piull.
 
@@ -73,7 +73,7 @@ Hint Constructors Disjoint_Contexts : Piull.
 
 
 Definition Bld ( x : nat )( A : Proposition ) : Context := cons (FName x:A) nil.
-#[global]
+#[global] 
 Hint Resolve Bld : Piull.
 
 Definition BldA ( X : Assignment ) : Context := cons X nil.
@@ -111,7 +111,7 @@ Inductive Inference : Process -> Context -> Context -> Context -> Prop :=
 
   | repl : forall ( D F G : Context )( u x : nat )( A : Proposition )( P : Process ),
     Collect D -> Collect F -> Collect G -> lc P -> u <> x -> 
-    ~( x ∈ (FVars P) ) -> 
+    ~( x ∈ (FVars P) ) -> ( u ∈ (FVars P) ) ->
     Well_Collected ( (Bld u A) ++ D ++ F ++ G ) P ->
     Well_Collected ( (Bld x (!A)) ++ D ++ F ++ G ) ({x \ u }P) ->
     Disjoint_Contexts ( (Bld u A) ++ D ) F G ->
@@ -122,13 +122,21 @@ Inductive Inference : Process -> Context -> Context -> Context -> Prop :=
 
   | wnotr : forall ( D F G : Context )( u x : nat )( A : Proposition )( P : Process ),
     Collect D -> Collect G -> Collect F -> lc P -> u <> x -> 
-    ~( x ∈ (FVars P) ) ->
+    ~( x ∈ (FVars P) ) -> ( u ∈ (FVars P) ) ->
+    Well_Collected ( (Bld u A) ++ D ++ F ++ G ) P ->
+    Well_Collected ( D ++ F ++ (Bld x (?(A ^⊥))) ++ G ) ({x \ u }P) ->
+    Disjoint_Contexts ( (Bld u A) ++ D ) F G ->
+    Disjoint_Contexts D F ( (Bld x (?(A ^⊥))) ++ G ) ->
     ( ( (Bld u A) ++ D ) ;;; F !- P ::: G ) -> 
     ( D ;;; F !- ({x \ u }P) ::: ( (Bld x (?(A ^⊥))) ++ G ) )
 
 
   | wnotl : forall ( D : Context )( x y : nat )( A : Proposition )( P : Process ),
     Collect D -> lc P -> x <> y -> 
+    Well_Collected ( D ++ (Bld y A) ) P ->
+    Well_Collected ( D ++ (Bld x (? A)) ) ( FName x !· (Close y P))  ->
+    Disjoint_Contexts D (Bld y A) nil ->
+    Disjoint_Contexts D (Bld x (? A)) nil ->
     ( D ;;; (Bld y A) !- P ::: nil ) -> 
     ( D ;;; (Bld x (? A)) !- ( FName x !· (Close y P)) ::: nil )
 
@@ -176,24 +184,36 @@ Inductive Inference : Process -> Context -> Context -> Context -> Prop :=
 
 
   | perpr : forall ( D F G: Context )( x : nat )( P : Process ),
-    Collect D -> Collect F -> Collect G -> lc P -> 
+    Collect D -> Collect F -> Collect G -> lc P ->
+    Well_Collected ( D ++ F ++ G ) P ->
+    Well_Collected ( D ++ F ++ (Bld x ⊥) ++ G ) (FName x ()· P) ->
+    Disjoint_Contexts D F G ->
+    Disjoint_Contexts D F ( (Bld x ⊥) ++ G ) ->
     ( D ;;; F !- P ::: G ) -> 
     ( D ;;; F !- (FName x ()· P) ::: ( (Bld x ⊥) ++ G ) )
 
 
   | perpl : forall ( D : Context )( x : nat ),
     Collect D ->
+    Well_Collected ( D ++ (Bld x ⊥) ) (FName x ·θ ) ->
+    Disjoint_Contexts D (Bld x ⊥) nil ->
     ( D ;;; (Bld x ⊥) !- (FName x ·θ ) ::: nil )
 
 
   | onel : forall ( D F G : Context )( x : nat )( P : Process ),
     Collect D -> Collect F -> Collect G -> lc P -> 
+    Well_Collected ( D ++ F ++ G ) P ->
+    Well_Collected ( D ++ (Bld x ¶) ++ F ++ G ) (FName x ()· P) ->
+    Disjoint_Contexts D F G ->
+    Disjoint_Contexts D ( (Bld x ¶) ++ F ) G ->
     ( D ;;; F !- P ::: G ) -> 
     ( D ;;; ( (Bld x ¶) ++ F ) !- (FName x ()· P ) ::: G )
 
 
   | oner : forall ( D : Context)( x : nat ),
     Collect D -> 
+    Well_Collected ( D ++ (Bld x ¶) ) (FName x ·θ ) ->
+    Disjoint_Contexts D nil (Bld x ¶) ->
     ( D ;;; nil !- (FName x ·θ ) ::: (Bld x ¶) )
 
 
@@ -261,5 +281,14 @@ end.
 Hint Resolve Replace : Piull.
 
 
-
+(**
+*)
+Fixpoint Remove (x : nat)(A : Proposition)(D : Context) : Context := 
+match D with
+  | nil  => nil
+  | (FName x : A) :: L0 =>  L0
+  | X :: L0 =>  (BldA X) ++ (Remove x A L0)
+end.
+#[global]
+Hint Resolve Remove : Piull.
 

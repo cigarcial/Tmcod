@@ -31,6 +31,22 @@ From Tmcod Require Import Facts_WSubst.
 
 (**
 *)
+Lemma Subst_Change_Side :
+forall ( x u : nat )( P Q : Process ),
+~ x ∈ FVars P -> {x \ u} P = Q -> P = {u \ x} Q.
+Proof.
+  intros.
+  apply (Equality_Subst_Equality _ _ u x) in H0.
+  rewrite <- Double_Subst_Expan_NFVar in H0; Piauto.
+  rewrite Subst_By_Equal in H0.
+  auto.
+Qed.
+#[global]
+Hint Resolve Subst_Change_Side : Piull.
+
+
+(**
+*)
 Lemma Fuse_No_Reduces :
 forall (x y : Name)(Q : Process), 
 ~([x ←→  y] --> Q ).
@@ -457,6 +473,7 @@ Qed.
 Hint Resolve App_Nil_Right : Piull.
 
 
+
 (**
 *)
 Lemma Nil_Is_Collect :
@@ -509,7 +526,6 @@ Hint Resolve Weakening_Ordinary : Piull.
 
 
 
-
 (**
 *)
 Lemma No_Typing_Fuse_One_Lf :
@@ -521,9 +537,7 @@ Proof.
   dependent induction H0.
   + admit.
   + admit.
-  + apply (Equality_Subst_Equality _ _ u x0) in x.
-    rewrite <- Double_Subst_Expan_NFVar in x; Piauto.
-    rewrite Subst_By_Equal in x.
+  + apply Subst_Change_Side in x.
     simpl in x.
     DecidSimple x1 x0.
     - admit.
@@ -549,9 +563,7 @@ Proof.
   dependent induction H0.
   + admit.
   + admit.
-  + apply (Equality_Subst_Equality _ _ u x0) in x.
-    rewrite <- Double_Subst_Expan_NFVar in x; Piauto.
-    rewrite Subst_By_Equal in x.
+  + apply Subst_Change_Side in x.
     simpl in x.
     DecidSimple x1 x0.
     - admit.
@@ -568,13 +580,55 @@ Admitted.
 
 
 
+(**
+*)
+Lemma No_Typing_Zero_Ord :
+forall ( A : Proposition )( x y : nat  )( D F G : Context ),
+( List.In (FName x : A) D ) -> ~( D ;;; F !- ( FName x ·θ ) ::: G ).
+Proof.
+  unfold not.
+  intros.
+  dependent induction H0.
+  + apply Subst_Change_Side in x; Piauto.
+    simpl in x.
+    DecidSimple x1 x0.
+    - admit. (* hay contextos no disyuntos *)
+    - rewrite n in x.
+      apply (IHInference x1); Piauto.
+      OrSearch.
+  + apply Subst_Change_Side in x; Piauto.
+    simpl in x.
+    DecidSimple x1 x0.
+    - admit. (* hay contextos no disyuntos *)
+    - rewrite n in x.
+      apply (IHInference x1); Piauto.
+      OrSearch.
+  + inversions H1.
+    destruct H3.
+    inversions H3.
+    apply (H5 x A ⊥); Piauto.
+    constructor; Piauto.
+    simpl.
+    OrSearch.
+  + admit. (* hay contextos no disyuntos *)
+Admitted.
 
 
-
-
-
-
-
+Lemma Typing_Change_Side_RgLf :
+forall ( P : Process)(D F G : Context)(x : nat)(A : Proposition),
+( List.In (FName x : A) G ) -> D;;; F !- P ::: G -> 
+D;;; (F ++ Bld x (A ^⊥)) !- P ::: (Remove x A G).
+Proof.
+  intros.
+  dependent induction H0.
+  + inversions H; try inversions H4.
+    constructor; Piauto.
+    admit.
+    admit.
+  + inversions H.
+  + inversions H; try inversions H8.
+    simpl.
+Admitted.
 
 
 

@@ -37,6 +37,7 @@ Proof.
   + Piauto.
   + Piauto.
   + constructor.
+    apply Process_Lca_Open_S.
     Piauto.
   + Piauto.
   + Piauto.
@@ -72,6 +73,7 @@ Proof.
     constructor.
     intros.
     specialize (Lca_Lc_Process_MOpen P 1 [x]) as HB.
+    simpl in HB.
     apply HB.
     auto.
     auto.

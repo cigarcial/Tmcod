@@ -92,6 +92,7 @@ Hint Resolve Type_Subst_Rg : Piull.
 
 (**
 *)
+
 Theorem Soundness : 
 forall (P : Process)(D F G : Context),
   ( D ;;; F !- P ::: G ) -> forall (Q : Process), (P --> Q) -> ( D ;;; F !- Q ::: G ).
@@ -101,10 +102,10 @@ Proof.
   + apply Fuse_No_Reduces in H3; contradiction.
   + apply Fuse_No_Reduces in H3; contradiction.
   + apply Rep_Input_No_Reduces in H7; contradiction.
-(*  + assert (Hx := H10).
-    apply (Subst_Reduction_NBeq ({x \ u} P) Q x u) in H10; Piauto.
-    rewrite <- Double_Subst_Expan_NFVar in H10; Piauto.
-    rewrite Subst_By_Equal in H10.
+  (*+ assert (Hx := H11).
+    apply (Subst_Reduction_NBeq ({x \ u} P) Q x u) in H11; Piauto.
+    rewrite <- Double_Subst_Expan_NFVar in H11; Piauto.
+    rewrite Subst_By_Equal in H11.
     rewrite <- (Subst_By_Equal Q x).
     rewrite (Double_Subst_Expan_NFVar Q x x u); ePiauto.
     constructor; ePiauto.
@@ -116,7 +117,7 @@ Proof.
     rewrite (Double_Subst_Expan_NFVar Q x x u); ePiauto. *)
   + admit.
   + admit.
-  + apply Rep_Input_No_Reduces in H3; contradiction.
+  (* + apply Rep_Input_No_Reduces in H3; contradiction.
   + apply Chan_Input_No_Reduces in H5; contradiction.
   + apply Parallel_Res_No_Reduces in H8; contradiction.
   + apply Chan_Input_No_Reduces in H4; contradiction.
@@ -128,7 +129,20 @@ Proof.
   + apply Chan_Close_No_Reduces in H4; contradiction.
   + apply Zero_No_Reduces in H0; contradiction.
   + apply Output_No_Reduces in H5; contradiction.
-  + apply Output_No_Reduces in H5; contradiction.
+  + apply Output_No_Reduces in H5; contradiction. *)
+  + admit.
+  + admit.
+  + admit.
+  + admit.
+  + admit.
+  + admit.
+  + admit.
+  + admit.
+  + admit.
+  + admit.
+  + admit.
+  + admit.
+  + admit.
   + inversions H7.
     - apply (IsClosingInj_inv _ _ u) in H13.
       rewrite <- H13 in *.
@@ -157,9 +171,10 @@ Proof.
       apply (Close_Same_Inv _ _ u 0) in H10; Piauto.
       apply (Close_Same_Inv _ _ u 1) in H9; Piauto.
       rewrite H9.
-      clear Hx; clear H8; clear IHInference1; clear IHInference2.
+      clear Hx; clear H8; clear IHInference1.
       apply (cutrep _ _ _ _ _ A x u); Piauto.
-      rewrite <- H10 in H6.
+      subst.
+      
       admit.
       
     - apply (IsClosingInj_inv _ _ u) in H19.
@@ -176,8 +191,8 @@ Proof.
       apply (cutrep _ _ _ _ _ A x u); Piauto.
       rewrite <- H10 in H6.
       inversions H6.
-      * admit.
-      * admit.
+      * admit. (* cicla *)
+      * admit. (* cicla *)
 
       * admit. (* disjoint contexts *)
       * admit. (* disjoint contexts *)
@@ -205,9 +220,13 @@ Proof.
       apply (Close_Same_Inv _ _ x 0) in H10; Piauto.
       rewrite <- H10 in *.
       inversions H7.
-      * admit.
-      * admit. (* caso no aceptado *)
-      
+      * admit. (* derivable *)
+      * assert ( Ht : (Remove x0 A (Bld x0 A ++ G)) = G ++ nil).
+        simpl. rewrite app_nil_r.
+        Piauto.
+        rewrite <- Ht.
+        apply (Typing_Change_Side_RgLf _ D F (Bld y A ++ G) y A); try constructor; Piauto.
+        admit. (* derivable *)
       * admit. (* revienta *)
       * admit. (* revienta *)
     - assert ( Hx : [if y =? x0 then BName 0 else FName y ←→ if x0 =? x0 then BName 0 else FName x0] =  Close_Rec 0 x0 ([FName y ←→ FName x0]) ). Piauto.
@@ -247,33 +266,57 @@ Proof.
       rewrite <- H15 in *.
       apply (Close_Same_Inv _ _ x 0) in H9; Piauto.
       rewrite <- H9 in *.
-      inversions H6.
-      * admit.
-      * admit.
-      * 
+      inversion H6.
+      * subst.
+        admit. (* revienta *)
+      * subst.
+        admit. (* revienta *)
+      * assert ( Hy : (if x0 =? x0 then BName 0 else FName x0) ()·Close_Rec 0 x0 Q0 = Close_Rec 0 x0 ( FName x0 ()· Q0) ). Piauto.
+        subst.
+        rewrite Hy in H10.
+        apply (Close_Same_Inv _ _ x0 0) in H10; Piauto.
+        rewrite <- H10 in *.
+        inversions H7.
+        ** admit. (* cicla *)
+        ** admit. (* derivable *)
+        ** Piauto.
+    - assert ( Hx : (if x0 =? x0 then BName 0 else FName x0) ·θ = Close_Rec 0 x0 (FName x0 ·θ) ). Piauto.
+      rewrite Hx in H10.
+      apply (IsClosingInj_inv _ _ x) in H15.
+      rewrite <- H15 in *.
+      apply (Close_Same_Inv _ _ x 0) in H10; Piauto.
+      rewrite <- H10 in *.
+      inversion H7.
+      * subst.
+        apply Subst_Change_Side in H14; Piauto.
+        simpl in H14.
+        DecidSimple x0 x0.
+        rewrite e in H14.
+        rewrite H14 in *.
+        apply (No_Typing_Zero_Ord A0 u) in H32; try OrSearch; Piauto.
+      * subst.
+        apply Subst_Change_Side in H14; Piauto.
+        simpl in H14.
+        DecidSimple x0 x1.
+        ** rewrite e in H14.
+           rewrite H14 in *.
+           apply (No_Typing_Zero_Ord A0 u) in H27; try OrSearch; Piauto.
+        ** rewrite n in H14.
+           admit.
+      * assert ( Hy : (if x =? x then BName 0 else FName x) ()·Close_Rec 0 x Q0 = Close_Rec 0 x ( FName x ()· Q0) ). Piauto.
+        subst.
+        rewrite Hy in H9.
+        apply (Close_Same_Inv _ _ x0 0) in H9; Piauto.
+        rewrite <- H9 in *.
+        inversions H6.
+        ** admit. (* cicla *)
+        ** do 2 rewrite app_nil_r.
+           Piauto.
+        ** admit. (* derivable *)
+    - 
+    - admit.
+    - admit.
 Admitted.
-
-
-Search Close_Rec.
-
-
-
-
-
-
-
-
-
-
-Lemma Inv_Typing_Implication :
-forall ( D F0 F' G0 G' : list Assignment ) ( u x2  x0 : nat )( A A0 B : Proposition )( P : Process ), 
-( cons (FName u : A) nil ++ D);;;  cons ((FName x2) : (A0 −∘ B)) nil ++ F0 ++ F' !- ν Close x0 (FName u « FName x0 »· P) ::: (G0 ++ G') -> x2 = u.
-Proof.
-  intros.
-  DecidSimple x2 u.
-Admitted.
-
-
 
 
 
