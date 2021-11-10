@@ -8,8 +8,6 @@
 *)
 
 Require Import Coq.Program.Equality.
-From Coq Require Import Lists.List.
-Import ListNotations.
 
 From Coq Require Import Bool.Bool.
 From Coq Require Import Arith.PeanoNat.
@@ -20,12 +18,14 @@ From Coq Require Import Sets.Constructive_sets.
 From Tmcod Require Import Defs_Tactics.
 From Tmcod Require Import Defs_Proposition.
 From Tmcod Require Import Defs_Process.
+From Tmcod Require Import Defs_Context.
 From Tmcod Require Import Defs_Typing.
 From Tmcod Require Import Facts_Names.
 From Tmcod Require Import Facts_FVars.
 From Tmcod Require Import Facts_Process.
 From Tmcod Require Import Facts_MOpen.
 From Tmcod Require Import Props_Process.
+From Tmcod Require Import Props_Propositions.
 From Tmcod Require Import Facts_WSubst.
 
 
@@ -417,15 +417,17 @@ Hint Resolve No_Typing_Output : Piull.
 *)
 Lemma Append_Assigment_Collect :
 forall ( u : nat )( A : Proposition )( L : Context ),
-Collect L ->  Collect ( (Bld u A) ++ L ).
+Collect L ->  Collect ( L ++ (Bld u A) ).
 Proof.
   intros.
   constructor.
   intros.
-  destruct H1.
-  + rewrite <- H1.
-    Piauto.
+  simpl in H1.
+  destruct H1. 
+  + rewrite H1.
+    constructor; Piauto.
   + inversions H.
+    specialize (H2 H0 H1).
     Piauto.
 Qed.
 #[global]
@@ -460,17 +462,7 @@ Qed.
 Hint Resolve Lca_Equal_Process : Piull.
 
 
-(**
-*)
-Lemma App_Nil_Right :
-forall ( L : Context ),
-L = (nil ++ L).
-Proof.
-  intros.
-  constructor.
-Qed.
-#[global]
-Hint Resolve App_Nil_Right : Piull.
+
 
 
 
@@ -491,13 +483,14 @@ Hint Resolve Nil_Is_Collect : Piull.
 *)
 Lemma Weakening_Well_Collected :
 forall ( D : Context )( A : Proposition )( P : Process )( u : nat ),
-Well_Collected D P -> Well_Collected ( (Bld u A) ++ D) P.
+Well_Collected D P -> Well_Collected ( D ++ (Bld u A) ) P.
 Proof.
   intros.
   constructor.
   intros.
   inversions H.
   specialize (H1 x A0 H0).
+  simpl.
   OrSearch.
 Qed.
 #[global]
@@ -509,7 +502,7 @@ Hint Resolve Weakening_Well_Collected : Piull.
 Lemma Weakening_Ordinary :
 forall ( D F G : Context )( A : Proposition )( P : Process )( u y: nat ),
 ( D ;;; F !- P ::: G ) ->
-( ((Bld u A) ++ D) ;;; F !- P ::: G ).
+( (D ++ (Bld u A)) ;;; F !- P ::: G ).
 Proof.
   intros.
   induction H.
@@ -530,7 +523,7 @@ Hint Resolve Weakening_Ordinary : Piull.
 *)
 Lemma No_Typing_Fuse_One_Lf :
 forall ( A : Proposition )( x y : nat  )( D F G : Context ),
-( List.In (FName x : A) D ) -> ~( D ;;; F !- ([FName x ←→ FName  y]) ::: G ).
+( In (FName x : A) D ) -> ~( D ;;; F !- ([FName x ←→ FName  y]) ::: G ).
 Proof.
   unfold not.
   intros.
@@ -556,7 +549,7 @@ Admitted.
 *)
 Lemma No_Typing_Fuse_One_Rg :
 forall ( A : Proposition )( x y : nat  )( D F G : Context ),
-( List.In (FName x : A) D ) -> ~( D ;;; F !- ([FName y ←→ FName  x]) ::: G ).
+( In (FName x : A) D ) -> ~( D ;;; F !- ([FName y ←→ FName  x]) ::: G ).
 Proof.
   unfold not.
   intros.
@@ -584,7 +577,7 @@ Admitted.
 *)
 Lemma No_Typing_Zero_Ord :
 forall ( A : Proposition )( x y : nat  )( D F G : Context ),
-( List.In (FName x : A) D ) -> ~( D ;;; F !- ( FName x ·θ ) ::: G ).
+( In (FName x : A) D ) -> ~( D ;;; F !- ( FName x ·θ ) ::: G ).
 Proof.
   unfold not.
   intros.
@@ -613,21 +606,68 @@ Proof.
   + admit. (* hay contextos no disyuntos *)
 Admitted.
 
+(**
+*)
+Proposition Type_Subst_Lf :
+forall ( P : Process )( x u : nat )( D F G : Context )( A : Proposition ),
+In (FName u : A) F -> 
+( D ;;; F !- P ::: G ) -> ( D ;;; (Replace u x A F) !- {x \ u}P ::: G ).
+Proof.
+Admitted.
+#[global]
+Hint Resolve Type_Subst_Lf : Piull.
+
+
+
+(**
+*)
+Proposition Type_Subst_Rg :
+forall ( P : Process )( x u : nat )( D F G : Context )( A : Proposition ),
+In (FName u : A) G -> 
+( D ;;; F !- P ::: G ) -> ( D ;;; F !- {x \ u}P ::: (Replace u x A G) ).
+Proof.
+Admitted.
+#[global]
+Hint Resolve Type_Subst_Rg : Piull.
+
 
 Lemma Typing_Change_Side_RgLf :
-forall ( P : Process)(D F G : Context)(x : nat)(A : Proposition),
-( List.In (FName x : A) G ) -> D;;; F !- P ::: G -> 
+forall ( P : Process)(D F G : Context),
+D;;; F !- P ::: G -> forall (x : nat)(A : Proposition),
+( In (FName x : A) G ) -> 
 D;;; (F ++ Bld x (A ^⊥)) !- P ::: (Remove x A G).
 Proof.
-  intros.
-  dependent induction H0.
-  + inversions H; try inversions H4.
+  intros P D F G H.
+  dependent induction H; intros.
+  + inversions H3; try inversions H4.
+    simpl.
     constructor; Piauto.
     admit.
     admit.
-  + inversions H.
-  + inversions H; try inversions H8.
+  + inversions H3.
+  + inversions H7; try inversions H8.
     simpl.
+    constructor; Piauto.
+    admit. 
+    admit. 
+    admit. 
+    admit.
+    simpl in IHInference.
+    apply (IHInference y); OrSearch.
+(*   + simpl.
+    constructor; Piauto.
+    admit.
+    admit.
+    admit.
+    admit.
+    admit.
+    admit.
+  + simpl in H11.
+    destruct H11.
+    - inversions H11.
+      simpl.
+      rewrite Doble_Duality_ULLT.
+      admit. *)
 Admitted.
 
 

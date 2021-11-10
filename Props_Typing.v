@@ -21,6 +21,7 @@ From Coq Require Import Sets.Constructive_sets.
 From Tmcod Require Import Defs_Tactics.
 From Tmcod Require Import Defs_Proposition.
 From Tmcod Require Import Defs_Process.
+From Tmcod Require Import Defs_Context.
 From Tmcod Require Import Defs_Typing.
 From Tmcod Require Import Facts_Names.
 From Tmcod Require Import Facts_FVars.
@@ -63,36 +64,96 @@ Qed.
 Hint Resolve Well_Collected_Reduction : Piull.
 
 
-
 (**
 *)
-Proposition Type_Subst_Lf :
-forall ( P : Process )( x u : nat )( D F G : Context )( A : Proposition ),
-List.In (FName u : A) F -> 
-( D ;;; F !- P ::: G ) -> ( D ;;; (Replace u x A F) !- {x \ u}P ::: G ).
+Lemma Rewriting_Lemma_Replicate :
+forall (P0 P : Process)(u x : nat),
+lc P -> Body P0 -> IsClosingInj P0 u -> 
+(if u =? u then BName 0 else FName u) !· Close_Rec 1 u P0 = Close_Rec 0 x P
+-> P = (FName u !· P0).
 Proof.
-Admitted.
-#[global]
-Hint Resolve Type_Subst_Lf : Piull.
-
+  intros.
+  assert ( Hx : ((if u =? u then BName 0 else FName u) !· Close_Rec 1 u P0) = Close_Rec 0 u (FName u !· P0) ).
+  Piauto.
+  rewrite Hx in H2.
+  apply (IsClosingInj_inv _ _ x) in H1.
+  rewrite H1 in *.
+  apply (Close_Same_Inv _ _ u 0) in H2; Piauto.
+Qed.
 
 
 (**
 *)
-Proposition Type_Subst_Rg :
-forall ( P : Process )( x u : nat )( D F G : Context )( A : Proposition ),
-List.In (FName u : A) G -> 
-( D ;;; F !- P ::: G ) -> ( D ;;; F !- {x \ u}P ::: (Replace u x A G) ).
+Lemma Rewriting_Lemma_Input :
+forall (P0 P : Process)(x x0 : nat),
+lc P -> Body P0 ->
+(if x0 =? x0 then BName 0 else FName x0) · Close_Rec 1 x0 P0 = Close_Rec 0 x0 P
+-> P = (FName x0 · P0).
 Proof.
-Admitted.
-#[global]
-Hint Resolve Type_Subst_Rg : Piull.
+  intros.
+  assert ( Hx : ((if x0 =? x0 then BName 0 else FName x0) · Close_Rec 1 x0 P0) = Close_Rec 0 x0 (FName x0 · P0) ).
+  Piauto.
+  rewrite Hx in H1.
+  apply (Close_Same_Inv _ _ x0 0) in H1; Piauto.
+Qed.
+
+
+
+
+(* 
+(**
+*)
+Lemma Rewriting_Lemma_Output :
+forall (P0 P : Process)(x x0 : nat),
+lc P -> Body P0 ->
+
+ν (Close_Name 1 x0 (if x0 =? y then BName 0 else FName x0) « Close_Name 1 x0 (if y =? y then BName 0 else FName y) »· (Close_Rec 1 x0 (Close_Rec 0 y Q1) ↓ Close_Rec 1 x0 (Close_Rec 0 y R))) = Close_Rec 0 x0 Q ->
+Q = ν (Close_Name 1 x0 (if x0 =? y then BName 0 else FName x0) « Close_Name 1 x0 (if y =? y then BName 0 else FName y) »· (Close_Rec 1 x0 (Close_Rec 0 y Q1) ↓ Close_Rec 1 x0 (Close_Rec 0 y R))).
+
+Proof.
+  intros.
+  assert ( Hx : ((if x0 =? x0 then BName 0 else FName x0) · Close_Rec 1 x0 P0) = Close_Rec 0 x0 (FName x0 · P0) ).
+  Piauto.
+  rewrite Hx in H1.
+  apply (Close_Same_Inv _ _ x0 0) in H1; Piauto.
+Qed. *)
+
+
+(**
+*)
+Lemma Rewriting_Lemma_Fuse_Lf :
+forall (Q : Process)(u x0 y : nat),
+lc Q -> IsClosingInj Q x0 -> 
+[if x0 =? x0 then BName 0 else FName x0 ←→ if y =? x0 then BName 0 else FName y] = Close_Rec 0 u Q -> Q = [ FName x0 ←→ FName y].
+Proof.
+  intros.
+  assert ( Hx : [if x0 =? x0 then BName 0 else FName x0 ←→ if y =? x0 then BName 0 else FName y] = Close_Rec 0 x0 ( [ FName x0 ←→ FName y] )). Piauto.
+  rewrite Hx in H1.
+  apply (IsClosingInj_inv _ _ u) in H0.
+  rewrite H0 in *.
+  apply (Close_Same_Inv _ _ x0 0) in H1; Piauto.
+Qed.
+
+
+(**
+*)
+Lemma Rewriting_Lemma_Fuse_Rg :
+forall (Q : Process)(u x0 y : nat),
+lc Q -> IsClosingInj Q x0 -> 
+[if y =? x0 then BName 0 else FName y ←→ if x0 =? x0 then BName 0 else FName x0] = Close_Rec 0 u Q -> Q = [ FName y ←→ FName x0].
+Proof.
+  intros.
+  assert ( Hx : [if y =? x0 then BName 0 else FName y ←→ if x0 =? x0 then BName 0 else FName x0] = Close_Rec 0 x0 ( [ FName y ←→ FName x0 ] )). Piauto.
+  rewrite Hx in H1.
+  apply (IsClosingInj_inv _ _ u) in H0.
+  rewrite H0 in *.
+  apply (Close_Same_Inv _ _ x0 0) in H1; Piauto.
+Qed.
 
 
 
 (**
 *)
-
 Theorem Soundness : 
 forall (P : Process)(D F G : Context),
   ( D ;;; F !- P ::: G ) -> forall (Q : Process), (P --> Q) -> ( D ;;; F !- Q ::: G ).
@@ -109,10 +170,10 @@ Proof.
     rewrite <- (Subst_By_Equal Q x).
     rewrite (Double_Subst_Expan_NFVar Q x x u); ePiauto.
     constructor; ePiauto.
-  + assert (Hx := H6).
-    apply (Subst_Reduction_NBeq ({x \ u} P) Q x u) in H6; Piauto.
-    rewrite <- Double_Subst_Expan_NFVar in H6; Piauto.
-    rewrite Subst_By_Equal in H6.
+  + assert (Hx := H11).
+    apply (Subst_Reduction_NBeq ({x \ u} P) Q x u) in H11; Piauto.
+    rewrite <- Double_Subst_Expan_NFVar in H11; Piauto.
+    rewrite Subst_By_Equal in H11.
     rewrite <- (Subst_By_Equal Q x).
     rewrite (Double_Subst_Expan_NFVar Q x x u); ePiauto. *)
   + admit.
@@ -144,22 +205,18 @@ Proof.
   + admit.
   + admit.
   + inversions H7.
-    - apply (IsClosingInj_inv _ _ u) in H13.
-      rewrite <- H13 in *.
-      assert ( Hx : [if u =? u then BName 0 else FName u ←→ if y =? u then BName 0 else FName y] = Close_Rec 0 u ([FName u ←→ FName y]) ). Piauto.
-      rewrite Hx in H9.
-      apply (Close_Same_Inv _ _ u 0) in H9; Piauto.
-      rewrite <- H9 in *.
+    - apply Rewriting_Lemma_Fuse_Lf in H9; Piauto.
+      apply (IsClosingInj_inv _ _ u) in H13.
+      subst.
       apply (No_Typing_Fuse_One_Lf A _ _ _ _ ) in H6; try OrSearch.
-      
-    - apply (IsClosingInj_inv _ _ u) in H13.
-      rewrite <- H13 in *.
-      assert ( Hx : [if y =? u then BName 0 else FName y ←→ if u =? u then BName 0 else FName u] = Close_Rec 0 u ([FName y ←→ FName u]) ). Piauto.
-      rewrite Hx in H9.
-      apply (Close_Same_Inv _ _ u 0) in H9; Piauto.
-      rewrite <- H9 in *.
+      apply (IsClosingInj_Process P0 _ _ ); Piauto.
+
+    - apply Rewriting_Lemma_Fuse_Rg in H9; Piauto.
+      apply (IsClosingInj_inv _ _ u) in H13.
+      subst.
       apply (No_Typing_Fuse_One_Rg A _ _ _ _ _) in H6; OrSearch.
-      
+      apply (IsClosingInj_Process P0 _ _ ); Piauto.
+
     - apply (IsClosingInj_inv _ _ u) in H19.
       rewrite <- H19 in *.
       assert ( Hx : ν (Close_Name 1 u (if u =? y then BName 0 else FName u)
@@ -174,9 +231,18 @@ Proof.
       clear Hx; clear H8; clear IHInference1.
       apply (cutrep _ _ _ _ _ A x u); Piauto.
       subst.
+      inversions H6.
+      * admit. (* cicla *)
+      * admit. (* cicla *)
       
-      admit.
+      * admit. (* disjoint contexts *)
+      * admit. (* disjoint contexts *)
+      * admit. (* disjoint contexts *)
       
+      * admit. (* derivable *)
+      * admit. (* derivable *)
+      
+
     - apply (IsClosingInj_inv _ _ u) in H19.
       rewrite <- H19 in *.
       assert ( Hx : ν (Close_Name 1 u (if u =? y then BName 0 else FName u)
@@ -211,24 +277,17 @@ Proof.
         rewrite <- Ht.
         apply Type_Subst_Rg; Piauto.
         OrSearch.
-      * admit.
+      * admit. (* derivable *)
   + inversions H8.
-    - assert ( Hx : [if x0 =? x0 then BName 0 else FName x0 ←→ if y =? x0 then BName 0 else FName y] =  Close_Rec 0 x0 ([FName x0 ←→ FName y]) ). Piauto.
-      rewrite Hx in H10.
+    - apply Rewriting_Lemma_Fuse_Lf in H10; Piauto.
       apply (IsClosingInj_inv _ _ x) in H14.
-      rewrite <- H14 in *.
-      apply (Close_Same_Inv _ _ x 0) in H10; Piauto.
-      rewrite <- H10 in *.
+      subst.
       inversions H7.
       * admit. (* derivable *)
-      * assert ( Ht : (Remove x0 A (Bld x0 A ++ G)) = G ++ nil).
-        simpl. rewrite app_nil_r.
-        Piauto.
-        rewrite <- Ht.
-        apply (Typing_Change_Side_RgLf _ D F (Bld y A ++ G) y A); try constructor; Piauto.
-        admit. (* derivable *)
+      * admit. (* derivable *)
       * admit. (* revienta *)
       * admit. (* revienta *)
+      * apply (IsClosingInj_Process P0 _ _ ); Piauto.
     - assert ( Hx : [if y =? x0 then BName 0 else FName y ←→ if x0 =? x0 then BName 0 else FName x0] =  Close_Rec 0 x0 ([FName y ←→ FName x0]) ). Piauto.
       rewrite Hx in H10.
       apply (IsClosingInj_inv _ _ x) in H14.
@@ -313,12 +372,37 @@ Proof.
         ** do 2 rewrite app_nil_r.
            Piauto.
         ** admit. (* derivable *)
+    - apply Rewriting_Lemma_Replicate in H9; Piauto.
+      rewrite H9 in *.
+      inversions H6.
+      * admit. (* caso anterior con corte *)
+      * admit. (* cicla *)
+      * admit. (* cicla *)
+    - apply Rewriting_Lemma_Replicate in H9; Piauto.
+      subst.
+      inversions H6.
+      * admit. (* caso anterior con corte *)
+      * admit. (* cicla *)
+      * admit. (* cicla *)
+    - apply (IsClosingInj_inv _ _ x) in H18.
+      subst.
+      apply Rewriting_Lemma_Input in H9; Piauto.
+      
+      subst.
+      inversions H6.
+      * admit. (* cicla *)
+      * admit. (* cicla *)
+      
+      * admit.
+      * admit.
+      * admit. (* contextos disyuntos *)
     - 
-    - admit.
-    - admit.
 Admitted.
 
 
+
+  
+  
 
 (*
 
