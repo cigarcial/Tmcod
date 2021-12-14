@@ -90,7 +90,7 @@ Hint Resolve Type_Subst_Rg : Piull.
 
 
 
-(**
+(**ç
 *)
 
 Theorem Soundness : 
