@@ -270,6 +270,14 @@ Qed.
 Hint Resolve Congruence_WD : Piull.
 
 
+Ltac PR_WD :=
+  try rewrite Lc_Open_Close_Subst;
+    try apply Subst_Lc_Lc;
+    try intros;
+    try rewrite Lc_Open_Close_Subst;
+    try apply Subst_Lc_Lc;
+    repeat constructor; Piauto.
+
 (**
 *)
 Theorem ProcessReduction_WD : 
@@ -277,23 +285,9 @@ forall P Q : Process,
 (P --> Q) -> lc(P)  -> lc(Q).
 Proof.
   intros.
-  induction H; try constructor; intros; eauto with Piull.
-  + rewrite Lc_Open_Close_Subst; Piauto.
-    - apply Subst_Lc_Lc.
-      constructor; Piauto.
-      constructor.
-      intros.
-      rewrite Lc_Open_Close_Subst; Piauto.
-      apply Subst_Lc_Lc.
-      constructor; Piauto.
-
-    - constructor; Piauto.
-      constructor.
-      intros.
-      rewrite Lc_Open_Close_Subst; Piauto.
-      apply Subst_Lc_Lc.
-      constructor; Piauto.
-Admitted.
+  induction H; try constructor; intros; 
+  try PR_WD; eauto with Piull.
+Qed.
 #[global]
 Hint Resolve ProcessReduction_WD : Piull.
 

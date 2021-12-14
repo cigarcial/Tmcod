@@ -940,11 +940,53 @@ Proof.
       simpl in H0.
       inversions H0.
       OrSearch.
-  + admit.
+  + simpl in H0.
+    apply Union_inv in H0.
+    destruct H0.
+    - destruct x; try contradiction.
+      simpl in H0.
+      DecidSimple x x0.
+      * rewrite e in H0.
+        simpl in H0.
+        inversions H0.
+      * rewrite n in H0.
+        simpl in H0.
+        inversions H0.
+        OrSearch.
+    - specialize (IHP _ _ i H H0).
+      OrSearch.
   + simpl in H0.
     simpl.
     apply (IHP u x (S i)); Piauto.
-Admitted.
+  + simpl in H0.
+    apply Union_inv in H0.
+    destruct H0.
+    - destruct x; try contradiction.
+      simpl in H0.
+      DecidSimple x x0.
+      * rewrite e in H0.
+        inversions H0.
+      * rewrite n in H0.
+        inversions H0.
+        OrSearch.
+    - simpl in H0.
+      specialize (IHP _ _ _ H H0).
+      OrSearch.
+  + simpl in H0.
+    apply Union_inv in H0.
+    destruct H0.
+    - destruct x; try contradiction.
+      simpl in H0.
+      DecidSimple x x0.
+      * rewrite e in H0.
+        inversions H0.
+      * rewrite n in H0.
+        inversions H0.
+        OrSearch.
+    - simpl in H0.
+      specialize (IHP _ _ _ H H0).
+      OrSearch.
+Qed.
 #[global]
 Hint Resolve Close_FVars_Beq : Piull.
 
@@ -1038,6 +1080,32 @@ Qed.
 Hint Resolve NFVar_Close_Cases : Piull.
 
 
+(**
+*)
+Lemma NFVar_Close :
+forall ( P : Process )( i x : nat ),
+~ x ∈ FVars (Close_Rec i x P).
+Proof.
+  unfold not.
+  induction P; simpl; intros; try inversions H; ePiauto.
+  inversions H0; ePiauto.
+Qed.
+#[global]
+Hint Resolve NFVar_Close : Piull.
+
+
+(** 
+*)
+Lemma Close_Parallel :
+forall ( u : nat)(P Q : Process),
+Close u (P ↓ Q) = (Close u P) ↓ (Close u Q).
+Proof.
+  Piauto.
+Qed.
+#[global]
+Hint Resolve Close_Parallel : Piull.
+
+
 (** FVars_Close_NotIn
 *)
 Lemma FVars_Reduction_Neg :
@@ -1048,10 +1116,7 @@ Proof.
   induction H0.
   + apply -> FVars_Res_Neg in H.
     specialize (NFVar_Close_Cases _ x x0 H) as Ht.
-    destruct Ht; try rewrite H3; Piauto.
-    subst.
-    (* Inocente, pero no tanto *)
-    Piauto.
+    destruct Ht; try rewrite H5; Piauto.
 
     destruct H5.
     apply No_FVars_Parallel in H6.
@@ -1066,60 +1131,64 @@ Proof.
     destruct HB.
     apply H8.
     constructor.
-(*  + apply -> FVars_Res_Neg in H.
+  + apply -> FVars_Res_Neg in H.
     specialize (NFVar_Close_Cases _ x x0 H) as Ht.
-    destruct Ht; try rewrite H3; Piauto.
-    destruct H3.
-    apply No_FVars_Parallel in H4.
-    destruct H4 as [HA HB].
+    destruct Ht; try rewrite H5; Piauto.
+
+    destruct H5.
+    apply No_FVars_Parallel in H6.
+    destruct H6 as [HA HB].
     unfold not.
     intros.
-    apply FVars_Subst in H4.
-    destruct H4; try contradiction.
-    rewrite H4 in HB.
+    apply FVars_Subst in H6.
+    destruct H6; try contradiction.
+    rewrite H6 in HB.
     simpl in HB.
     apply No_Union_No_Each in HB.
     destruct HB.
-    apply H5.
+    apply H7.
     constructor.
   + apply -> FVars_Res_Neg in H.
     specialize (NFVar_Close_Cases _ x x0 H) as Ht.
-    destruct Ht; try rewrite H3; Piauto.
-    destruct H3.
-    apply No_FVars_Parallel in H4.
-    destruct H4 as [HA HB].
+    destruct Ht; try rewrite H5; Piauto.
+    
+    destruct H5.
+    apply No_FVars_Parallel in H6.
+    destruct H6 as [HA HB].
     unfold not.
     intros.
-    apply FVars_Subst in H4.
-    destruct H4; try contradiction.
-    rewrite H4 in HA.
+    apply FVars_Subst in H6.
+    destruct H6; try contradiction.
+    rewrite H6 in HA.
     simpl in HA.
     apply No_Union_No_Each in HA.
     destruct HA.
-    apply H5.
+    apply H7.
     constructor.
   + apply -> FVars_Res_Neg in H.
     specialize (NFVar_Close_Cases _ x x0 H) as Ht.
-    destruct Ht; try rewrite H3; Piauto.
-    destruct H3.
-    apply No_FVars_Parallel in H4.
-    destruct H4 as [HA HB].
+    destruct Ht; try rewrite H5; Piauto.
+
+    destruct H5.
+    apply No_FVars_Parallel in H6.
+    destruct H6 as [HA HB].
     unfold not.
     intros.
-    apply FVars_Subst in H4.
-    destruct H4; try contradiction.
-    rewrite H4 in HA.
+    apply FVars_Subst in H6.
+    destruct H6; try contradiction.
+    rewrite H6 in HA.
     simpl in HA.
     apply No_Union_No_Each in HA.
     destruct HA.
-    apply H6.
+    apply H8.
     constructor.
   + apply -> FVars_Res_Neg in H.
     specialize (NFVar_Close_Cases _ x x0 H) as Ht.
-    destruct Ht; try rewrite H3; Piauto.
-    destruct H3.
-    apply No_FVars_Parallel in H4.
-    destruct H4 as [HA HB].
+    destruct Ht; try rewrite H4; Piauto.
+
+    destruct H4.
+    apply No_FVars_Parallel in H5.
+    destruct H5 as [HA HB].
     unfold not in *.
     intros.
     apply HB.
@@ -1127,10 +1196,11 @@ Proof.
     OrSearch.
   + apply -> FVars_Res_Neg in H.
     specialize (NFVar_Close_Cases _ x x0 H) as Ht.
-    destruct Ht; try rewrite H3; Piauto.
-    destruct H3.
-    apply No_FVars_Parallel in H4.
-    destruct H4 as [HA HB].
+    destruct Ht; try rewrite H4; Piauto.
+
+    destruct H4.
+    apply No_FVars_Parallel in H5.
+    destruct H5 as [HA HB].
     unfold not in *.
     intros.
     apply HA.
@@ -1140,24 +1210,48 @@ Proof.
     apply FVars_Res_Neg.
     specialize (NFVar_Close_Cases _ x u H) as Ht.
     destruct Ht.
-    - rewrite H7 in *.
+    - rewrite H9 in *.
       apply NFVar_Close.
-    - destruct H7.
-      apply -> FVars_Res_Neg in H8.
-      specialize (NFVar_Close_Cases _ x y H8) as Ht.
+    - destruct H9.
+      apply No_FVars_Parallel in H10.
+      destruct H10.
+      rewrite Close_Parallel.
+      unfold not.
+      intros.
+      simpl in H12.
+      apply Union_inv in H12.
+      destruct H12.
+      * apply Union_inv in H12.
+        destruct H12.
+        ++ DecidSimple u u.
+           rewrite e in H12.
+           inversions H12.
+        ++ apply H10.
+           apply Close_FVars_Beq in H12; Piauto.
+           OrSearch.
+      * apply Union_inv in H12.
+        destruct H12.
+        ++ admit.
+        ++ 
+           
+      
+      apply -> FVars_Res_Neg in H11.
+      specialize (NFVar_Close_Cases _ x y H11) as Ht.
       destruct Ht.
-      * rewrite H9.
-        unfold Close.
-        rewrite Close_Res_Rew.
-        apply FVars_Res_Neg.
+      
+      
+      
+      * rewrite H12.
         rewrite Close_Permutation; Piauto.
-      * destruct H9.
-        apply No_FVars_Parallel in H10.
-        destruct H10 as [HA HB].
+      * destruct H12.
+        
+      
         unfold not.
         intros.
-        apply Close_FVars_Beq in H10; Piauto.
-        apply -> FVars_Res in H10.
+        apply Close_FVars_Beq in H14; Piauto.
+        simpl in H14.
+        
+        apply -> FVars_Res in H14.
         apply Close_FVars_Beq in H10; Piauto.
         simpl in H10.
         destruct H10.
@@ -1208,18 +1302,6 @@ Admitted.
 Hint Resolve FVars_Reduction_Neg : Piull.
 
 
-(**
-*)
-Lemma NFVar_Close :
-forall ( P : Process )( i x : nat ),
-~ x ∈ FVars (Close_Rec i x P).
-Proof.
-  unfold not.
-  induction P; simpl; intros; try inversions H; ePiauto.
-  inversions H0; ePiauto.
-Qed.
-#[global]
-Hint Resolve NFVar_Close : Piull.
 
 
 (**

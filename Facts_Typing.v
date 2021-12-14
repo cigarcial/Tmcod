@@ -8,24 +8,25 @@
 *)
 
 Require Import Coq.Program.Equality.
-From Coq Require Import Lists.List.
-Import ListNotations.
 
 From Coq Require Import Bool.Bool.
 From Coq Require Import Arith.PeanoNat.
 From Coq Require Import Arith.EqNat.
 From Coq Require Import Lia.
 From Coq Require Import Sets.Constructive_sets.
+From Coq Require Import Sets.Powerset_facts.
 
 From Tmcod Require Import Defs_Tactics.
 From Tmcod Require Import Defs_Proposition.
 From Tmcod Require Import Defs_Process.
+From Tmcod Require Import Defs_Context.
 From Tmcod Require Import Defs_Typing.
 From Tmcod Require Import Facts_Names.
 From Tmcod Require Import Facts_FVars.
 From Tmcod Require Import Facts_Process.
 From Tmcod Require Import Facts_MOpen.
 From Tmcod Require Import Props_Process.
+From Tmcod Require Import Props_Propositions.
 From Tmcod Require Import Facts_WSubst.
 
 
@@ -417,13 +418,15 @@ Hint Resolve No_Typing_Output : Piull.
 *)
 Lemma Append_Assigment_Collect :
 forall ( u : nat )( A : Proposition )( L : Context ),
-Collect L ->  Collect ( (Bld u A) ++ L ).
+Collect L ->  Collect ( (Bld u A) ∪ L ).
 Proof.
   intros.
   constructor.
   intros.
+  apply Union_inv in H1.
   destruct H1.
-  + rewrite <- H1.
+  + apply Singleton_inv in H1.
+    rewrite <- H1.
     Piauto.
   + inversions H.
     Piauto.
@@ -464,11 +467,9 @@ Hint Resolve Lca_Equal_Process : Piull.
 *)
 Lemma App_Nil_Right :
 forall ( L : Context ),
-L = (nil ++ L).
+L = (ø ∪ L).
 Proof.
-  intros.
-  constructor.
-Qed.
+Admitted.
 #[global]
 Hint Resolve App_Nil_Right : Piull.
 
@@ -477,7 +478,7 @@ Hint Resolve App_Nil_Right : Piull.
 (**
 *)
 Lemma Nil_Is_Collect :
-Collect nil.
+Collect ø.
 Proof.
   constructor.
   intros.
@@ -486,20 +487,53 @@ Qed.
 #[global]
 Hint Resolve Nil_Is_Collect : Piull.
 
+Ltac AndSearch H :=
+  (progress auto with *) +
+  (destruct H as [? H]; AndSearch H).
+
 
 (**
 *)
 Lemma Weakening_Well_Collected :
-forall ( D : Context )( A : Proposition )( P : Process )( u : nat ),
-Well_Collected D P -> Well_Collected ( (Bld u A) ++ D) P.
+forall ( D F G : Context )( A : Proposition )( P : Process )( u : nat ),
+Good_Contexts D F G P -> Fresh u (D ∪ F ∪ G)  -> Good_Contexts ( (Bld u A) ∪ D) F G P.
 Proof.
   intros.
+  inversions H.
+  constructor.
+  
   constructor.
   intros.
-  inversions H.
-  specialize (H1 x A0 H0).
-  OrSearch.
-Qed.
+  destruct H1.
+  specialize (H1 x H2).
+  destruct H1.
+  exists x0.
+  destruct H1; try OrSearch.
+  destruct H1; try OrSearch.
+
+  constructor.
+  constructor.
+  unfold not.
+  intros.
+  destruct H2.
+  apply Union_inv in H2.
+  destruct H2.
+   inversions H2.
+    inversions H0.
+    specialize (H4 x B).
+    apply H4; Piauto.
+    OrSearch.
+   destruct H1.
+    destruct H4.
+    inversions H4.
+    specialize (H6 x A0 B).
+    auto.
+  
+  constructor.
+  admit.
+  
+  constructor; AndSearch H1.
+Admitted.
 #[global]
 Hint Resolve Weakening_Well_Collected : Piull.
 
@@ -509,17 +543,8 @@ Hint Resolve Weakening_Well_Collected : Piull.
 Lemma Weakening_Ordinary :
 forall ( D F G : Context )( A : Proposition )( P : Process )( u y: nat ),
 ( D ;;; F !- P ::: G ) ->
-( ((Bld u A) ++ D) ;;; F !- P ::: G ).
+( ((Bld u A) ∪ D) ;;; F !- P ::: G ).
 Proof.
-  intros.
-  induction H.
-  + constructor; Piauto.
-    constructor.
-    inversions H1.
-    intros.
-    specialize (H3 x0 A1 H4).
-    destruct H3; try OrSearch.
-    destruct H3; OrSearch.
 Admitted.
 #[global]
 Hint Resolve Weakening_Ordinary : Piull.
@@ -530,61 +555,59 @@ Hint Resolve Weakening_Ordinary : Piull.
 *)
 Lemma No_Typing_Fuse_One_Lf :
 forall ( A : Proposition )( x y : nat  )( D F G : Context ),
-( List.In (FName x : A) D ) -> ~( D ;;; F !- ([FName x ←→ FName  y]) ::: G ).
+( (FName x : A) ∈ D ) -> ~( D ;;; F !- ([FName x ←→ FName  y]) ::: G ).
 Proof.
   unfold not.
   intros.
   dependent induction H0.
-  + admit.
-  + admit.
-  + apply Subst_Change_Side in x.
+  + admit. (* hay contextos no disyuntos *)
+  + admit. (* hay contextos no disyuntos *)
+  + apply Subst_Change_Side in x; Piauto.
     simpl in x.
     DecidSimple x1 x0.
-    - admit.
+    - admit. (* hay contextos no disyuntos *)
     - rewrite n in x.
       DecidSimple y x0.
       * rewrite e in x.
-        apply (IHInference x1 u); auto.
-        right; Piauto.
+        apply (IHInference x1 u); ePiauto.
       * rewrite n0 in x.
-        apply (IHInference x1 y); auto.
-        right; Piauto.
+        apply (IHInference x1 y); ePiauto.
 Admitted.
+#[global]
+Hint Resolve No_Typing_Fuse_One_Lf : Piull.
 
 
 (**
 *)
 Lemma No_Typing_Fuse_One_Rg :
 forall ( A : Proposition )( x y : nat  )( D F G : Context ),
-( List.In (FName x : A) D ) -> ~( D ;;; F !- ([FName y ←→ FName  x]) ::: G ).
+( (FName x : A) ∈ D ) -> ~( D ;;; F !- ([FName y ←→ FName  x]) ::: G ).
 Proof.
   unfold not.
   intros.
   dependent induction H0.
-  + admit.
-  + admit.
+  + admit. (* hay contextos no disyuntos *)
+  + admit. (* hay contextos no disyuntos *)
   + apply Subst_Change_Side in x.
     simpl in x.
     DecidSimple x1 x0.
-    - admit.
+    - admit. (* hay contextos no disyuntos *)
     - rewrite n in x.
       DecidSimple y x0.
       * rewrite e in x.
-        apply (IHInference x1 u); auto.
-        right; Piauto.
+        apply (IHInference x1 u); ePiauto.
       * rewrite n0 in x.
-        apply (IHInference x1 y); auto.
-        right; Piauto.
+        apply (IHInference x1 y); ePiauto.
 Admitted.
-
-
+#[global]
+Hint Resolve No_Typing_Fuse_One_Rg : Piull.
 
 
 (**
 *)
 Lemma No_Typing_Zero_Ord :
 forall ( A : Proposition )( x y : nat  )( D F G : Context ),
-( List.In (FName x : A) D ) -> ~( D ;;; F !- ( FName x ·θ ) ::: G ).
+( (FName x : A) ∈ D ) -> ~( D ;;; F !- ( FName x ·θ ) ::: G ).
 Proof.
   unfold not.
   intros.
@@ -594,41 +617,250 @@ Proof.
     DecidSimple x1 x0.
     - admit. (* hay contextos no disyuntos *)
     - rewrite n in x.
-      apply (IHInference x1); Piauto.
-      OrSearch.
+      apply (IHInference x1); ePiauto.
   + apply Subst_Change_Side in x; Piauto.
     simpl in x.
     DecidSimple x1 x0.
     - admit. (* hay contextos no disyuntos *)
     - rewrite n in x.
-      apply (IHInference x1); Piauto.
-      OrSearch.
-  + inversions H1.
+      apply (IHInference x1); ePiauto.
+(*   + inversions H1.
     destruct H3.
     inversions H3.
     apply (H5 x A ⊥); Piauto.
     constructor; Piauto.
     simpl.
     OrSearch.
-  + admit. (* hay contextos no disyuntos *)
+  + admit. (* hay contextos no disyuntos *) *)
 Admitted.
+#[global]
+Hint Resolve No_Typing_Zero_Ord : Piull.
 
 
-Lemma Typing_Change_Side_RgLf :
-forall ( P : Process)(D F G : Context)(x : nat)(A : Proposition),
-( List.In (FName x : A) G ) -> D;;; F !- P ::: G -> 
-D;;; (F ++ Bld x (A ^⊥)) !- P ::: (Remove x A G).
+
+
+
+
+
+
+
+
+
+
+
+
+(**
+*)
+Lemma GContext_Three_Linear :
+forall (D F G : Context)(P : Process),
+Good_Contexts D F G P -> Linear G.
 Proof.
   intros.
-  dependent induction H0.
-  + inversions H; try inversions H4.
+  inversions H.
+  destruct H0.
+  AndSearch H1.
+Qed.
+#[global]
+Hint Resolve GContext_Three_Linear : Piull.
+
+
+(**
+*)
+Lemma In_Union_Linear :
+forall (G : Context)(x y : nat)(A B : Proposition),
+Linear G -> Fresh x G ->
+(FName y : B) ∈ (Bld x A ∪ G) -> 
+( (FName y : B) = (FName x : A) /\ ~ ( (FName y : B) ∈ G ) \/
+  (y <> x /\ ( (FName y : B) ∈ G ) )).
+Proof.
+  intros.
+  apply Union_inv in H1.
+  destruct H1.
+  + left.
+    inversions H1.
+    constructor; Piauto.
+    unfold not.
+    intros.
+    inversions H0.
+    specialize (H3 y B H2); Piauto.
+  + right.
+    constructor; Piauto.
+    unfold not.
+    intros.
+    inversions H2.
+    inversions H0.
+    specialize (H2 x B H1); Piauto.
+Qed.
+#[global]
+Hint Resolve In_Union_Linear : Piull.
+
+
+(**
+*)
+Lemma SMA_Nin_Context :
+forall (G : Context)(x : nat)(A : Proposition),
+~((FName x : A) ∈ G) -> SMA G x A = G.
+Proof.
+Admitted.
+#[global]
+Hint Resolve SMA_Nin_Context : Piull.
+
+
+Lemma SMA_Union :
+forall (D F : Context)(x : nat)(A : Proposition),
+(SMA (D ∪ F) x A) = ((SMA D x A) ∪ (SMA F x A)).
+Proof.
+  intros.
+  apply Extensionality_Ensembles.
+  constructor.
+  + unfold Included.
+    intros.
+    inversions H.
+    apply Union_inv in H0.
+    destruct H0.
+    - left.
+      constructor; Piauto.
+    - right.
+      constructor; Piauto.
+  + unfold Included.
+    intros.
+    apply Union_inv in H.
+    destruct H.
+    - inversions H.
+      constructor; try OrSearch; Piauto.
+    - inversions H.
+      constructor; try OrSearch; Piauto.
+Qed.
+#[global]
+Hint Resolve SMA_Union : Piull.
+
+
+
+(**
+*)
+Lemma Neq_Nbld :
+forall (x y : nat)(A B : Proposition),
+x <> y -> ~ (FName x : A) ∈ Bld y B.
+Proof.
+  unfold not.
+  intros.
+  inversions H0.
+  contradiction.
+Qed.
+#[global]
+Hint Resolve Neq_Nbld : Piull.
+
+
+
+(*
+Lemma Typing_Change_Side_RgLf :
+forall ( P : Process)(D F G : Context),
+D;;; F !- P ::: G -> 
+forall (x : nat)(A : Proposition), ( (FName x : A) ∈ G ) ->
+D;;; (F ∪ Bld x (A ^⊥)) !- P ::: (SMA G x A).
+Proof.
+  intros.
+  dependent induction H.
+  + inversions H2.
+    rewrite SMA_Elimination.
+    constructor; Piauto.
+    admit.
+  + inversions H2.
+  + inversions H6.
+    rewrite SMA_Elimination.
+    rewrite <- App_Nil_Right in *.
+    simpl.
     constructor; Piauto.
     admit.
     admit.
-  + inversions H.
-  + inversions H; try inversions H8.
-    simpl.
+    rewrite <- (SMA_Elimination y A).
+    rewrite (App_Nil_Right (Bld y (A ^⊥))) in *.
+    apply IHInference; ePiauto.
+    constructor.
+  + rewrite Union_associative.
+    constructor; Piauto.
+    rewrite Union_commutative; Piauto.
+    admit.
+    admit.
+    admit.
+  + apply In_Union_Linear in H12; ePiauto.
+    destruct H12.
+    - destruct H12.
+      inversions H12.
+      rewrite SMA_Union_In.
+      simpl.
+      rewrite Doble_Duality_ULLT.
+      rewrite Union_commutative.
+      constructor; Piauto.
+      admit.
+      admit.
+      rewrite SMA_Nin_Context; Piauto.
+      rewrite SMA_Nin_Context; Piauto.
+    - destruct H12.
+      rewrite SMA_Union.
+      rewrite (SMA_Nin_Context _ x0 A0).
+      constructor; Piauto.
+      admit.
+      admit.
+      admit.
+      admit.
+      apply Neq_Nbld; Piauto.
+  + inversions H6.
+  + apply In_Union_Linear in H7; ePiauto.
+    destruct H7.
+    - destruct H7.
+      inversions H7.
+      rewrite SMA_Union_In.
+      simpl.
+      rewrite Doble_Duality_ULLT.
+      rewrite Union_commutative.
+      admit.
+    - destruct H7.
+      rewrite SMA_Union.
+      rewrite (SMA_Nin_Context _ x0 A0).
+      constructor; Piauto.
+      admit.
+      admit.
+      admit.
+      admit.
+      apply Neq_Nbld; Piauto.
+    - admit.
+    - admit.
+  + apply Union_inv in H11.
+    destruct H11.
+    - inversions H7.
+      rewrite SMA_Union_In.
+      simpl.
+      rewrite Doble_Duality_ULLT.
+      rewrite Union_commutative.
+      admit.
+    - destruct H7.
+      rewrite SMA_Union.
+      rewrite (SMA_Nin_Context _ x0 A0).
+      constructor; Piauto.
+      admit.
+      admit.
+      admit.
+      admit.
+      apply Neq_Nbld; Piauto.
+    - admit.
+    - admit.
+    
 Admitted.
+#[global]
+Hint Resolve Typing_Change_Side_RgLf : Piull.
+*)
+
+
+
+
+
+
+
+
+
+
+
 
 
 
