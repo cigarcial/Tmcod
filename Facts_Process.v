@@ -822,6 +822,3 @@ Qed.
 Hint Resolve Close_Res_Rew : Piull.
 
 
-
-
-

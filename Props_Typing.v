@@ -32,6 +32,7 @@ From Tmcod Require Import Props_Process.
 From Tmcod Require Import Facts_WSubst.
 From Tmcod Require Import Facts_Typing.
 
+Search Open_Rec.
 
 (**
 *)

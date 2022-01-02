@@ -465,7 +465,8 @@ Inductive Reduction : Process -> Process -> Prop :=
 
 
   | Red_output_input_rg : forall ( x y : nat) (P Q R : Process),
-    Body P -> lc Q -> lc R -> ~ y ∈ FVars P -> x <> y -> 
+    Body P -> lc Q -> lc R -> x <> y ->
+    ~ y ∈ FVars P -> ~ y ∈ FVars R ->
     IsClosing P x -> IsClosing P y -> 
     IsClosingInj P x -> IsClosingInj P y ->
       ( ν Close x (  ((FName x) · P) ↓ ν Close y ( (FName x) « (FName y) »· (Q↓R)) )
@@ -473,7 +474,8 @@ Inductive Reduction : Process -> Process -> Prop :=
 
 
   | Red_output_input_lf : forall ( x y : nat) (P Q R : Process),
-    Body P -> lc Q -> lc R -> ~ y ∈ FVars P -> x <> y -> 
+    Body P -> lc Q -> lc R -> x <> y -> 
+    ~ y ∈ FVars P -> ~ y ∈ FVars R ->
     IsClosing P x -> IsClosing P y -> 
     IsClosingInj P x -> IsClosingInj P y ->
       ( ν Close x ( ν Close y ( (FName x) « (FName y) »· (Q↓R)) ↓ ((FName x) · P) )
