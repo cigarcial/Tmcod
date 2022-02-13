@@ -48,12 +48,12 @@ Hint Constructors Collect : Piull.
 
 (**
 *)
-Inductive Linear : Context -> Prop := 
+Inductive Injective : Context -> Prop := 
   is_linear : forall L : Context,
   (forall (x : nat)(A B : Proposition), ~ (((FName x:A) ∈ L) /\ ((FName x:B) ∈ L)) ) 
-  -> Linear L.
+  -> Injective L.
 #[global] 
-Hint Constructors Linear : Piull.
+Hint Constructors Injective : Piull.
 
 
 (**

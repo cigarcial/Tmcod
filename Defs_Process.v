@@ -503,4 +503,18 @@ Hint Constructors Reduction: Piull.
 
 
 
+Fixpoint M4Open_Rec (k : nat)(L : list nat)( T : Process ) : Process := 
+match L , k with
+  | nil , _  => T
+  | x :: L0, 0 =>  { 0 ~> x } (M4Open_Rec 0 L0 T)
+  | x :: L0, (S 0) =>  { (S 0) ~> x } (M4Open_Rec 0 L0 T)
+  | x :: L0, (S (S 0)) =>  { (S (S 0)) ~> x } (M4Open_Rec 0 L0 T)
+  | x :: L0, S t =>  { S t ~> x } (M4Open_Rec t L0 T)
+end.
+#[global]
+Hint Resolve M4Open_Rec : Piull.
+
+
+
+
 

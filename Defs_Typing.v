@@ -28,7 +28,7 @@ Hint Constructors Disjoint_Sets : Piull.
 Inductive Good_Contexts : Context -> Context -> Context -> Process -> Prop := is_well_collected : 
 forall (D F G : Context)(P : Process),
   ( forall (x : nat), ( (x ∈ FVars P) -> ( exists (A : Proposition), (FName x:A) ∈ (D ∪ F ∪ G) ) )) /\
-  ( (Disjoint_Sets D F) /\ (Disjoint_Sets D G) /\ (Disjoint_Sets F G) /\ (Linear F) /\ (Linear G) )
+  ( (Disjoint_Sets D F) /\ (Disjoint_Sets D G) /\ (Disjoint_Sets F G) /\ (Injective D) /\ (Injective F) /\ (Injective G))
    -> (Good_Contexts D F G P).
 #[global]
 Hint Constructors Good_Contexts : Piull.
@@ -110,31 +110,40 @@ Inductive Inference : Process -> Context -> Context -> Context -> Prop :=
     ( D ;;; ( (Bld x B) ∪ F' ) !- Q ::: G' ) ->
     ( D ;;; ( (Bld x (A−∘B)) ∪ F ∪ F' ) !- (ν Close y (FName x « FName y »· (P↓Q))) ::: ( G ∪ G') )
 
-(* NOT COMPLETE ^*)
-
-
   | rampr : forall ( D F G: Context )( x y : nat )( A B : Proposition )( P : Process ),
     Collect D -> Collect F -> Collect G -> lc P -> 
+    Good_Contexts D F ( (Bld x B) ∪ (Bld y A) ∪ G )  P -> 
+    Good_Contexts D F ( (Bld x (A⅋B)) ∪ G )  (FName x · (Close y P)) -> 
     ( D ;;; F !- P ::: ( (Bld x B) ∪ (Bld y A) ∪ G ) ) -> 
     ( D ;;; F !- (FName x · (Close y P)) ::: ( (Bld x (A⅋B)) ∪ G ) )
 
 
   | rampl  : forall ( D F G F' G': Context )( x y : nat )( A B : Proposition )( P Q: Process ),
-    Collect D -> Collect F -> Collect G -> Collect F' -> Collect G' -> lc P  -> lc Q -> 
+    Collect D -> Collect F -> Collect G -> Collect F' -> 
+    Collect G' -> lc P  -> lc Q -> 
+    Good_Contexts D ( (Bld y A) ∪ F ) G  P -> 
+    Good_Contexts D ( (Bld x B) ∪ F') G' Q -> 
+    Good_Contexts D ( (Bld x (A⅋B)) ∪ F ∪ F' ) ( G ∪ G')  (ν Close y (FName x « FName y »· (P↓Q)) ) -> 
     ( D ;;; ( (Bld y A) ∪ F ) !- P ::: G ) ->
     ( D ;;; ( (Bld x B) ∪ F' ) !- Q ::: G') ->
-    ( D ;;; ( (Bld x (A⅋B)) ∪ F ∪ F' ) !- (ν Close y (FName x « FName y »· (P↓Q)) ) ::: ( G ∪ G') )
+    ( D ;;; ( (Bld x (A⅋B)) ∪ F ∪ F' ) !-  (ν Close y (FName x « FName y »· (P↓Q)) ) ::: ( G ∪ G') )
 
 
 
   | otiml : forall ( D F G: Context )( x y : nat )( y : nat )( A B : Proposition )( P : Process ),
     Collect D -> Collect F -> Collect G -> lc P -> x <> y -> 
+    Good_Contexts D ( (Bld x B) ∪ (Bld y A) ∪ F ) G  P -> 
+    Good_Contexts D ( (Bld x (A⊗B)) ∪ F ) G  (FName x · Close y P) -> 
     ( D ;;; ( (Bld x B) ∪ (Bld y A) ∪ F ) !- P ::: G ) -> 
     ( D ;;; ( (Bld x (A⊗B)) ∪ F ) !- (FName x · Close y P) ::: G )
 
 
   | otimr  : forall ( D F G F' G': Context )( x y : nat )( A B : Proposition )( P Q: Process ),
-    Collect D -> Collect F -> Collect G -> Collect F' -> Collect G' -> lc P  -> lc Q -> x <> y ->
+    Collect D -> Collect F -> Collect G -> Collect F' -> 
+    Collect G' -> lc P  -> lc Q -> x <> y ->
+    Good_Contexts D F ( (Bld y A) ∪ G ) P -> 
+    Good_Contexts D F' ((Bld x B) ∪ G')  Q -> 
+    Good_Contexts D (F ∪ F') ( (Bld x (A⊗B)) ∪ G ∪ G' )  (ν Close y ( FName x « FName y »· (P↓Q))) -> 
     ( D ;;; F !- P ::: ( (Bld y A) ∪ G ) ) ->
     ( D ;;; F' !- Q ::: ( (Bld x B) ∪ G' ) ) ->
     ( D ;;; (F ∪ F') !- ν Close y ( FName x « FName y »· (P↓Q)) ::: ( (Bld x (A⊗B)) ∪ G ∪ G' ) )
@@ -142,6 +151,8 @@ Inductive Inference : Process -> Context -> Context -> Context -> Prop :=
 
   | perpr : forall ( D F G: Context )( x : nat )( P : Process ),
     Collect D -> Collect F -> Collect G -> lc P ->
+    Good_Contexts D F G P -> 
+    Good_Contexts D F ( (Bld x ⊥) ∪ G ) (FName x ()· P) -> 
     ( D ;;; F !- P ::: G ) -> 
     ( D ;;; F !- (FName x ()· P) ::: ( (Bld x ⊥) ∪ G ) )
 
@@ -154,23 +165,30 @@ Inductive Inference : Process -> Context -> Context -> Context -> Prop :=
 
   | onel : forall ( D F G : Context )( x : nat )( P : Process ),
     Collect D -> Collect F -> Collect G -> lc P -> 
+    Good_Contexts D F G P ->
+    Good_Contexts D ( (Bld x ¶) ∪ F ) G (FName x ()· P ) ->
     ( D ;;; F !- P ::: G ) -> 
     ( D ;;; ( (Bld x ¶) ∪ F ) !- (FName x ()· P ) ::: G )
 
 
   | oner : forall ( D : Context)( x : nat ),
     Collect D -> 
+    Good_Contexts D ø (Bld x ¶)  (FName x ·θ ) -> 
     ( D ;;; ø !- (FName x ·θ ) ::: (Bld x ¶) )
 
 
   | copyl : forall ( D F G : Context )( x u : nat )( P : Process )( A : Proposition ),
     Collect D -> Collect F -> Collect G -> lc P -> x <> u ->
+    Good_Contexts ( (Bld u A) ∪ D ) ( (Bld x A) ∪ F ) G P ->
+    Good_Contexts ( (Bld u A) ∪ D ) F G (ν Close x ( FName u « FName x »· P )) ->
     ( ( (Bld u A) ∪ D ) ;;; ( (Bld x A) ∪ F ) !- P ::: G ) -> 
     ( ( (Bld u A) ∪ D ) ;;; F !- ν Close x ( FName u « FName x »· P ) ::: G )
 
 
   | copyr : forall ( D F G : Context )( x u : nat )( P : Process )( A : Proposition ),
     Collect D -> Collect F -> Collect G -> lc P -> x <> u ->
+    Good_Contexts ( (Bld u A) ∪ D ) F ( (Bld x (A^⊥)) ∪ G ) P ->
+    Good_Contexts ( (Bld u A) ∪ D ) F G (ν Close x ( FName u « FName x »· P )) ->
     ( ( (Bld u A) ∪ D ) ;;; F !- P ::: ( (Bld x (A^⊥)) ∪ G ) ) -> 
     ( ( (Bld u A) ∪ D ) ;;; F !- ν Close x ( FName u « FName x »· P ) ::: G )
 
@@ -183,6 +201,17 @@ Inductive Inference : Process -> Context -> Context -> Context -> Prop :=
     ( D ;;; ø !- P ::: (Bld x A) ) -> 
     ( ( (Bld u A) ∪ D ) ;;; F !- Q ::: G )  -> 
     ( D ;;; F !- ν Close u ((FName u !· Close x P) ↓ Q) ::: G )
+
+
+  | cutwnot : forall ( D F G : Context )( P Q : Process )( A : Proposition )( x u : nat ),
+    Collect D -> Collect F -> Collect G -> 
+    lc P -> lc Q ->  x <> u ->
+    Good_Contexts D (Bld x (A^⊥)) ø P ->
+    Good_Contexts ((Bld u A) ∪ D) F G Q ->
+    Good_Contexts D F G (ν Close u ( ((FName u) !· Close x P) ↓ Q)) ->
+    ( D ;;; (Bld x (A^⊥)) !- P ::: ø ) -> 
+    ( ((Bld u A) ∪ D) ;;; F !- Q ::: G ) -> 
+    ( D ;;; F !- (ν Close u ( ((FName u) !· Close x P) ↓ Q)) ::: G )
 
 
   | cutr : forall ( D F G F' G' : Context )( P Q : Process )( A : Proposition )( x : nat ),
@@ -207,24 +236,8 @@ Inductive Inference : Process -> Context -> Context -> Context -> Prop :=
     ( D ;;; (F ∪ F') !- ( ν Close x (P↓Q) ) ::: (G ∪ G') )
 
 
-(*
-  | cutwnot : forall ( D F G : Context )( x u : nat )( P Q : Process )( A : Proposition ),
-    Collect D -> Collect F -> Collect G -> 
-    lc P -> lc Q ->  x <> u ->
-    ( D ;;; ( cons ((FName x):(A^⊥)) nil ) !- P ::: nil ) -> 
-    ( ((cons ((FName u):A) nil) ++ D) ;;; F !- Q ::: G ) -> 
-    ( D ;;; F !- (ν Close u ( ((FName u) !· Close x P) ↓ Q)) ::: G )
-*)
-
-
-
-
-
 where "D ';;;'  F '!-' P ':::' G" := (Inference P D F G).
 #[global]
 Hint Constructors Inference : Piull.
 
-
-(*
-*)
 
