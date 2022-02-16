@@ -91,6 +91,14 @@ Ltac OrSearchRew L :=
   (rewrite L; simpl; progress auto with *) +
   (left; OrSearchRew L) +
   (right; OrSearchRew L).
+  
+  
+(**
+*)
+Ltac OrSearchCons :=
+  (constructor; progress auto with *) +
+  (left; OrSearchCons ) +
+  (right; OrSearchCons ).
 
 
 (**

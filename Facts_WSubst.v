@@ -193,6 +193,23 @@ forall ( P : Process )( x0 x u : nat ),
 x0 <> x -> x0 ∈ FVars P ->
 x0 ∈ FVars ({u \ x} P).
 Proof.
+  induction P; intros.
+  + Piauto.
+  + admit.
+  + simpl in H0.
+    apply Union_inv in H0.
+    destruct H0.
+    - left.
+      apply IHP1; Piauto.
+    - right.
+      apply IHP2; Piauto.
+  + admit.
+  + admit.
+  + admit.
+  + simpl in *.
+    apply IHP; Piauto.
+  + admit.
+  + admit.
 Admitted.
 #[global]
 Hint Resolve Beq_FVars_Subst : Piull.

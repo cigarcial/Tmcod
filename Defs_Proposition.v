@@ -15,7 +15,7 @@ Inductive Proposition : Type :=
   | ABS : Proposition
   | TEN (A : Proposition) (B : Proposition) : Proposition
   | PAR (A : Proposition) (B : Proposition) : Proposition
-(*   | ULLT_IMP (A : ULLType) (B : ULLType) : ULLType  *)
+(*   | ULLT_IMP (A : Proposition) (B : Proposition) : Proposition *)
   | EXP (A : Proposition) : Proposition
   | MOD (A : Proposition) : Proposition.
 #[global]
@@ -44,6 +44,7 @@ match T with
   | ⊥ => ¶
   | A ⊗ B => (Dual_Prop A) ⅋ (Dual_Prop B)
   | A ⅋ B => (Dual_Prop A) ⊗ (Dual_Prop B)
+(*   | A −∘ B => A ⊗ (Dual_Prop B) *)
   | ! A => ? (Dual_Prop A)
   | ? A => ! (Dual_Prop A)
 end.

@@ -465,7 +465,8 @@ Inductive Reduction : Process -> Process -> Prop :=
 
 
   | Red_output_input_rg : forall ( x y : nat) (P Q R : Process),
-    Body P -> lc Q -> lc R -> ~ y ∈ FVars P -> x <> y -> 
+    Body P -> lc Q -> lc R -> x <> y ->
+    ~ y ∈ FVars P -> ~ y ∈ FVars R ->
     IsClosing P x -> IsClosing P y -> 
     IsClosingInj P x -> IsClosingInj P y ->
       ( ν Close x (  ((FName x) · P) ↓ ν Close y ( (FName x) « (FName y) »· (Q↓R)) )
@@ -473,7 +474,8 @@ Inductive Reduction : Process -> Process -> Prop :=
 
 
   | Red_output_input_lf : forall ( x y : nat) (P Q R : Process),
-    Body P -> lc Q -> lc R -> ~ y ∈ FVars P -> x <> y -> 
+    Body P -> lc Q -> lc R -> x <> y -> 
+    ~ y ∈ FVars P -> ~ y ∈ FVars R ->
     IsClosing P x -> IsClosing P y -> 
     IsClosingInj P x -> IsClosingInj P y ->
       ( ν Close x ( ν Close y ( (FName x) « (FName y) »· (Q↓R)) ↓ ((FName x) · P) )
@@ -497,6 +499,20 @@ where "R '-->' S" := (Reduction R S).
 #[global]
 Hint Constructors Reduction: Piull.
 
+
+
+
+
+Fixpoint M4Open_Rec (k : nat)(L : list nat)( T : Process ) : Process := 
+match L , k with
+  | nil , _  => T
+  | x :: L0, 0 =>  { 0 ~> x } (M4Open_Rec 0 L0 T)
+  | x :: L0, (S 0) =>  { (S 0) ~> x } (M4Open_Rec 0 L0 T)
+  | x :: L0, (S (S 0)) =>  { (S (S 0)) ~> x } (M4Open_Rec 0 L0 T)
+  | x :: L0, S t =>  { S t ~> x } (M4Open_Rec t L0 T)
+end.
+#[global]
+Hint Resolve M4Open_Rec : Piull.
 
 
 
