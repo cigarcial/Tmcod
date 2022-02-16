@@ -50,7 +50,7 @@ Hint Constructors Collect : Piull.
 *)
 Inductive Injective : Context -> Prop := 
   is_linear : forall L : Context,
-  (forall (x : nat)(A B : Proposition), ~ (((FName x:A) ∈ L) /\ ((FName x:B) ∈ L)) ) 
+  (forall (x : nat)(A B : Proposition), ~ ( A <> B /\ ((FName x:A) ∈ L) /\ ((FName x:B) ∈ L)) ) 
   -> Injective L.
 #[global] 
 Hint Constructors Injective : Piull.
@@ -269,7 +269,24 @@ Qed.
 #[global]
 Hint Resolve Replace_Union : Piull.
 
-
+Lemma Union_Collect_Collect :
+forall ( A B : Context ),
+Collect A -> Collect B -> Collect (A ∪ B).
+Proof.
+  intros.
+  constructor.
+  intros.
+  apply Union_inv in H2.
+  destruct H2.
+  + inversions H.
+    specialize (H3 H1 H2).
+    Piauto.
+  + inversions H0.
+    specialize (H3 H1 H2).
+    Piauto.
+Qed.
+#[global]
+Hint Resolve Union_Collect_Collect : Piull.
 
 
 

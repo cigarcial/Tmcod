@@ -1152,11 +1152,41 @@ Hint Resolve Typing_Change_Side_RgLf : Piull.
 
 
 
+(**
+*)
+Lemma No_Typing_Fuse_One_Subst_Lf :
+forall ( A : Proposition )( x y u w : nat  )( D F G : Context ),
+u ∈ FVars ({u \ w} ([FName x ←→ FName y])) -> 
+( (FName u : A) ∈ D ) -> ~( D ;;; F !- ({u \ w} ([FName x ←→ FName y])) ::: G ).
+Proof.
+Admitted.
+#[global]
+Hint Resolve No_Typing_Fuse_One_Subst_Lf : Piull.
 
 
 
+(**
+*)
+Lemma No_Typing_Fuse_One_Subst_Rg :
+forall ( A : Proposition )( x y u w : nat  )( D F G : Context ),
+u ∈ FVars ({u \ w} ([FName y ←→ FName x])) -> 
+( (FName u : A) ∈ D ) -> ~( D ;;; F !- ({u \ w} ([FName y ←→ FName x])) ::: G ).
+Proof.
+Admitted.
+#[global]
+Hint Resolve No_Typing_Fuse_One_Subst_Rg : Piull.
 
 
+(**
+*)
+Lemma No_Typing_Zero_Ord_Subst :
+forall ( A : Proposition )( x u w : nat  )( D F G : Context ),
+u ∈ FVars ({u \ w} ( FName x ·θ ) ) -> 
+( (FName u : A) ∈ D ) -> ~( D ;;; F !- {u \ w} ( FName x ·θ ) ::: G ).
+Proof.
+Admitted.
+#[global]
+Hint Resolve No_Typing_Zero_Ord_Subst : Piull.
 
 
 

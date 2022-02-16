@@ -16,6 +16,7 @@ forall A : Proposition ,
 (A^⊥)^⊥ = A. 
 Proof.
   StructuralInduction A.
+  
 Qed.
 #[global]
 Hint Resolve Doble_Duality_ULLT : Piull.
@@ -64,3 +65,109 @@ Proof.
 Qed.
 #[global]
 Hint Resolve Dual_Implication_Tensor : Piull.
+
+
+
+(**
+*)
+Theorem Decid_Propositions :
+forall (A B : Proposition),
+A = B \/ A <> B.
+Proof.
+  intro.
+  induction A.
+  + destruct B; OrSearch.
+  + destruct B; OrSearch.
+  + destruct B; try OrSearch.
+    specialize (IHA1 B1).
+    specialize (IHA2 B2).
+    destruct IHA1.
+    - destruct IHA2.
+      * subst. Piauto.
+      * right.
+        unfold not.
+        intros.
+        apply H0.
+        inversions H1.
+        Piauto.
+    - right.
+      unfold not.
+      intros.
+      apply H.
+      inversions H0.
+      Piauto.
+  + destruct B; try OrSearch.
+    specialize (IHA1 B1).
+    specialize (IHA2 B2).
+    destruct IHA1.
+    - destruct IHA2.
+      * subst. Piauto.
+      * right.
+        unfold not.
+        intros.
+        apply H0.
+        inversions H1.
+        Piauto.
+    - right.
+      unfold not.
+      intros.
+      apply H.
+      inversions H0.
+      Piauto.
+  + destruct B; try OrSearch.
+    specialize (IHA B).
+    destruct IHA.
+    - rewrite H.
+      OrSearch.
+    - right.
+      unfold not.
+      intros.
+      apply H.
+      inversions H0.
+      Piauto.
+  + destruct B; try OrSearch.
+    specialize (IHA B).
+    destruct IHA.
+    - rewrite H.
+      OrSearch.
+    - right.
+      unfold not.
+      intros.
+      apply H.
+      inversions H0.
+      Piauto.
+Qed.
+#[global]
+Hint Resolve Decid_Propositions : Piull.
+
+
+(**
+*)
+Proposition Beq_Ramp_LImplication : 
+forall A B C D : Proposition , 
+(A ⅋ B) = (C −∘ D) -> False.
+Proof.
+Admitted.
+#[global]
+Hint Resolve Dual_Implication_Tensor : Piull.
+
+
+(**
+*)
+Proposition Dual_inv : 
+forall A B : Proposition , 
+(A^⊥)= (B^⊥) -> A = B.
+Proof.
+  intros.
+  assert ( Ha : (A ^⊥)^⊥ = A); Piauto.
+  rewrite H in Ha.
+  rewrite Doble_Duality_ULLT in Ha.
+  Piauto.
+Qed.
+#[global]
+Hint Resolve Dual_inv : Piull.
+
+
+
+
+
