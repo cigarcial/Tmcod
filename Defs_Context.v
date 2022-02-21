@@ -175,7 +175,12 @@ Lemma SMA_nil :
 forall (x : nat)(A : Proposition),
 SMA ø x A = ø.
 Proof.
-Admitted.
+  intros.
+  apply Extensionality_Ensembles.
+  unfold Same_set.
+  constructor; unfold Included; intros; inversions H.
+  inversions H0.
+Qed.
 #[global]
 Hint Resolve SMA_nil : Piull.
 
@@ -186,9 +191,49 @@ Lemma SMA_Collect :
 forall (G : Context)(x : nat)(A : Proposition),
 Collect G -> Collect (SMA G x A).
 Proof.
-Admitted.
+  intros.
+  constructor.
+  intros.
+  inversions H1.
+  inversions H.
+  specialize (H4 H0 H2).
+  Piauto.
+Qed.
 #[global]
 Hint Resolve SMA_Collect : Piull.
+
+
+(**
+*)
+Lemma Replace_Union :
+forall (x u : nat)(A : Proposition)(D F : Context),
+Replace (D ∪ F) u x A = ((Replace D u x A) ∪ (Replace F u x A)).
+Proof.
+  intros.
+  apply Extensionality_Ensembles.
+  constructor.
+  + unfold Included.
+    intros.
+    unfold Replace in H.
+    apply Union_inv in H.
+    inversions H.
+    - inversions H0.
+      apply Union_inv in H1.
+      destruct H1; OrSearch.
+    - inversions H0; OrSearch.
+  + unfold Included.
+    intros.
+    apply Union_inv in H.
+    destruct H.
+    - inversions H.
+      * inversions H0; OrSearch.
+      * OrSearch.
+    - inversions H.
+      * inversions H0; OrSearch.
+      * OrSearch.
+Qed.
+#[global]
+Hint Resolve Replace_Union : Piull.
 
 
 (**
@@ -197,7 +242,19 @@ Lemma SMA_Union_In :
 forall (G : Context)(x : nat)(A : Proposition),
 SMA ((Bld x A) ∪ G) x A = SMA G x A.
 Proof.
-Admitted.
+  intros.
+  apply Extensionality_Ensembles.
+  constructor; unfold Included; intros.
+  + constructor.
+    - inversions H.
+      apply Union_inv in H0.
+      destruct H0; auto.
+      contradiction.
+    - inversions H; auto.
+  + constructor;
+     inversions H;
+     OrSearch.
+Qed.
 #[global]
 Hint Resolve SMA_Union_In : Piull.
 
@@ -237,38 +294,6 @@ Qed.
 Hint Resolve Replace_Bld : Piull.
 
 
-(**
-*)
-Lemma Replace_Union :
-forall (x u : nat)(A : Proposition)(D F : Context),
-Replace (D ∪ F) u x A = ((Replace D u x A) ∪ (Replace F u x A)).
-Proof.
-  intros.
-  apply Extensionality_Ensembles.
-  constructor.
-  + unfold Included.
-    intros.
-    unfold Replace in H.
-    apply Union_inv in H.
-    inversions H.
-    - inversions H0.
-      apply Union_inv in H1.
-      destruct H1; OrSearch.
-    - inversions H0; OrSearch.
-  + unfold Included.
-    intros.
-    apply Union_inv in H.
-    destruct H.
-    - inversions H.
-      * inversions H0; OrSearch.
-      * OrSearch.
-    - inversions H.
-      * inversions H0; OrSearch.
-      * OrSearch.
-Qed.
-#[global]
-Hint Resolve Replace_Union : Piull.
-
 Lemma Union_Collect_Collect :
 forall ( A B : Context ),
 Collect A -> Collect B -> Collect (A ∪ B).
@@ -289,6 +314,51 @@ Qed.
 Hint Resolve Union_Collect_Collect : Piull.
 
 
+(**
+x, A  // x no está en A 
+x -> y 
+y, A 
+*)
+Lemma Replace_Union_Bld :
+forall ( F : Context )( x y : nat )( A : Proposition),
+Replace (Bld x A ∪ F) x y A = (Bld y A ∪ F).
+Proof.
+  intros.
+  apply Extensionality_Ensembles.
+  constructor; unfold Included; intros.
+  + inversions H; try OrSearch.
+    inversions H0.
+    apply Union_inv in H1.
+    destruct H1; try contradiction.
+    OrSearch.
+  + unfold Replace.
+    inversions H; try OrSearch.
+    left.
+    constructor; try OrSearch.
+    admit.
+Admitted.
+#[global]
+Hint Resolve Replace_Union_Bld : Piull.
+
+
+(**
+(x, A) / x = A 
+*)
+Lemma SMA_Union_Bld :
+forall ( G : Context )( x : nat )( A : Proposition),
+SMA (Bld x A ∪ G) x A = G .
+Proof.
+  intros.
+  apply Extensionality_Ensembles.
+  constructor; unfold Included; intros.
+  + inversions H.
+    apply Union_inv in H0.
+    destruct H0; try contradiction; Piauto.
+  + constructor; try OrSearch.
+    admit.
+Admitted.
+#[global]
+Hint Resolve SMA_Union_Bld : Piull.
 
 
 

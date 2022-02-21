@@ -208,6 +208,40 @@ Hint Resolve No_Disjoint_Context_Left_Right : Piull.
 
 (**
 *)
+Lemma Disjoint_Sets_Empty_Rg :
+forall ( D : Context ),
+Disjoint_Sets D ø.
+Proof.
+  intros.
+  constructor.
+  unfold not.
+  intros.
+  destruct H.
+  inversions H0.
+Qed.
+#[global]
+Hint Resolve Disjoint_Sets_Empty_Rg : Piull.
+
+
+(**
+*)
+Lemma Disjoint_Sets_Empty_Lf :
+forall ( D : Context ),
+Disjoint_Sets ø D.
+Proof.
+  intros.
+  constructor.
+  unfold not.
+  intros.
+  destruct H.
+  inversions H.
+Qed.
+#[global]
+Hint Resolve Disjoint_Sets_Empty_Lf : Piull.
+
+
+(**
+*)
 Lemma Equality_Context :
 forall ( x : nat )( A B : Proposition)( D F : Context),
 Injective (Bld x A ∪ D) -> 
@@ -279,28 +313,14 @@ D;;; (SMA F x A) !- P ::: (G ∪ Bld x (A ^⊥)).
 Proof.
 Admitted.
 
-
 (**
+This lemma should not be in the database.
 *)
-Lemma Replace_Union_Bld :
-forall ( F : Context )( x y : nat )( A : Proposition),
-Replace (Bld x A ∪ F) x y A = (Bld y A ∪ F).
+Lemma Cyclic_Argument :
+forall ( x u : nat )( P Q R: Process )( D F G : Context),
+{x \ u} P = Q -> ( D ;;; F !- R ::: G ).
 Proof.
 Admitted.
-#[global]
-Hint Resolve Replace_Union_Bld : Piull.
-
-
-(**ç
-*)
-Lemma SMA_Union_Bld :
-forall ( G : Context )( x : nat )( A : Proposition),
-SMA (Bld x A ∪ G) x A = G .
-Proof.
-Admitted.
-#[global]
-Hint Resolve SMA_Union_Bld : Piull.
-
 
 
 
@@ -330,8 +350,6 @@ Proof.
     rewrite (Double_Subst_Expan_NFVar Q x x u); ePiauto.
     constructor; ePiauto.
   + apply Rep_Input_No_Reduces in H6; contradiction.
-  + apply Chan_Input_No_Reduces in H7; contradiction.
-  + apply Parallel_Res_No_Reduces in H11; contradiction.
   + apply Chan_Input_No_Reduces in H6; contradiction.
   + apply Parallel_Res_No_Reduces in H11; contradiction.
   + apply Chan_Input_No_Reduces in H7; contradiction.
@@ -375,16 +393,22 @@ Proof.
       clear Hx; clear H10; clear IHInference1.
       subst.
       apply (cutrep _ _ _ _ _ A x u0); Piauto.
+      apply Another_GContext; ePiauto.
       admit.
 
       inversions H8.
-      * admit. (* cyclic argument *)
-      * admit. (* cyclic argument *)
-      
-      * apply Equality_Substitution_Beq_Left in H10; Piauto.
-        subst.
-        apply No_Disjoint_Context_Left in H29.
-        contradiction.
+
+      * (* CYCLIC ARGUMENT *)
+        apply (Cyclic_Argument x0 u P0 
+         (ν ((if u0 =? y then BName 0 else FName u0)
+         « if y =? y then BName 0 else FName y »· Close_Rec 0 y Q1)));
+         auto.
+
+      * (* CYCLIC ARGUMENT *)
+        apply (Cyclic_Argument x0 u P0 
+         (ν ((if u0 =? y then BName 0 else FName u0)
+         « if y =? y then BName 0 else FName y »· Close_Rec 0 y Q1)));
+         auto.
 
       * apply Equality_Substitution_Beq_Left in H10; Piauto.
         subst.
@@ -404,22 +428,26 @@ Proof.
         subst.
         rewrite (App_Nil_Left F).
         rewrite (App_Nil_Left G).
-        apply (cutl (Bld u0 A0 ∪ D0) F G ø ø _ _  A0 y); Piauto.
-        admit.
-        
+        apply Equality_Context in H20; ePiauto.
+        destruct H20.
+        subst.
+        apply (cutl (Bld u0 A ∪ D) F G ø ø _ _  A y); Piauto.
+        apply GContext_Weakening.
+        apply GContext_Transference_Rg_Lf.
+        apply GContext_Type_Subst_Rg.
+        rewrite <- App_Nil_Left.
+        Piauto.
+
         apply Weakening_Ordinary; Piauto.
         rewrite Lc_Open_Close_Subst; Piauto.
-        assert( Ht : Replace (Bld x (A0 ^⊥)) x y (A0 ^⊥) = (Bld y (A0 ^⊥) ∪ ø) ).
+        assert( Ht : Replace (Bld x (A ^⊥)) x y (A ^⊥) = (Bld y (A ^⊥) ∪ ø) ).
           rewrite Replace_Bld.
           ePiauto.
 
         rewrite <- Ht.
         apply Type_Subst_Lf; try constructor.
-        assert( Hx : SMA (Bld x A0) x A0 = ø );
+        assert( Hx : SMA (Bld x A) x A = ø );
           ePiauto.
-        apply Equality_Context in H20; ePiauto.
-        destruct H20.
-        subst.
         rewrite <- Hx.
         rewrite (App_Nil_Right (Bld x (A ^⊥))).
         apply Transference_Rg_Lf; ePiauto.
@@ -433,31 +461,39 @@ Proof.
         subst.
         rewrite (App_Nil_Left F).
         rewrite (App_Nil_Left G).
-        apply (cutl (Bld u0 A0 ∪ D0) F G ø ø _ _  A0 y); Piauto.
-        admit.
-        admit.
+        apply Equality_Context in H20; ePiauto.
+        destruct H20.
+        subst.
+        apply (cutl (Bld u0 A ∪ D) F G ø ø _ _  A y); Piauto.
 
-        rewrite <- (Doble_Duality_ULLT A0) at 2.
-        assert ( Ha : G = SMA (Bld y (A0 ^⊥) ∪ G) y (A0 ^⊥)).
+        rewrite <- Doble_Duality_ULLT at 2.
+        apply GContext_Transference_Rg_Lf.
+        Piauto.
+
+        apply GContext_Weakening.
+        apply GContext_Transference_Rg_Lf.
+        apply GContext_Type_Subst_Rg.
+        rewrite <- App_Nil_Left.
+        Piauto.
+
+        rewrite <- (Doble_Duality_ULLT A) at 2.
+        assert ( Ha : G = SMA (Bld y (A ^⊥) ∪ G) y (A ^⊥)).
           apply eq_sym.
           Piauto.
         rewrite Ha.
-        rewrite (Union_commutative _ ( Bld y ((A0 ^⊥) ^⊥) ) F).
+        rewrite (Union_commutative _ ( Bld y ((A ^⊥) ^⊥) ) F).
         apply Transference_Rg_Lf; try OrSearchCons; Piauto.
 
         apply Weakening_Ordinary; Piauto.
         rewrite Lc_Open_Close_Subst; Piauto.
-        assert( Ht : Replace (Bld x (A0 ^⊥)) x y (A0 ^⊥) = (Bld y (A0 ^⊥) ∪ ø) ).
+        assert( Ht : Replace (Bld x (A ^⊥)) x y (A ^⊥) = (Bld y (A ^⊥) ∪ ø) ).
           rewrite Replace_Bld.
           ePiauto.
 
         rewrite <- Ht.
         apply Type_Subst_Lf; try constructor.
-        assert( Hx : SMA (Bld x A0) x A0 = ø );
+        assert( Hx : SMA (Bld x A) x A = ø );
           ePiauto.
-        apply Equality_Context in H20; ePiauto.
-        destruct H20.
-        subst.
         rewrite <- Hx.
         rewrite (App_Nil_Right (Bld x (A ^⊥))).
         apply Transference_Rg_Lf; try OrSearchCons; ePiauto.
@@ -474,17 +510,21 @@ Proof.
       apply (Close_Same_Inv _ _ u 1) in H11; Piauto.
       rewrite H11.
       apply (cutrep _ _ _ _ _ A x u); Piauto.
+      apply Another_GContext; ePiauto.
       admit.
 
       rewrite <- H12 in H8.
       inversions H8.
-      * admit. (* cyclic argument *)
-      * admit. (* cyclic argument *)
-
-      * apply Equality_Substitution_Beq_Left in H20; Piauto.
-        subst.
-        apply No_Disjoint_Context_Left in H33.
-        contradiction.
+      * (* cyclic argument *)
+        apply (Cyclic_Argument x0 u1 P1 
+         (ν ((if u0 =? y then BName 0 else FName u0)
+         « if y =? y then BName 0 else FName y »· Close_Rec 0 y Q1)));
+         auto.
+      * (* cyclic argument *)
+        apply (Cyclic_Argument x0 u1 P1 
+         (ν ((if u0 =? y then BName 0 else FName u0)
+         « if y =? y then BName 0 else FName y »· Close_Rec 0 y Q1)));
+         auto.
 
       * apply Equality_Substitution_Beq_Left in H20; Piauto.
         subst.
@@ -504,20 +544,23 @@ Proof.
         subst.
         rewrite (App_Nil_Right F).
         rewrite (App_Nil_Right G).
-        apply (cutr (Bld u0 A0 ∪ D0) ø ø F G _ _  A0 y); Piauto.
-        admit.
-        
+        apply Equality_Context in H25; ePiauto.
+        destruct H25.
+        subst.
+        apply (cutr (Bld u0 A ∪ D) ø ø F G _ _  A y); Piauto.
+
+        apply GContext_Weakening.
+        apply GContext_Type_Subst_Rg.
+        rewrite <- App_Nil_Left.
+        Piauto.
+
         apply Weakening_Ordinary; Piauto.
         rewrite Lc_Open_Close_Subst; Piauto.
-        assert( Ht : Replace (Bld x A0) x y A0 = (Bld y A0 ∪ ø) ). 
+        assert( Ht : Replace (Bld x A) x y A = (Bld y A ∪ ø) ).
           rewrite Replace_Bld.
           ePiauto.
         rewrite <- Ht.
         apply Type_Subst_Rg; try OrSearchCons; Piauto.
-        apply Equality_Context in H25; ePiauto.
-        destruct H25.
-        subst.
-        Piauto.
 
       * apply Equality_Substitution_Beq_Left in H20; Piauto.
         subst.
@@ -527,23 +570,31 @@ Proof.
         subst.
         rewrite (App_Nil_Right F).
         rewrite (App_Nil_Right G).
-        apply (cutr (Bld u0 A0 ∪ D0) ø ø F G _ _  A0 y); Piauto.
-        admit.
-        admit.
+        apply Equality_Context in H25; ePiauto.
+        destruct H25.
+        subst.
+        apply (cutr (Bld u0 A ∪ D) ø ø F G _ _  A y); Piauto.
+
+        apply GContext_Weakening.
+        apply GContext_Type_Subst_Rg.
+        rewrite <- App_Nil_Left.
+        Piauto.
+
+        rewrite <- Doble_Duality_ULLT at 2.
+        apply GContext_Transference_Rg_Lf.
+        Piauto.
 
         apply Weakening_Ordinary; Piauto.
         rewrite Lc_Open_Close_Subst; Piauto.
-        assert( Ht : Replace (Bld x A0) x y A0 = (Bld y A0 ∪ ø) ). 
+        assert( Ht : Replace (Bld x A) x y A = (Bld y A ∪ ø) ). 
           rewrite Replace_Bld.
           ePiauto.
         rewrite <- Ht.
         apply Type_Subst_Rg; try OrSearchCons; Piauto.
-        apply Equality_Context in H25; ePiauto.
-        destruct H25.
-        subst.
+        
         Piauto.
 
-        assert( Ha : SMA (Bld y (A0 ^⊥) ∪ G) y (A0 ^⊥) = G ); Piauto.
+        assert( Ha : SMA (Bld y (A ^⊥) ∪ G) y (A ^⊥) = G ); Piauto.
         rewrite <- Ha.
         rewrite (Union_commutative _ _ F).
         rewrite <- Doble_Duality_ULLT at 2.
@@ -586,13 +637,18 @@ Proof.
 
       rewrite <- H13 in H9.
       inversions H9.
-      * admit. (* cyclic argument *)
-      * admit. (* cyclic argument *)
-      
-      * apply Equality_Substitution_Beq_Left in H11; Piauto.
-        subst.
-        apply No_Disjoint_Context_Left in H33.
-        contradiction.
+
+      * (* cyclic argument *)
+        apply (Cyclic_Argument x0 u1 P1 
+         (ν ((if u0 =? y then BName 0 else FName u0)
+         « if y =? y then BName 0 else FName y »· Close_Rec 0 y Q1)));
+         auto.
+
+      * (* cyclic argument *)
+        apply (Cyclic_Argument x0 u1 P1 
+         (ν ((if u0 =? y then BName 0 else FName u0)
+         « if y =? y then BName 0 else FName y »· Close_Rec 0 y Q1)));
+         auto.
 
       * apply Equality_Substitution_Beq_Left in H11; Piauto.
         subst.
@@ -612,20 +668,23 @@ Proof.
         subst.
         rewrite (App_Nil_Left F).
         rewrite (App_Nil_Left G).
-        apply (cutl (Bld u0 A0 ∪ D0) F G ø ø _ _  A0 y); Piauto.
-        admit.
-
-        apply Weakening_Ordinary; Piauto.
-        rewrite Lc_Open_Close_Subst; Piauto.
-        assert( Ht : Replace (Bld x (A0 ^⊥)) x y (A0 ^⊥) = (Bld y (A0 ^⊥) ∪ ø) ).
-          rewrite Replace_Bld.
-          ePiauto.
-        rewrite <- Ht.
-        apply Type_Subst_Lf; try constructor.
         apply Equality_Context in H25; ePiauto.
         destruct H25.
         subst.
+        apply (cutl (Bld u0 A ∪ D) F G ø ø _ _  A y); Piauto.
+
+        apply GContext_Weakening.
+        apply GContext_Type_Subst_Lf.
+        rewrite <- App_Nil_Left.
         Piauto.
+
+        apply Weakening_Ordinary; Piauto.
+        rewrite Lc_Open_Close_Subst; Piauto.
+        assert( Ht : Replace (Bld x (A ^⊥)) x y (A ^⊥) = (Bld y (A ^⊥) ∪ ø) ).
+          rewrite Replace_Bld.
+          ePiauto.
+        rewrite <- Ht.
+        apply Type_Subst_Lf; try constructor; Piauto.
 
       * apply Equality_Substitution_Beq_Left in H11; Piauto.
         subst.
@@ -635,30 +694,23 @@ Proof.
         subst.
         rewrite (App_Nil_Left F).
         rewrite (App_Nil_Left G).
-        apply (cutl (Bld u0 A0 ∪ D0) F G ø ø _ _  A0 y); Piauto.
-        admit.
-        admit.
-        
-        rewrite <- (Doble_Duality_ULLT A0) at 2.
-        assert ( Ha : G = SMA (Bld y (A0 ^⊥) ∪ G) y (A0 ^⊥)).
-          apply eq_sym.
-          Piauto.
-        rewrite Ha.
-        rewrite (Union_commutative _ ( Bld y ((A0 ^⊥) ^⊥) ) F).
-        apply Transference_Rg_Lf; try OrSearchCons; Piauto.
-        
-        apply Weakening_Ordinary; Piauto.
-        rewrite Lc_Open_Close_Subst; Piauto.
-        assert( Ht : Replace (Bld x (A0 ^⊥)) x y (A0 ^⊥) = (Bld y (A0 ^⊥) ∪ ø) ).
-          rewrite Replace_Bld.
-          ePiauto.
-        rewrite <- Ht.
-        apply Type_Subst_Lf; try constructor.
-
         apply Equality_Context in H25; ePiauto.
         destruct H25.
         subst.
+        apply (cutr (Bld u0 A ∪ D) F G ø ø _ _  (A ^⊥) y); Piauto.
+
+        apply GContext_Weakening.
+        apply GContext_Type_Subst_Lf.
+        rewrite <- App_Nil_Left.
         Piauto.
+
+        apply Weakening_Ordinary; Piauto.
+        rewrite Lc_Open_Close_Subst; Piauto.
+        assert( Ht : Replace (Bld x (A ^⊥)) x y (A ^⊥) = (Bld y (A ^⊥) ∪ ø) ).
+          rewrite Replace_Bld.
+          ePiauto.
+        rewrite <- Ht.
+        apply Type_Subst_Lf; try constructor; Piauto.
 
     - apply (IsClosingInj_inv _ _ u) in H22.
       rewrite <- H22 in *.
@@ -677,13 +729,18 @@ Proof.
 
       rewrite <- H13 in H9.
       inversions H9.
-      * admit. (* cyclic argument *)
-      * admit. (* cyclic argument *)
 
-      * apply Equality_Substitution_Beq_Left in H21; Piauto.
-        subst.
-        apply No_Disjoint_Context_Left in H34.
-        contradiction.
+      * (* cyclic argument *)
+        apply (Cyclic_Argument x0 u1 P1 
+         (ν ((if u0 =? y then BName 0 else FName u0)
+         « if y =? y then BName 0 else FName y »· Close_Rec 0 y Q1)));
+         auto.
+
+      * (* cyclic argument *)
+        apply (Cyclic_Argument x0 u1 P1 
+         (ν ((if u0 =? y then BName 0 else FName u0)
+         « if y =? y then BName 0 else FName y »· Close_Rec 0 y Q1)));
+         auto.
 
       * apply Equality_Substitution_Beq_Left in H21; Piauto.
         subst.
@@ -703,29 +760,31 @@ Proof.
         subst.
         rewrite (App_Nil_Right F).
         rewrite (App_Nil_Right G).
-        apply (cutr (Bld u0 A0 ∪ D0) ø ø F G _ _  A0 y); Piauto.
-        admit.
-        
-        apply Weakening_Ordinary; Piauto.
-        rewrite Lc_Open_Close_Subst; Piauto.
-        assert( Ht : Replace (Bld x A0) x y A0 = (Bld y A0 ∪ ø) ). 
-          rewrite Replace_Bld.
-          ePiauto.
-        rewrite <- Ht.
-        apply Type_Subst_Rg; Piauto.
         apply Equality_Context in H26; ePiauto.
         destruct H26.
         subst.
+        apply (cutr (Bld u0 A ∪ D) ø ø F G _ _  A y); Piauto.
 
+        apply GContext_Weakening.
+        rewrite <- Doble_Duality_ULLT at 1.
+        apply GContext_Transference_Lf_Rg.
+        apply GContext_Type_Subst_Lf.
+        rewrite <- App_Nil_Left.
+        Piauto.
+
+        apply Weakening_Ordinary; Piauto.
+        rewrite Lc_Open_Close_Subst; Piauto.
+        assert( Ht : Replace (Bld x A) x y A = (Bld y A ∪ ø) ). 
+          rewrite Replace_Bld.
+          ePiauto.
+        rewrite <- Ht.
+        apply Type_Subst_Rg; try constructor; Piauto.
         assert( Ha : SMA (Bld x (A ^⊥)) x (A ^⊥) = ø );
           ePiauto.
         rewrite <- Ha.
         rewrite App_Nil_Right.
         rewrite <- (Doble_Duality_ULLT A) at 3.
-
-        apply Transference_Lf_Rg; ePiauto.
-        constructor.
-        constructor.
+        apply Transference_Lf_Rg; try constructor; ePiauto.
 
       * apply Equality_Substitution_Beq_Left in H21; Piauto.
         subst.
@@ -735,20 +794,29 @@ Proof.
         subst.
         rewrite (App_Nil_Right F).
         rewrite (App_Nil_Right G).
-        apply (cutr (Bld u0 A0 ∪ D0) ø ø F G _ _  A0 y); Piauto.
-        admit.
-        admit.
-        
+        apply Equality_Context in H26; ePiauto.
+        destruct H26.
+        subst.
+        apply (cutr (Bld u0 A ∪ D) ø ø F G _ _ A y); Piauto.
+
+        apply GContext_Weakening.
+        rewrite <- Doble_Duality_ULLT at 1.
+        apply GContext_Transference_Lf_Rg.
+        apply GContext_Type_Subst_Lf.
+        rewrite <- App_Nil_Left.
+        Piauto.
+
+        rewrite <- Doble_Duality_ULLT at 2.
+        apply GContext_Transference_Rg_Lf.
+        Piauto.
+
         apply Weakening_Ordinary; Piauto.
         rewrite Lc_Open_Close_Subst; Piauto.
-        assert( Ht : Replace (Bld x A0) x y A0 = (Bld y A0 ∪ ø) ). 
+        assert( Ht : Replace (Bld x A) x y A = (Bld y A ∪ ø) ).
           rewrite Replace_Bld.
           ePiauto.
         rewrite <- Ht.
         apply Type_Subst_Rg; try OrSearchCons; Piauto.
-        apply Equality_Context in H26; ePiauto.
-        destruct H26.
-        subst.
 
         assert( Ha : SMA (Bld x (A ^⊥)) x (A ^⊥) = ø );
           ePiauto.
@@ -757,10 +825,10 @@ Proof.
         rewrite <- (Doble_Duality_ULLT A) at 3.
         apply Transference_Lf_Rg; try OrSearchCons; ePiauto.
 
-        rewrite (Union_commutative _ (Bld y A0) F).
-        assert( Ha : SMA (Bld y (A0 ^⊥) ∪ G) y (A0 ^⊥) = G ); Piauto.
+        rewrite (Union_commutative _ (Bld y A) F).
+        assert( Ha : SMA (Bld y (A ^⊥) ∪ G) y (A ^⊥) = G ); Piauto.
         rewrite <- Ha.
-        rewrite <- (Doble_Duality_ULLT A0) at 2.
+        rewrite <- (Doble_Duality_ULLT A) at 2.
         apply Transference_Rg_Lf; try OrSearchCons; ePiauto.
 
   + inversions H10.
@@ -842,10 +910,6 @@ Proof.
         rewrite <- Ha.
         rewrite <- (Doble_Duality_ULLT A0) at 1.
         apply Transference_Rg_Lf; try OrSearchCons; ePiauto.
-
-        apply GContext_Second_Injective in H25.
-        rewrite Union_commutative.
-        Piauto.
 
       * apply (Equality_Subst_Equality _ _ u x1) in H17.
         rewrite <- (Double_Subst_Expan_NFVar _ u u x1) in H17; Piauto.
@@ -971,8 +1035,11 @@ Proof.
         subst.
         inversions H9.
 
-        ** admit. (* cyclic argument *)
-        ** admit. (* cyclic argument *)
+        ** (* cyclic argument *)
+           apply (Cyclic_Argument x u P (FName x0 ()·Q0)); auto.
+
+        ** (* cyclic argument *)
+           apply (Cyclic_Argument x u P (FName x0 ()·Q0)); auto.
 
         ** rewrite (App_Nil_Left (Bld x0 ¶)) in H18.
            apply Equality_Context in H18; ePiauto.
@@ -1021,8 +1088,11 @@ Proof.
         subst.
         inversions H8.
 
-        ** admit. (* cyclic argument *)
-        ** admit. (* cyclic argument *)
+        ** (* cyclic argument *)
+           apply (Cyclic_Argument x u P (FName x0 ()·Q0)); auto.
+
+        ** (* cyclic argument *)
+           apply (Cyclic_Argument x u P (FName x0 ()·Q0)); auto.
 
         ** rewrite (App_Nil_Left (Bld x0 ⊥)) in H18.
            apply Equality_Context in H18; ePiauto.
@@ -1052,191 +1122,110 @@ Proof.
              ↓ Close_Rec 1 x0 (Close_Rec 0 y R))) = Close_Rec 0 x0 ( ν Close_Rec 0 y (FName x0 « FName y »· ( Q1 ↓ R)))) .
              Piauto.
       rewrite Hx in H12.
-      apply (IsClosingInj_inv _ _ x) in H21.
+      apply (IsClosingInj_inv _ _ x) in H22.
       subst.
       apply (Close_Same_Inv _ _ x0 _) in H12; Piauto.
       subst.
       inversions H9.
 
-      * admit. (* cyclic argument *)
-      * admit. (* cyclic argument *)
+      * (* cyclic argument *)
+        apply (Cyclic_Argument x u P1
+         (ν ((if x0 =? y then BName 0 else FName x0)
+         « if y =? y then BName 0 else FName y
+         »· (Close_Rec 0 y Q1 ↓ Close_Rec 0 y R)))); 
+         auto.
+      * (* cyclic argument *)
+        apply (Cyclic_Argument x u P1
+         (ν ((if x0 =? y then BName 0 else FName x0)
+         « if y =? y then BName 0 else FName y
+         »· (Close_Rec 0 y Q1 ↓ Close_Rec 0 y R)))); 
+         auto.
 
       * assert (Ha : (if x0 =? x0 then BName 0 else FName x0) · Close_Rec 1 x0 P0 = Close_Rec 0 x0 (FName x0 · P0));
           Piauto.
         rewrite Ha in H11.
         apply (Close_Same_Inv _ _ x0 _) in H11; Piauto.
         apply Equality_Substitution_Beq_Left in H12; Piauto.
-        apply (IsClosingInj_inv _ _ y0) in H23.
+        apply (IsClosingInj_inv _ _ y0) in H24.
         subst.
-        apply (Close_Same_Inv _ _ y _) in H24; Piauto.
-        apply (Close_Same_Inv _ _ y _) in H22; Piauto.
+        apply (Close_Same_Inv _ _ y _) in H25; Piauto.
+        apply (Close_Same_Inv _ _ y _) in H23; Piauto.
         subst.
-        rewrite Union_associative in H25.
-        apply Equality_Context in H25; ePiauto.
-        destruct H25.
+        rewrite Union_associative in H26.
+        apply Equality_Context in H26; ePiauto.
+        destruct H26.
         subst.
         inversions H8.
 
-        ** admit. (* cyclic argument *)
-        ** admit. (* cyclic argument *)
+        ** (* cyclic argument *)
+           apply (Cyclic_Argument x u P (FName x0 · P0)); auto.
 
-        ** apply Equality_Context in H22; ePiauto.
-           destruct H22.
+        ** (* cyclic argument *)
+           apply (Cyclic_Argument x u P (FName x0 · P0)); auto.
+
+        ** apply Equality_Context in H23; ePiauto.
+           destruct H23.
            inversions H11.
+           rewrite (Union_commutative _ F0).
+           rewrite (Union_commutative _ G0).
            do 2 rewrite <- Union_associative.
-           apply (cutr D (F ∪ F0) (G ∪ G0) F'0 G'0 _ _  B x0); Piauto.
+           apply (cutr D (F ∪ F'0) (G ∪ G'0) F0 G0 _ _  A0 y); Piauto.
            admit.
-           
-           rewrite Union_commutative.
+
            rewrite <- Union_associative.
-           rewrite <- (Union_commutative _ G0).
-           apply (cutr D F0 G0 F (Bld x0 B ∪ G) _ _ A0 y); Piauto.
-           admit.
+           rewrite (Union_commutative _ _ F'0).
+           rewrite (Union_commutative _ _ G'0).
+           apply (cutl D F'0 G'0 F (Bld y A0 ∪ G) _ _ B x0); Piauto.
            
+           
+           admit.
+
            rewrite Lc_Open_Close_Subst; Piauto.
-           assert( Ht : Replace (Bld y0 A0 ∪ F) y0 y A0 = (Bld y A0 ∪ F) ); Piauto.
+           assert( Ht : Replace (Bld y0 A0 ∪ G) y0 y A0 = (Bld y A0 ∪ G) ); Piauto.
            rewrite <- Ht.
-           apply Dual_inv in H41.
            subst.
-           apply Type_Subst_Lf; try OrSearchCons; Piauto.
+           apply Type_Subst_Rg; try OrSearchCons; Piauto.
 
-        ** apply Equality_Context in H22; ePiauto.
-           destruct H22.
-           inversions H11.
-           do 2 rewrite <- Union_associative.
-           apply (cutr D (F ∪ F0) (G ∪ G0) F'0 G'0 _ _  B x0); Piauto.
-           admit.
-
-           rewrite Union_commutative.
-           rewrite <- Union_associative.
-           rewrite <- (Union_commutative _ G0).
-           apply (cutr D F0 G0 F (Bld x0 B ∪ G) _ _ A0 y); Piauto.
-           admit.
-
-           rewrite Lc_Open_Close_Subst; Piauto.
-           assert( Ht : Replace (Bld y0 A0 ∪ F) y0 y A0 = (Bld y A0 ∪ F) ); Piauto.
-           rewrite <- Ht.
-           apply Type_Subst_Lf;try OrSearchCons; Piauto.
-           rewrite Union_commutative.
-           assert( Hb : (Bld x0 B ∪ G) = SMA ((Bld x0 B ∪ Bld y0 (A0 ^⊥)) ∪ G) y0 (A0 ^⊥) ).
+           assert( Hb : (Bld y0 A0 ∪ G) = SMA ((Bld x0 B ∪ Bld y0 A0) ∪ G) x0 B ).
             apply eq_sym.
-            rewrite (Union_commutative _ (Bld x0 B) ).
             rewrite Union_associative.
             Piauto.
            rewrite Hb.
-           rewrite <- Doble_Duality_ULLT at 1.
+           rewrite Union_commutative.
            apply Transference_Rg_Lf ; try OrSearchCons; Piauto.
 
-        ** apply No_Disjoint_Context_Left_Right in H40.
+        ** apply No_Disjoint_Context_Left_Right in H41.
            contradiction.
 
-        ** apply GContext_Second_Injective in H37.
-           rewrite <- Union_associative.
-           Piauto.
-
-      * assert (Ha : (if x0 =? x0 then BName 0 else FName x0) · Close_Rec 1 x0 P0 = Close_Rec 0 x0 (FName x0 · P0));
-          Piauto.
-        rewrite Ha in H11.
-        apply (Close_Same_Inv _ _ x0 _) in H11; Piauto.
-        apply Equality_Substitution_Beq_Left in H12; Piauto.
-        apply (IsClosingInj_inv _ _ y0) in H23.
-        subst.
-        apply (Close_Same_Inv _ _ y _) in H24; Piauto.
-        apply (Close_Same_Inv _ _ y _) in H22; Piauto.
-        subst.
-        rewrite Union_associative in H25.
-        apply Equality_Context in H25; ePiauto.
-        destruct H25.
-        subst.
-        inversions H8.
-
-        ** admit. (* cyclic argument *)
-        ** admit. (* cyclic argument *)
-
-        ** apply Equality_Context in H22; ePiauto.
-           destruct H22.
-           inversions H11.
-           do 2 rewrite <- Union_associative.
-           apply (cutr D (F ∪ F0) (G ∪ G0) F'0 G'0 _ _  B x0); Piauto.
-           admit.
-           
-           rewrite Union_commutative.
-           rewrite <- Union_associative.
-           rewrite <- (Union_commutative _ G0).
-           apply (cutr D F0 G0 F (Bld x0 B ∪ G) _ _ A y); Piauto.
-           admit.
-           admit.
-
-           assert( Ht : SMA (Bld y (A ^⊥) ∪ F0) y (A ^⊥) = F0); Piauto.
-           rewrite <- Ht.
-           rewrite <- (Doble_Duality_ULLT A) at 3.
-           rewrite <- (Union_commutative _ G0).
-           apply Transference_Lf_Rg; try OrSearchCons; Piauto.
-
-           rewrite Lc_Open_Close_Subst; Piauto.
-           assert( Ht : Replace (Bld y0 A ∪ F) y0 y A = (Bld y A ∪ F) ); Piauto.
-           rewrite <- Ht.
-           apply Type_Subst_Lf; try OrSearchCons; Piauto.
-
-        ** apply Equality_Context in H22; ePiauto.
-           destruct H22.
-           inversions H11.
-           do 2 rewrite <- Union_associative.
-           apply (cutr D (F ∪ F0) (G ∪ G0) F'0 G'0 _ _  B x0); Piauto.
-           admit.
-           
-           rewrite Union_commutative.
-           rewrite <- Union_associative.
-           rewrite <- (Union_commutative _ G0).
-           apply (cutl D F0 G0 F (Bld x0 B ∪ G) _ _ A0 y); Piauto.
-           admit.
-           
-           rewrite Lc_Open_Close_Subst; Piauto.
-           assert( Ht : Replace (Bld y0 (A0 ^⊥) ∪ F) y0 y (A0 ^⊥) = (Bld y (A0 ^⊥) ∪ F) ); Piauto.
-           rewrite <- Ht.
-           apply Type_Subst_Lf; try OrSearchCons; Piauto.
-
-           assert( Hb : SMA (((Bld x0 B ∪ Bld y0 A0) ∪ G)) y0 (A0) = (Bld x0 B ∪ G)).
-            rewrite (Union_commutative _ (Bld x0 B) ).
-            rewrite Union_associative.
-            Piauto.
-           rewrite <- Hb.
-           rewrite <- (Union_commutative _ F).
-           apply Transference_Rg_Lf; try OrSearchCons; Piauto.
-
-        ** apply No_Disjoint_Context_Left_Right in H40.
-           contradiction.
-
-        ** apply GContext_Second_Injective in H37.
+        ** apply GContext_Second_Injective in H38.
            rewrite <- Union_associative.
            Piauto.
 
       * apply Equality_Substitution_Beq_Left in H12; Piauto.
-        apply (IsClosingInj_inv _ _ y0) in H23.
         subst.
-        rewrite H25 in H38.
-        rewrite Union_associative in H38.
-        apply No_Disjoint_Context_Left_Right in H38.
+        rewrite H26 in H39.
+        rewrite Union_associative in H39.
+        apply No_Disjoint_Context_Left_Right in H39.
         contradiction.
 
-      * apply (IsClosingInj_inv _ _ x) in H23.
+      * apply (IsClosingInj_inv _ _ x) in H24.
         subst.
         assert (Ht : Close_Rec 0 y Q1 ↓ Close_Rec 0 y R = Close_Rec 0 y (Q1 ↓ R));
           Piauto.
-        rewrite Ht in H22.
-        apply (Close_Same_Inv _ _ y _) in H22; Piauto.
+        rewrite Ht in H23.
+        apply (Close_Same_Inv _ _ y _) in H23; Piauto.
         subst.
-        apply No_Typing_Parallel in H34.
+        apply No_Typing_Parallel in H35.
         contradiction.
 
-      * apply (IsClosingInj_inv _ _ x) in H23.
+      * apply (IsClosingInj_inv _ _ x) in H24.
         subst.
         assert (Ht : Close_Rec 0 y Q1 ↓ Close_Rec 0 y R = Close_Rec 0 y (Q1 ↓ R));
           Piauto.
-        rewrite Ht in H22.
-        apply (Close_Same_Inv _ _ y _) in H22; Piauto.
+        rewrite Ht in H23.
+        apply (Close_Same_Inv _ _ y _) in H23; Piauto.
         subst.
-        apply No_Typing_Parallel in H34.
+        apply No_Typing_Parallel in H35.
         contradiction.
 
       * apply Process_ProcessAt.
@@ -1257,15 +1246,18 @@ Proof.
       subst.
       inversions H8.
 
-      * admit. (* cyclic argument *)
-      * admit. (* cyclic argument *)
-
-      * apply Equality_Substitution_Beq_Left in H11; Piauto.
-        subst.
-        rewrite H25 in H37.
-        rewrite Union_associative in H37.
-        apply No_Disjoint_Context_Left_Right in H37.
-        contradiction.
+      * (* cyclic argument *)
+        apply (Cyclic_Argument x u P 
+         (ν ((if x0 =? y then BName 0 else FName x0)
+         « if y =? y then BName 0 else FName y
+         »· (Close_Rec 0 y Q1 ↓ Close_Rec 0 y R)))); 
+         auto.
+      * (* cyclic argument *)
+        apply (Cyclic_Argument x u P 
+         (ν ((if x0 =? y then BName 0 else FName x0)
+         « if y =? y then BName 0 else FName y
+         »· (Close_Rec 0 y Q1 ↓ Close_Rec 0 y R)))); 
+         auto.
 
       * apply Equality_Substitution_Beq_Left in H11; Piauto.
         subst.
@@ -1290,11 +1282,11 @@ Proof.
         subst.
         inversions H9.
 
-        ** admit. (* cyclic argument *)
-        ** admit. (* cyclic argument *)
+        ** (* cyclic argument *)
+           apply (Cyclic_Argument x u P (FName x0 · P0)); auto.
 
-        ** apply No_Disjoint_Context_Left_Right in H41.
-           contradiction.
+        ** (* cyclic argument *)
+           apply (Cyclic_Argument x u P (FName x0 · P0)); auto.
 
         ** apply No_Disjoint_Context_Left_Right in H36.
            contradiction.
@@ -1312,8 +1304,11 @@ Proof.
            rewrite <- (Union_commutative _ F0).
            rewrite Union_associative.
            apply (cutr D F0 G0 (Bld x0 B ∪ F') G' _ _ A0 y); Piauto.
-           admit.
            
+           rewrite (Union_commutative _ _ (Bld y1 A0)) in H41.
+           rewrite Union_associative in H41.
+           Piauto.
+
            rewrite Lc_Open_Close_Subst; Piauto.
            assert( Ht : Replace ((Bld x0 B ∪ Bld y1 A0) ∪ F') y1 y A0 = (Bld y A0 ∪ (Bld x0 B ∪ F')) ).
             rewrite (Union_commutative _ (Bld x0 B)).
@@ -1322,7 +1317,7 @@ Proof.
            rewrite <- Ht.
            apply Type_Subst_Lf; try OrSearchCons; Piauto.
 
-        ** apply GContext_Three_Injective in H38.
+        ** apply GContext_Third_Injective in H38.
            rewrite <- Union_associative.
            Piauto.
 
@@ -1351,6 +1346,7 @@ Proof.
         constructor.
         apply Lc_Close_Is_Body.
         constructor; Piauto.
+
   + inversions H10.
     - assert ( Hx : [if x0 =? x0 then BName 0 else FName x0 ←→ if y =? x0 then BName 0 else FName y] =  Close_Rec 0 x0 ([FName x0 ←→ FName y]) ). Piauto.
       rewrite Hx in H12.
@@ -1568,8 +1564,11 @@ Proof.
         subst.
         inversions H9.
 
-        ** admit. (* cyclic argument *)
-        ** admit. (* cyclic argument *)
+        ** (* cyclic argument *)
+           apply (Cyclic_Argument x u P (FName x0 ()·Q0)); auto.
+
+        ** (* cyclic argument *)
+           apply (Cyclic_Argument x u P (FName x0 ()·Q0)); auto.
 
         ** rewrite (App_Nil_Left (Bld x0 ⊥)) in H18.
            apply Equality_Context in H18; ePiauto.
@@ -1626,8 +1625,11 @@ Proof.
         subst.
         inversions H8.
 
-        ** admit. (* cyclic argument *)
-        ** admit. (* cyclic argument *)
+        ** (* cyclic argument *)
+           apply (Cyclic_Argument x u P (FName x0 ()·Q0)); auto.
+
+        ** (* cyclic argument *)
+           apply (Cyclic_Argument x u P (FName x0 ()·Q0)); auto.
 
         ** apply No_Disjoint_Context_Left_Right in H24.
            contradiction.
@@ -1657,154 +1659,107 @@ Proof.
              ↓ Close_Rec 1 x0 (Close_Rec 0 y R))) = Close_Rec 0 x0 ( ν Close_Rec 0 y (FName x0 « FName y »· ( Q1 ↓ R)))) .
              Piauto.
       rewrite Hx in H12.
-      apply (IsClosingInj_inv _ _ x) in H21.
+      apply (IsClosingInj_inv _ _ x) in H22.
       subst.
       apply (Close_Same_Inv _ _ x0 _) in H12; Piauto.
       subst.
       inversions H9.
 
-      * admit. (* cyclic argument *)
-      * admit. (* cyclic argument *)
+      * (* cyclic argument *)
+        apply (Cyclic_Argument x u P1
+         (ν ((if x0 =? y then BName 0 else FName x0)
+         « if y =? y then BName 0 else FName y
+         »· (Close_Rec 0 y Q1 ↓ Close_Rec 0 y R)))); 
+         auto.
+
+      * (* cyclic argument *)
+        apply (Cyclic_Argument x u P1
+         (ν ((if x0 =? y then BName 0 else FName x0)
+         « if y =? y then BName 0 else FName y
+         »· (Close_Rec 0 y Q1 ↓ Close_Rec 0 y R)))); 
+         auto.
 
       * assert (Ha : (if x0 =? x0 then BName 0 else FName x0) · Close_Rec 1 x0 P0 = Close_Rec 0 x0 (FName x0 · P0));
           Piauto.
         rewrite Ha in H11.
         apply (Close_Same_Inv _ _ x0 _) in H11; Piauto.
         apply Equality_Substitution_Beq_Left in H12; Piauto.
-        apply (IsClosingInj_inv _ _ y0) in H23.
+        apply (IsClosingInj_inv _ _ y0) in H24.
         subst.
-        apply (Close_Same_Inv _ _ y _) in H24; Piauto.
-        apply (Close_Same_Inv _ _ y _) in H22; Piauto.
+        apply (Close_Same_Inv _ _ y _) in H25; Piauto.
+        apply (Close_Same_Inv _ _ y _) in H23; Piauto.
         subst.
-        rewrite Union_associative in H25.
-        apply Equality_Context in H25; ePiauto.
-        destruct H25.
+        rewrite Union_associative in H26.
+        apply Equality_Context in H26; ePiauto.
+        destruct H26.
         subst.
         inversions H8.
 
-        ** admit. (* cyclic argument *)
-        ** admit. (* cyclic argument *)
+        ** (* cyclic argument *)
+           apply (Cyclic_Argument x u P (FName x0 · P0)); auto.
+
+        ** (* cyclic argument *)
+           apply (Cyclic_Argument x u P (FName x0 · P0)); auto.
 
         ** apply No_Disjoint_Context_Left_Right in H41.
            contradiction.
 
-        ** apply No_Disjoint_Context_Left_Right in H40.
-           contradiction.
-
-        ** apply Equality_Context in H23; ePiauto.
-           destruct H23.
+        ** apply Equality_Context in H24; ePiauto.
+           destruct H24.
+           inversions H12.
            inversions H11.
+           rewrite (Union_commutative _ F0).
+           rewrite (Union_commutative _ G0).
            do 2 rewrite <- Union_associative.
-           apply (cutr D (F ∪ F0) (G ∪ G0) F'0 G'0 _ _  B x0); Piauto.
+           apply (cutl D (F ∪ F'0) (G ∪ G'0) F0 G0 _ _  A1 y); Piauto.
            admit.
 
-           inversions H42.
-           apply Dual_inv in H22.
-           subst.
-           rewrite Union_commutative.
            rewrite <- Union_associative.
-           rewrite <- (Union_commutative _ G0).
-           apply (cutr D F0 G0 F (Bld x0 (B0 ^⊥) ∪ G) _ _ A1 y); Piauto.
+           rewrite (Union_commutative _ G).
+           rewrite (Union_commutative _ _ F'0).
+           apply (cutl D F'0 G'0 (Bld y A1 ∪ F) G _ _ (B0 ^⊥) x0); Piauto.
            admit.
 
            rewrite Lc_Open_Close_Subst; Piauto.
-           assert( Ht : Replace (Bld y1 A1 ∪ F) y1 y A1 = (Bld y A1 ∪ F) ); Piauto.
-           rewrite <- Ht.
-           subst.
-           apply Type_Subst_Lf; try OrSearchCons; Piauto.
-           assert ( Hb : SMA ((Bld x0 B0 ∪ Bld y1 A1) ∪ F ) x0 B0 = (Bld y1 A1 ∪ F) ).
-            rewrite Union_associative.
-            Piauto.
-           rewrite <- Hb.
-           rewrite (Union_commutative _ _ G).
-           apply Transference_Lf_Rg; try OrSearchCons; ePiauto.
-
-        ** apply GContext_Second_Injective in H37.
-           rewrite <- Union_associative.
-           Piauto.
-
-
-      * assert (Ha : (if x0 =? x0 then BName 0 else FName x0) · Close_Rec 1 x0 P0 = Close_Rec 0 x0 (FName x0 · P0));
-          Piauto.
-        rewrite Ha in H11.
-        apply (Close_Same_Inv _ _ x0 _) in H11; Piauto.
-        apply Equality_Substitution_Beq_Left in H12; Piauto.
-        apply (IsClosingInj_inv _ _ y0) in H23.
-        subst.
-        apply (Close_Same_Inv _ _ y _) in H24; Piauto.
-        apply (Close_Same_Inv _ _ y _) in H22; Piauto.
-        subst.
-        rewrite Union_associative in H25.
-        apply Equality_Context in H25; ePiauto.
-        destruct H25.
-        subst.
-        inversions H8.
-
-        ** admit. (* cyclic argument *)
-        ** admit. (* cyclic argument *)
-
-        ** apply No_Disjoint_Context_Left_Right in H41.
-           contradiction.
-
-        ** apply No_Disjoint_Context_Left_Right in H40.
-           contradiction.
-
-        ** apply Equality_Context in H23; ePiauto.
-           destruct H23.
-           inversions H11.
-           do 2 rewrite <- Union_associative.
-           apply (cutr D (F ∪ F0) (G ∪ G0) F'0 G'0 _ _  B x0); Piauto.
-           admit.
-
-           rewrite Union_commutative.
-           rewrite <- Union_associative.
-           rewrite <- (Union_commutative _ G0).
-           apply (cutl D F0 G0 F (Bld x0 B ∪ G) _ _ A0 y); Piauto.
-           admit.
-
-           inversions H42.
            rewrite Doble_Duality_ULLT.
-           rewrite Lc_Open_Close_Subst; Piauto.
-           assert( Ht : Replace (Bld y1 A1 ∪ F) y1 y A1 = (Bld y A1 ∪ F) ); Piauto.
+           assert( Ht : Replace ((Bld x0 B0 ∪ Bld y1 A1) ∪ F) y1 y A1 = (Bld x0 B0 ∪ (Bld y A1 ∪ F)) ).
+            rewrite (Union_commutative _ (Bld x0 B0)).
+            rewrite (Union_commutative _ (Bld x0 B0) (Bld y A1 ∪ F)).
+            do 2 rewrite Union_associative.
+            rewrite (Union_commutative _ F (Bld x0 B0)).
+            Piauto.
            rewrite <- Ht.
            apply Type_Subst_Lf; try OrSearchCons; Piauto.
-           assert( Hb : SMA ((Bld x0 B0 ∪ Bld y1 A1) ∪ F) x0 B0 = (Bld y1 A1 ∪ F) ).
-            rewrite Union_associative.
-            Piauto.
-           rewrite <- Hb.
-           rewrite (Union_commutative _ _ G).
-           apply Transference_Lf_Rg; try OrSearchCons; Piauto.
 
-        ** apply GContext_Second_Injective in H37.
+        ** apply GContext_Second_Injective in H38.
            rewrite <- Union_associative.
            Piauto.
 
       * apply Equality_Substitution_Beq_Left in H12; Piauto.
-        apply (IsClosingInj_inv _ _ y0) in H23.
         subst.
-        rewrite H25 in H38.
-        rewrite Union_associative in H38.
-        apply No_Disjoint_Context_Left_Right in H38.
+        rewrite H26 in H39.
+        rewrite Union_associative in H39.
+        apply No_Disjoint_Context_Left_Right in H39.
         contradiction.
 
-      * apply (IsClosingInj_inv _ _ x) in H23.
+      * apply (IsClosingInj_inv _ _ x) in H24.
         subst.
         assert (Ht : Close_Rec 0 y Q1 ↓ Close_Rec 0 y R = Close_Rec 0 y (Q1 ↓ R));
           Piauto.
-        rewrite Ht in H22.
-        apply (Close_Same_Inv _ _ y _) in H22; Piauto.
+        rewrite Ht in H23.
+        apply (Close_Same_Inv _ _ y _) in H23; Piauto.
         subst.
-        apply No_Typing_Parallel in H34.
+        apply No_Typing_Parallel in H35.
         contradiction.
 
-      * apply (IsClosingInj_inv _ _ x) in H23.
+      * apply (IsClosingInj_inv _ _ x) in H24.
         subst.
         assert (Ht : Close_Rec 0 y Q1 ↓ Close_Rec 0 y R = Close_Rec 0 y (Q1 ↓ R));
           Piauto.
-        rewrite Ht in H22.
-        apply (Close_Same_Inv _ _ y _) in H22; Piauto.
+        rewrite Ht in H23.
+        apply (Close_Same_Inv _ _ y _) in H23; Piauto.
         subst.
-        apply No_Typing_Parallel in H34.
+        apply No_Typing_Parallel in H35.
         contradiction.
 
       * apply Process_ProcessAt.
@@ -1825,8 +1780,19 @@ Proof.
       subst.
       inversions H8.
 
-      * admit. (* cyclic argument *)
-      * admit. (* cyclic argument *)
+      * (* cyclic argument *)
+        apply (Cyclic_Argument x u P 
+         (ν ((if x0 =? y then BName 0 else FName x0)
+         « if y =? y then BName 0 else FName y
+         »· (Close_Rec 0 y Q1 ↓ Close_Rec 0 y R))));
+         auto.
+
+      * (* cyclic argument *)
+        apply (Cyclic_Argument x u P 
+         (ν ((if x0 =? y then BName 0 else FName x0)
+         « if y =? y then BName 0 else FName y
+         »· (Close_Rec 0 y Q1 ↓ Close_Rec 0 y R))));
+         auto.
 
       * assert (Ha : (if x0 =? x0 then BName 0 else FName x0) · Close_Rec 1 x0 P0 = Close_Rec 0 x0 (FName x0 · P0));
           Piauto.
@@ -1844,65 +1810,11 @@ Proof.
         subst.
         inversions H9.
 
-        ** admit. (* cyclic argument *)
-        ** admit. (* cyclic argument *)
+        ** (* cyclic argument *)
+           apply (Cyclic_Argument x u P (FName x0 · P0)); auto.
 
-        ** apply No_Disjoint_Context_Left_Right in H40.
-           contradiction.
-
-        ** apply No_Disjoint_Context_Left_Right in H36.
-           contradiction.
-
-        ** apply Equality_Context in H22; ePiauto.
-           destruct H22.
-           inversions H11.
-           rewrite (Union_commutative _ F0).
-           rewrite (Union_commutative _ G0).
-           do 2 rewrite Union_associative.
-           apply (cutl D F'0 G'0 (F0 ∪ F') (G0 ∪ G')  _ _  B x0); Piauto.
-           admit.
-
-           rewrite <- Union_associative.
-           rewrite <- (Union_commutative _ F0).
-           rewrite Union_associative.
-           apply (cutr D F0 G0 (Bld x0 (B ^⊥) ∪ F') G' _ _ A0 y); Piauto.
-           admit.
-
-            
-           rewrite Lc_Open_Close_Subst; Piauto.
-           assert( Ht : Replace ((Bld x0 (B ^⊥) ∪ Bld y1 A0) ∪ F') y1 y A0 = (Bld y A0 ∪ (Bld x0 (B ^⊥) ∪ F')) ).
-            rewrite (Union_commutative _ _ (Bld y1 A0)).
-            rewrite Union_associative.
-            Piauto.
-           rewrite Doble_Duality_ULLT in H44.
-           rewrite <- Ht.
-           apply Type_Subst_Lf; try OrSearchCons; Piauto.
-
-        ** apply GContext_Second_Injective in H37.
-           rewrite <- Union_associative.
-           Piauto.
-
-      * assert (Ha : (if x0 =? x0 then BName 0 else FName x0) · Close_Rec 1 x0 P0 = Close_Rec 0 x0 (FName x0 · P0));
-          Piauto.
-        rewrite Ha in H12.
-        apply (Close_Same_Inv _ _ x0 _) in H12; Piauto.
-        apply Equality_Substitution_Beq_Left in H11; Piauto.
-        apply (IsClosingInj_inv _ _ y0) in H23.
-        subst.
-        apply (Close_Same_Inv _ _ y _) in H24; Piauto.
-        apply (Close_Same_Inv _ _ y _) in H22; Piauto.
-        subst.
-        rewrite Union_associative in H25.
-        apply Equality_Context in H25; ePiauto.
-        destruct H25.
-        subst.
-        inversions H9.
-
-        ** admit. (* cyclic argument *)
-        ** admit. (* cyclic argument *)
-
-        ** apply No_Disjoint_Context_Left_Right in H40.
-           contradiction.
+        ** (* cyclic argument *)
+           apply (Cyclic_Argument x u P (FName x0 · P0)); auto.
 
         ** apply No_Disjoint_Context_Left_Right in H36.
            contradiction.
@@ -1916,11 +1828,11 @@ Proof.
            apply (cutl D F'0 G'0 (F0 ∪ F') (G0 ∪ G')  _ _  B x0); Piauto.
            admit.
 
-           rewrite <- Union_associative.
-           rewrite <- (Union_commutative _ F0).
+           rewrite Union_commutative.
            rewrite Union_associative.
+           rewrite (Union_commutative _ F').
            apply (cutl D F0 G0 (Bld x0 (B ^⊥) ∪ F') G' _ _ A0 y); Piauto.
-           admit.
+           
 
            rewrite Lc_Open_Close_Subst; Piauto.
            assert( Ht : Replace ((Bld x0 (B ^⊥) ∪ Bld y1 (A0 ^⊥)) ∪ F') y1 y (A0 ^⊥) = (Bld y (A0 ^⊥) ∪ (Bld x0 (B ^⊥) ∪ F')) ).

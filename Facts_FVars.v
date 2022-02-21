@@ -1291,35 +1291,41 @@ Proof.
   + apply -> FVars_Res_Neg in H.
     specialize (NFVar_Close_Cases _ x x0 H) as Ht.
     destruct Ht.
-    - rewrite H10 in *.
-      apply NFVar_Close.
-    - destruct H10.
-      apply No_FVars_Parallel in H11.
-      destruct H11.
-      apply -> FVars_Res_Neg in H12.
-      specialize (NFVar_Close_Cases _ x y H12) as Ht.
-      apply FVars_Res_Neg.
-      unfold not.
+    - subst.
+      unfold not in *.
       intros.
-      apply Close_FVars_Beq in H13; Piauto.
+      apply Close_FVars_Beq in H11; Piauto.
+      simpl in H11.
+      apply Union_inv in H11.
+      destruct H11; Piauto.
+      apply Union_inv in H11.
+      destruct H11.
+      apply (NFVar_Close R 0 x0); Piauto.
+      apply (NFVar_Close (P ^ y) 0 x0); Piauto.
+    - destruct H11.
+      apply No_FVars_Parallel in H12.
+      destruct H12.
+      apply -> FVars_Res_Neg in H13.
+      specialize (NFVar_Close_Cases _ x y H13) as Ht.
+      apply FVars_Res_Neg.
       destruct Ht.
       * subst.
-        simpl in H13.
-        apply Union_inv in H13.
-        destruct H13; Piauto.
-        apply Union_inv in H13.
-        destruct H13;
-        apply NFVar_Close in H13; Piauto.
+        apply NFVar_Close.
       * destruct H14.
-        destruct H13; Piauto.
-        apply Close_FVars_Beq in H13; Piauto.
-        simpl in H13.
-        apply Union_inv in H13.
-        destruct H13.
-        apply H15; OrSearch.
-        apply FVars_Open_Beq in H13; Piauto.
-        apply H11; OrSearch.
-        apply H15; OrSearch.
+        unfold not.
+        intros.
+        apply Close_FVars_Beq in H16; Piauto.
+        simpl in H16.
+        apply Union_inv in H16.
+        destruct H16.
+        ++ apply Union_inv in H16.
+           destruct H16.
+           apply Close_FVars_Beq in H16; Piauto.
+           apply H15; OrSearch.
+           apply Close_FVars_Beq in H16; Piauto.
+           apply FVars_Open_Beq in H16; Piauto.
+           apply H12; OrSearch.
+        ++ apply H15; OrSearch.
   + apply -> FVars_Res_Neg in H.
     specialize (NFVar_Close_Cases _ x x0 H) as Ht.
     destruct Ht.
@@ -1554,44 +1560,29 @@ Proof.
         OrSearch.
       * OrSearch.
   + apply -> FVars_Res in H.
-    DecidSimple x x0.
+    DecidSimple x y.
     apply beq_nat_true in e.
     rewrite e in *.
     apply NFVar_Close in H.
     contradiction.
 
     apply beq_nat_false in n.
-    apply FVars_Close_Beq; Piauto.
     apply FVars_Beq_Close in H; Piauto.
     destruct H.
     - apply -> FVars_Res in H.
-      DecidSimple x y.
+      DecidSimple x x0.
       apply beq_nat_true in e.
       rewrite e in H.
       apply NFVar_Close in H.
       contradiction.
-      
+
       apply beq_nat_false in n0.
-      inversions H0.
-      rewrite (Cong_FVars
-        ((FName x0 · P) ↓ (ν Close y (FName x0 « FName y »· (Q ↓ R))))
-        (ν ((FName x0 · P) ↓ Close y (FName x0 « FName y »· (Q ↓ R))))
-        ); Piauto.
-      rewrite Close_Parallel_NFVar; Piauto.
-      apply FVars_Close_Beq; Piauto.
       apply FVars_Beq_Close in H; Piauto.
       destruct H.
       * OrSearch.
       * apply FVars_Open_Beq in H; Piauto.
         OrSearch.
-      * simpl.
-        unfold not.
-        intros.
-        destruct H11.
-        ++ inversions H11.
-           contradiction.
-        ++ apply H4; Piauto.
-    - DecidSimple x y.
+    - DecidSimple x x0.
       apply beq_nat_true in e.
       subst.
       contradiction.
@@ -1600,6 +1591,8 @@ Proof.
       right.
       apply FVars_Close_Beq; Piauto.
       OrSearch.
+      
+      
   + apply -> FVars_Res in H.
     DecidSimple x x0.
     apply beq_nat_true in e.

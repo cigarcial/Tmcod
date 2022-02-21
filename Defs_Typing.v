@@ -91,7 +91,7 @@ Inductive Inference : Process -> Context -> Context -> Context -> Prop :=
     ( D ;;; (Bld x (? A)) !- ( FName x !· (Close y P)) ::: ø )
 
 
-  | limpr : forall ( D F G: Context )( x y : nat )( A B : Proposition )( P : Process ),
+(*   | limpr : forall ( D F G: Context )( x y : nat )( A B : Proposition )( P : Process ),
     Collect D -> Collect F -> Collect G -> x <> y -> 
     lc P -> 
     Good_Contexts D ( (Bld y A) ∪ F ) ( (Bld x B) ∪ G )  P ->
@@ -108,7 +108,7 @@ Inductive Inference : Process -> Context -> Context -> Context -> Prop :=
     Good_Contexts D ( (Bld x (A−∘B)) ∪ F ∪ F' ) ( G ∪ G') (ν Close y (FName x « FName y »· (P↓Q))) ->
     ( D ;;; F !- P ::: ( (Bld y A) ∪ G ) ) ->
     ( D ;;; ( (Bld x B) ∪ F' ) !- Q ::: G' ) ->
-    ( D ;;; ( (Bld x (A−∘B)) ∪ F ∪ F' ) !- (ν Close y (FName x « FName y »· (P↓Q))) ::: ( G ∪ G') )
+    ( D ;;; ( (Bld x (A−∘B)) ∪ F ∪ F' ) !- (ν Close y (FName x « FName y »· (P↓Q))) ::: ( G ∪ G') ) *)
 
   | rampr : forall ( D F G: Context )( x y : nat )( A B : Proposition )( P : Process ),
     Collect D -> Collect F -> Collect G -> lc P -> 
