@@ -1176,9 +1176,12 @@ Proof.
            rewrite (Union_commutative _ _ F'0).
            rewrite (Union_commutative _ _ G'0).
            apply (cutl D F'0 G'0 F (Bld y A0 ∪ G) _ _ B x0); Piauto.
-           
-           
-           admit.
+
+
+           apply GContext_Type_Subst_Rg.
+           apply GContext_Transference_Rg_Lf.
+           rewrite <- Union_associative.
+           Piauto.
 
            rewrite Lc_Open_Close_Subst; Piauto.
            assert( Ht : Replace (Bld y0 A0 ∪ G) y0 y A0 = (Bld y A0 ∪ G) ); Piauto.
@@ -1196,10 +1199,6 @@ Proof.
 
         ** apply No_Disjoint_Context_Left_Right in H41.
            contradiction.
-
-        ** apply GContext_Second_Injective in H38.
-           rewrite <- Union_associative.
-           Piauto.
 
       * apply Equality_Substitution_Beq_Left in H12; Piauto.
         subst.
@@ -1304,7 +1303,7 @@ Proof.
            rewrite <- (Union_commutative _ F0).
            rewrite Union_associative.
            apply (cutr D F0 G0 (Bld x0 B ∪ F') G' _ _ A0 y); Piauto.
-           
+
            rewrite (Union_commutative _ _ (Bld y1 A0)) in H41.
            rewrite Union_associative in H41.
            Piauto.
@@ -1316,10 +1315,6 @@ Proof.
             Piauto.
            rewrite <- Ht.
            apply Type_Subst_Lf; try OrSearchCons; Piauto.
-
-        ** apply GContext_Third_Injective in H38.
-           rewrite <- Union_associative.
-           Piauto.
 
       * apply (IsClosingInj_inv _ _ x) in H23.
         subst.
@@ -1427,9 +1422,6 @@ Proof.
         subst.
         rewrite Union_commutative; Piauto.
 
-        apply GContext_Second_Injective in H25.
-        rewrite Union_commutative.
-        Piauto.
 
       * apply (Equality_Subst_Equality _ _ u x1) in H17.
         rewrite <- (Double_Subst_Expan_NFVar _ u u x1) in H17; Piauto.
@@ -1471,10 +1463,6 @@ Proof.
         rewrite <- Ht.
         apply Type_Subst_Lf; Piauto.
         OrSearchCons.
-
-        apply GContext_Second_Injective in H25.
-        rewrite Union_commutative.
-        Piauto.
 
       * apply (Equality_Subst_Equality _ _ u x1) in H17.
         rewrite <- (Double_Subst_Expan_NFVar _ u u x1) in H17; Piauto.
@@ -1718,7 +1706,15 @@ Proof.
            rewrite (Union_commutative _ G).
            rewrite (Union_commutative _ _ F'0).
            apply (cutl D F'0 G'0 (Bld y A1 ∪ F) G _ _ (B0 ^⊥) x0); Piauto.
-           admit.
+
+           rewrite Doble_Duality_ULLT.
+           rewrite (Union_commutative  _ (Bld x0 B0) _).
+           rewrite Union_associative.
+           apply GContext_Type_Subst_Lf.
+           rewrite <- Union_associative.
+           rewrite <- (Union_commutative).
+           rewrite <- Union_associative.
+           Piauto.
 
            rewrite Lc_Open_Close_Subst; Piauto.
            rewrite Doble_Duality_ULLT.
@@ -1730,10 +1726,6 @@ Proof.
             Piauto.
            rewrite <- Ht.
            apply Type_Subst_Lf; try OrSearchCons; Piauto.
-
-        ** apply GContext_Second_Injective in H38.
-           rewrite <- Union_associative.
-           Piauto.
 
       * apply Equality_Substitution_Beq_Left in H12; Piauto.
         subst.
@@ -1832,7 +1824,11 @@ Proof.
            rewrite Union_associative.
            rewrite (Union_commutative _ F').
            apply (cutl D F0 G0 (Bld x0 (B ^⊥) ∪ F') G' _ _ A0 y); Piauto.
-           
+
+           apply GContext_Type_Subst_Lf.
+           rewrite <- Union_associative.
+           rewrite (Union_commutative _ (Bld y1 (A0 ^⊥))).
+           Piauto.
 
            rewrite Lc_Open_Close_Subst; Piauto.
            assert( Ht : Replace ((Bld x0 (B ^⊥) ∪ Bld y1 (A0 ^⊥)) ∪ F') y1 y (A0 ^⊥) = (Bld y (A0 ^⊥) ∪ (Bld x0 (B ^⊥) ∪ F')) ).
@@ -1841,10 +1837,6 @@ Proof.
             Piauto.
            rewrite <- Ht.
            apply Type_Subst_Lf; try OrSearchCons; Piauto.
-
-        ** apply GContext_Second_Injective in H37.
-           rewrite <- Union_associative.
-           Piauto.
 
       * apply Equality_Substitution_Beq_Left in H11; Piauto.
         subst.
