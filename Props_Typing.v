@@ -1173,29 +1173,26 @@ Proof.
            admit.
 
            rewrite <- Union_associative.
-           rewrite (Union_commutative _ _ F'0).
-           rewrite (Union_commutative _ _ G'0).
-           apply (cutl D F'0 G'0 F (Bld y A0 ∪ G) _ _ B x0); Piauto.
+           apply (cutr D F (Bld y A0 ∪ G) F'0 G'0 _ _ B x0); Piauto.
 
-
+           rewrite Union_commutative.
+           rewrite Union_associative.
            apply GContext_Type_Subst_Rg.
-           apply GContext_Transference_Rg_Lf.
+           rewrite <- Union_associative.
+           rewrite <- Union_commutative.
            rewrite <- Union_associative.
            Piauto.
 
            rewrite Lc_Open_Close_Subst; Piauto.
-           assert( Ht : Replace (Bld y0 A0 ∪ G) y0 y A0 = (Bld y A0 ∪ G) ); Piauto.
+           assert( Ht : Replace ((Bld x0 B ∪ Bld y0 A0) ∪ G) y0 y A0 = (Bld x0 B ∪ (Bld y A0 ∪ G)) ).
+            do 2 rewrite (Union_commutative _ (Bld x0 B) _).
+            do 2 rewrite Union_associative.
+            rewrite (Union_commutative _ G _).
+            Piauto.
            rewrite <- Ht.
            subst.
            apply Type_Subst_Rg; try OrSearchCons; Piauto.
 
-           assert( Hb : (Bld y0 A0 ∪ G) = SMA ((Bld x0 B ∪ Bld y0 A0) ∪ G) x0 B ).
-            apply eq_sym.
-            rewrite Union_associative.
-            Piauto.
-           rewrite Hb.
-           rewrite Union_commutative.
-           apply Transference_Rg_Lf ; try OrSearchCons; Piauto.
 
         ** apply No_Disjoint_Context_Left_Right in H41.
            contradiction.
@@ -1703,29 +1700,22 @@ Proof.
            admit.
 
            rewrite <- Union_associative.
-           rewrite (Union_commutative _ G).
-           rewrite (Union_commutative _ _ F'0).
-           apply (cutl D F'0 G'0 (Bld y A1 ∪ F) G _ _ (B0 ^⊥) x0); Piauto.
+           apply (cutr D (Bld y A1 ∪ F) G F'0 G'0 _ _ (B0 ^⊥) x0); Piauto.
 
-           rewrite Doble_Duality_ULLT.
-           rewrite (Union_commutative  _ (Bld x0 B0) _).
-           rewrite Union_associative.
            apply GContext_Type_Subst_Lf.
-           rewrite <- Union_associative.
-           rewrite <- (Union_commutative).
+           apply GContext_Transference_Lf_Rg.
            rewrite <- Union_associative.
            Piauto.
 
            rewrite Lc_Open_Close_Subst; Piauto.
-           rewrite Doble_Duality_ULLT.
-           assert( Ht : Replace ((Bld x0 B0 ∪ Bld y1 A1) ∪ F) y1 y A1 = (Bld x0 B0 ∪ (Bld y A1 ∪ F)) ).
-            rewrite (Union_commutative _ (Bld x0 B0)).
-            rewrite (Union_commutative _ (Bld x0 B0) (Bld y A1 ∪ F)).
-            do 2 rewrite Union_associative.
-            rewrite (Union_commutative _ F (Bld x0 B0)).
-            Piauto.
+           assert( Ht : Replace (Bld y1 A1 ∪ F ) y1 y A1 = (Bld y A1 ∪ F ) ); Piauto.
            rewrite <- Ht.
            apply Type_Subst_Lf; try OrSearchCons; Piauto.
+           assert ( Hb : SMA ((Bld x0 B0 ∪ Bld y1 A1) ∪ F ) x0 B0 = (Bld y1 A1 ∪ F) ).
+            rewrite Union_associative; Piauto.
+           rewrite <- Hb.
+           rewrite (Union_commutative _ _ G).
+           apply Transference_Lf_Rg; try OrSearchCons; ePiauto.
 
       * apply Equality_Substitution_Beq_Left in H12; Piauto.
         subst.

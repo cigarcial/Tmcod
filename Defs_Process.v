@@ -470,7 +470,7 @@ Inductive Reduction : Process -> Process -> Prop :=
     IsClosing P x -> IsClosing P y -> 
     IsClosingInj P x -> IsClosingInj P y ->
       ( ν Close x (  ((FName x) · P) ↓ ν Close y ( (FName x) « (FName y) »· (Q↓R)) )
-      --> ν Close y ( ν Close x ( R ↓ ({0 ~> y} P)) ↓ Q ) )
+      --> ν Close y ( ν Close x ( ({0 ~> y} P) ↓ R ) ↓ Q ) )
 
 
   | Red_output_input_lf : forall ( x y : nat) (P Q R : Process),

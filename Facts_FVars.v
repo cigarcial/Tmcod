@@ -1300,8 +1300,8 @@ Proof.
       destruct H11; Piauto.
       apply Union_inv in H11.
       destruct H11.
-      apply (NFVar_Close R 0 x0); Piauto.
       apply (NFVar_Close (P ^ y) 0 x0); Piauto.
+      apply (NFVar_Close R 0 x0); Piauto.
     - destruct H11.
       apply No_FVars_Parallel in H12.
       destruct H12.
@@ -1321,10 +1321,10 @@ Proof.
         ++ apply Union_inv in H16.
            destruct H16.
            apply Close_FVars_Beq in H16; Piauto.
-           apply H15; OrSearch.
-           apply Close_FVars_Beq in H16; Piauto.
            apply FVars_Open_Beq in H16; Piauto.
            apply H12; OrSearch.
+           apply Close_FVars_Beq in H16; Piauto.
+           apply H15; OrSearch.
         ++ apply H15; OrSearch.
   + apply -> FVars_Res_Neg in H.
     specialize (NFVar_Close_Cases _ x x0 H) as Ht.
@@ -1579,9 +1579,10 @@ Proof.
       apply beq_nat_false in n0.
       apply FVars_Beq_Close in H; Piauto.
       destruct H.
-      * OrSearch.
       * apply FVars_Open_Beq in H; Piauto.
         OrSearch.
+      * OrSearch.
+
     - DecidSimple x x0.
       apply beq_nat_true in e.
       subst.

@@ -413,7 +413,7 @@ Proof.
       * apply beq_nat_false in n.
         left.
         repeat apply FVars_Close_Beq; Piauto.
-        right.
+        left.
         apply FVars_Open_Beq; Piauto.
     - repeat destruct H.
       * simpl in H.
