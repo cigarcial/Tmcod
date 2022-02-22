@@ -143,17 +143,6 @@ Hint Resolve Decid_Propositions : Piull.
 
 (**
 *)
-Proposition Beq_Ramp_LImplication : 
-forall A B C D : Proposition , 
-(A ⅋ B) = (C −∘ D) -> False.
-Proof.
-Admitted.
-#[global]
-Hint Resolve Dual_Implication_Tensor : Piull.
-
-
-(**
-*)
 Proposition Dual_inv : 
 forall A B : Proposition , 
 (A^⊥)= (B^⊥) -> A = B.

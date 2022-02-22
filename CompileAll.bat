@@ -18,3 +18,5 @@ coqc Props_Process.v -Q . Tmcod
 coqc Facts_WSubst.v -Q . Tmcod
 
 coqc Facts_Typing.v -Q . Tmcod
+
+coqc Props_Typing.v -Q . Tmcod
