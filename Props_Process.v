@@ -129,7 +129,7 @@ Hint Resolve Lca_One_Body : Piull.
 (**
 *)
 Lemma Lc_Open_Close_Subst :
-forall ( P : Process )( x y k : nat ), 
+forall ( P : Process )( x y : nat ), 
 lc P -> { 0 ~> y } Close_Rec 0 x P = { y \ x } P.
 Proof.
   Piauto.
@@ -282,7 +282,7 @@ Ltac PR_WD :=
 *)
 Theorem ProcessReduction_WD : 
 forall P Q : Process, 
-(P --> Q) -> lc(P)  -> lc(Q).
+(P --> Q) -> lc(P) -> lc(Q).
 Proof.
   intros.
   induction H; try constructor; intros; 

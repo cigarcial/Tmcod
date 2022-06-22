@@ -1153,3 +1153,180 @@ Hint Resolve GContext_Transference_Lf_Rg : Piull.
 
 
 
+
+
+(**
+*)
+Lemma GContext_Type_Subst_Lf_Replace :
+forall ( z w : nat )( A : Proposition )( D F G : Context )( P : Process ),
+lc P -> (FName z : A) ∈ F -> Good_Contexts D F G P ->
+Good_Contexts D (Replace F z w A) G ({w \ z} P).
+Proof.
+  intros.
+  specialize (Replace_Context_Element_Partition z w A F H0) as Ha.
+  destruct Ha as [B [Ha Hb]].
+  rewrite Hb.
+  rewrite Ha in H1.
+  rewrite <- Lc_Open_Close_Subst; Piauto.
+Qed.
+#[global]
+Hint Resolve GContext_Type_Subst_Lf_Replace : Piull.
+
+
+
+(**
+*)
+Lemma TS_GContext_Type_Subst_Lf :
+forall ( x y : nat )( A : Proposition )( D F G : Context )( P : Process ),
+Fresh y (D ∪ F ∪ G) -> x <> y -> lc P ->
+Good_Contexts D ((Bld x A) ∪ F) G P ->
+Good_Contexts D ((Bld y A) ∪ F) G (Close x P ^ y).
+Proof.
+  intros.
+  apply Another_GContext; ePiauto.
+  + constructor.
+    unfold not.
+    intros.
+    destruct H3.
+    apply Union_inv in H3.
+    destruct H3.
+    - inversions H3.
+      inversions H.
+      specialize (H5 x0 B).
+      apply H5; OrSearch.
+    - apply GContext_Disjoint_ST in H2.
+      inversions H2.
+      apply (H5 x0 A0 B).
+      constructor; OrSearch.
+  + intros.
+    rewrite Lc_Open_Close_Subst in H3; Piauto.
+    assert (Hk := H3).
+    apply FVars_Subst in H3.
+    destruct H3.
+    - subst.
+      exists A; try OrSearchCons.
+    - inversions H2.
+      destruct H4 as [Ha _ ].
+      specialize (Ha x0 H3).
+      destruct Ha as [B H4].
+      apply Union_inv in H4.
+      destruct H4.
+      * apply Union_inv in H4.
+        destruct H4.
+        ++ exists B; try OrSearch.
+        ++ apply Union_inv in H4.
+
+           destruct H4.
+           inversions H4.
+           apply After_Subst_No_FVar in Hk; Piauto.
+           contradiction.
+
+           exists B; try OrSearch.
+      * exists B; try OrSearch.
+Qed.
+#[global]
+Hint Resolve GContext_Type_Subst_Lf : Piull.
+
+
+Proposition TS_Type_Subst_Lf :
+forall ( P : Process )( D F G : Context ),
+( D ;;; F !- P ::: G ) -> lc P ->
+forall ( w z : nat )( A : Proposition ), (FName z : A) ∈ F ->
+Fresh w (D ∪ F ∪ G) ->
+( D ;;; (Replace F z w A) !- {w \ z}P ::: G ).
+Proof.
+  intros.
+  dependent induction H.
+  + inversions H3.
+    simpl.
+    DecidSimple z z.
+    DecidSimple y z.
+    rewrite n.
+    rewrite Replace_Bld.
+    constructor; Piauto.
+
+    unfold not; intros.
+    subst.
+    inversions H4.
+    apply (H5 y A0); try OrSearchCons.
+
+    assert ( Ha : [FName w ←→ FName y] = Close z ([FName z ←→ FName y]) ^ w).
+      simpl.
+      rewrite e.
+      rewrite n.
+      simpl.
+      Piauto.
+    rewrite Ha.
+    rewrite (App_Nil_Left (Bld w A0)).
+    apply GContext_Type_Subst_Lf.
+    rewrite <- App_Nil_Left.
+    Piauto.
+
+  + apply Union_inv in H3.
+    admit.
+  
+  
+  + inversions H7.
+
+  + admit. (* caso complicado *)
+
+  + assert ( Ha : w <> u ).
+      admit. (* ordinary and linear names are disjoint *)
+    assert ( Hb : u <> z ).
+      unfold not.
+      intros.
+      subst.
+      apply GContext_Disjoint_FS in H8.
+      inversions H8.
+      apply (H15 z A A0).
+      constructor; Piauto.
+    assert ( Hc : x <> z ).
+      unfold not.
+      intros.
+      subst.
+      inversions H10.
+      apply (H15 z A0); try OrSearchCons.
+    assert ( Hd : x <> w ).
+      unfold not.
+      intros.
+      subst.
+      inversions H14.
+      apply (H15 w (? A ^⊥)); try OrSearchCons.
+    rewrite Double_Subst_All_Dif; Piauto.
+    constructor; ePiauto.
+
+    rewrite Double_Subst_All_Dif; Piauto.
+    apply IHInference; ePiauto.
+
+    constructor.
+    unfold not.
+    intros.
+    subst.
+    apply Union_inv in H15.
+    inversions H14.
+    destruct H15.
+    - apply Union_inv in H15.
+      destruct H15; apply (H16 y A1); try OrSearchCons.
+    - apply (H16 y A1); try OrSearchCons.
+  + inversions H7.
+    simpl.
+    DecidSimple z z.
+    rewrite Replace_Bld.
+    unfold Close.
+    assert (Ha : w <> y ).
+      admit. (* alpha equivalence *)
+    
+    rewrite Subst_Close_Dif_Name; Piauto.
+    constructor; ePiauto.
+    
+Admitted.
+
+
+
+
+
+
+
+
+
+

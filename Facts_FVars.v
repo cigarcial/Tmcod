@@ -21,17 +21,6 @@ From Tmcod Require Import Facts_Names.
 
 (**
 *)
-Lemma No_Union_No_Each : 
-forall (x : nat)( X Y : FVarsE ),
-~(x ∈ (X ∪ Y)) -> ~(x ∈ X) /\ ~(x ∈ Y).
-Proof.
-Admitted.
-#[global]
-Hint Resolve No_Union_No_Each : Piull.
-
-
-(**
-*)
 Lemma There_Is_A_Name :
 forall ( P : Process ),
 exists ( x : nat ), ~ ( x ∈ (FVars P) ).
@@ -49,6 +38,22 @@ forall (P : Process)( x : nat),
 Admitted.
 #[global]
 Hint Resolve FVar_Process_Is_Or_Not : Piull.
+
+
+(**
+*)
+Lemma No_Union_No_Each : 
+forall (x : nat)( X Y : FVarsE ),
+~(x ∈ (X ∪ Y)) -> ~(x ∈ X) /\ ~(x ∈ Y).
+Proof.
+  unfold not in *.
+  intros.
+  constructor;
+   intros;
+   apply H; OrSearch.
+Qed.
+#[global]
+Hint Resolve No_Union_No_Each : Piull.
 
 
 (**
@@ -1633,7 +1638,20 @@ Qed.
 Hint Resolve FVars_Reduction_Inv : Piull.
 
 
-
+(**
+*)
+Lemma Not_FVar_Subst :
+forall ( x w z : nat )( P : Process ),
+x <> w -> ~ x ∈ FVars (P) ->
+~ x ∈ FVars ({w \ z} P).
+Proof.
+  unfold not.
+  intros.
+  apply FVars_Subst in H1.
+  destruct H1; Piauto.
+Qed.
+#[global]
+Hint Resolve Not_FVar_Subst : Piull.
 
   
   

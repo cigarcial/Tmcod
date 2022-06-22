@@ -171,7 +171,7 @@ Inductive Inference : Process -> Context -> Context -> Context -> Prop :=
     ( D ;;; ( (Bld x ¶) ∪ F ) !- (FName x ()· P ) ::: G )
 
 
-  | oner : forall ( D : Context)( x : nat ),
+  | oner : forall ( D : Context)( x : nat ),      
     Collect D -> 
     Good_Contexts D ø (Bld x ¶)  (FName x ·θ ) -> 
     ( D ;;; ø !- (FName x ·θ ) ::: (Bld x ¶) )

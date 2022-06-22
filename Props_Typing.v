@@ -313,6 +313,7 @@ D;;; (SMA F x A) !- P ::: (G ∪ Bld x (A ^⊥)).
 Proof.
 Admitted.
 
+
 (**
 This lemma should not be in the database.
 *)

@@ -315,6 +315,76 @@ Hint Resolve Union_Collect_Collect : Piull.
 
 
 (**
+*)
+Lemma Collect_After_Replace :
+forall ( x y : nat )( A : Proposition )( D : Context),
+Collect D -> Collect (Replace D x y A).
+Proof.
+  intros.
+  constructor.
+  intros.
+  inversions H1.
+  + inversions H2.
+    inversions H.
+    apply H5; Piauto.
+  + inversions H2.
+    repeat constructor.
+Qed.
+#[global]
+Hint Resolve Collect_After_Replace : Piull.
+
+
+(**
+*)
+Lemma Fresh_Replace :
+forall ( x w z : nat )( A : Proposition )( D F G : Context ),
+x <> w -> Fresh x ((D ∪ F) ∪ G) ->
+Fresh x ((D ∪ Replace F z w A) ∪ G).
+Proof.
+  constructor.
+  intros.
+  unfold not.
+  intros.
+  subst.
+  apply Union_inv in H1.
+  destruct H1.
+  + apply Union_inv in H1.
+    destruct H1.
+    - inversions H0.
+      apply (H2 y A0); try OrSearchCons.
+    - inversions H1.
+      * inversions H2.
+        inversions H0.
+        apply (H5 y A0); try OrSearchCons.
+      * inversions H2.
+        contradiction.
+  + inversions H0.
+    apply (H2 y A0); try OrSearchCons.
+Qed.
+#[global]
+Hint Resolve Fresh_Replace : Piull.
+
+
+(**
+*)
+Lemma Context_Element_Partition :
+forall ( x : nat )( A : Proposition ) ( F : Context ),
+(FName x : A) ∈ F -> 
+exists ( B : Context ), F = ((Bld x A) ∪ B).
+Proof.
+  intros.
+  exists (SMA F x A).
+  apply Extensionality_Ensembles.
+  constructor; unfold Included; intros.
+  + admit.
+  + apply Union_inv in H0.
+    destruct H0;
+    inversions H0; Piauto.
+Admitted.
+
+
+
+(**
 x, A  // x no está en A 
 x -> y 
 y, A 
@@ -361,6 +431,21 @@ Admitted.
 Hint Resolve SMA_Union_Bld : Piull.
 
 
+(**
+*)
+Lemma Replace_Context_Element_Partition :
+forall ( x w : nat )( A : Proposition ) ( F : Context ),
+(FName x : A) ∈ F -> 
+exists ( B : Context ), F = ((Bld x A) ∪ B) /\ (Replace F x w A) = ((Bld w A) ∪ B).
+Proof.
+  intros.
+  apply Context_Element_Partition in H.
+  destruct H as [B Hb].
+  exists B.
+  rewrite Hb.
+  rewrite Replace_Union_Bld.
+  constructor; Piauto.
+Qed.
 
 
 
